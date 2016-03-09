@@ -4,8 +4,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import com.excilys.formation.computerdatabase.connection.ConnectionManager;
+
 import com.excilys.formation.computerdatabase.modele.Computer;
 
 public class ComputerDao extends GenericDao<Computer> {
@@ -68,8 +69,8 @@ public class ComputerDao extends GenericDao<Computer> {
 	@Override
 	public boolean create(Computer obj) {
 		String companyName = "null";
-		String pIntro = (obj.getIntroduced() == null) ? "0000-00-00" : obj.getIntroduced();
-		String pDis = (obj.getDiscontinued() == null) ? "0000-00-00" : obj.getDiscontinued();
+		LocalDate pIntro = obj.getIntroduced();
+		LocalDate pDis = obj.getDiscontinued();
 		String query = "";
 
 		if (obj.getCompanieName() != null) {
@@ -91,8 +92,8 @@ public class ComputerDao extends GenericDao<Computer> {
 			}
 
 		} else
-			query = "INSERT into computer(name,introduced,discontinued) values ('" + obj.getName() + "','" + pIntro
-					+ "','" + pDis + "'	)";
+			query = "INSERT into computer(name,introduced,discontinued) values ('" + obj.getName() + "'," + pIntro
+					+ "," + pDis + "	)";
 
 		try {
 			Statement stm = super.connect.createStatement();
@@ -131,10 +132,12 @@ public class ComputerDao extends GenericDao<Computer> {
 
 	@Override
 	public boolean update(Computer obj) {
-		String intro = (obj.getIntroduced() == null) ? "0000-00-00" : obj.getIntroduced();
-		String disc = (obj.getDiscontinued() == null) ? "0000-00-00" : obj.getDiscontinued();
+		LocalDate intro2 = obj.getIntroduced();
+		String intro = (intro2==null)? null: "'"+intro2+"'";
+		LocalDate disc2 = obj.getDiscontinued();
+		String disc = (disc2==null)? null: "'"+disc2+"'";
 		String companyName;
-		String query;
+		String query="";
 		if (obj.getCompanieName() != null) {
 			ResultSet result;
 
@@ -144,20 +147,31 @@ public class ComputerDao extends GenericDao<Computer> {
 				if (result.first()) {
 					companyName = result.getString("id");
 					query = "UPDATE computer SET name='" + obj.getName() + "', company_id=" + companyName
-							+ ",introduced='" + intro + "',discontinued='" + disc + "' where	id=" + obj.getId();
+							+ ",introduced=" + intro + ",discontinued=" + disc + " where	id=" + obj.getId();
 				} else
-					query = "UPDATE computer SET name='" + obj.getName() + "',introduced='" + intro + "',discontinued='"
-							+ disc + "' where	id=" + obj.getId();
-			} catch (SQLException e) {
+					query = "UPDATE computer SET name='" + obj.getName() + "',introduced=" + intro + ",discontinued="
+							+ disc + " where	id=" + obj.getId();
+			} catch (SQLException e) {				
 				System.out.println("Exception sql lors de l'update");
 				e.printStackTrace();
+				
 			}
 
-		} else
-			query = "UPDATE computer SET name='" + obj.getName() + "',introduced='" + intro + "',discontinued='" + disc
-					+ "' where	id=" + obj.getId();
+		} else{
+			query = "UPDATE computer SET name='" + obj.getName() + "',introduced=" + intro + ",discontinued=" + disc
+					+ " where	id=" + obj.getId();}
 
-		return super.update(obj);
+		try {
+			Statement stt=connect.createStatement();
+			
+			stt.executeUpdate(query);
+		} catch (SQLException e) {		
+			e.printStackTrace();
+			return false;
+		}
+
+	
+		return true;
 	}
 
 	
@@ -208,10 +222,10 @@ public class ComputerDao extends GenericDao<Computer> {
 		Computer c1 = new Computer(rs.getInt("computer.id"), rs.getString("computer.name"));
 
 		if (rs.getTimestamp(3) != null) {
-			c1.setIntroduced(rs.getTimestamp(3).toString());
+			c1.setIntroduced(rs.getDate(3).toLocalDate());
 		}
 		if (rs.getTimestamp(4) != null) {
-			c1.setDiscontinued(rs.getTimestamp(4).toString());
+			c1.setDiscontinued(rs.getDate(4).toLocalDate());
 		}
 		if (rs.getString("company.name") != null) {
 

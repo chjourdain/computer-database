@@ -1,4 +1,7 @@
 package com.excilys.formation.computerdatabase.modele;
+
+import java.time.LocalDate;
+
 /**
  * Class de modélisation d'un ordianteur
  * @author excilys
@@ -8,11 +11,11 @@ public class Computer {
 	
 	protected int id;
 	protected String name;
-	protected String introduced;
+	protected LocalDate introduced;
 	public void setName(String name) {
 		this.name = name;
 	}
-	protected String discontinued;
+	protected LocalDate discontinued;
 	protected String companieName;
 	
 	public Computer(String pName){
@@ -26,7 +29,7 @@ public class Computer {
 		this.name=pName;
 		
 	}
-	public Computer(String pName, String pIntroduced,String pDiscontinued, String pCompanieName  ){
+	public Computer(String pName, LocalDate pIntroduced,LocalDate pDiscontinued, String pCompanieName  ){
 		this.name=pName;
 		this.introduced=pIntroduced;
 		this.discontinued=pDiscontinued;
@@ -34,7 +37,7 @@ public class Computer {
 		
 	}
 	
-	public Computer(int pId, String pName, String pIntroduced,String pDiscontinued, String pCompanieName  ){
+	public Computer(int pId, String pName, LocalDate pIntroduced,LocalDate pDiscontinued, String pCompanieName  ){
 		this.id=pId;
 		this.name=pName;
 		this.introduced=pIntroduced;
@@ -43,19 +46,19 @@ public class Computer {
 		
 	}
 
-	public String getIntroduced() {
+	public LocalDate getIntroduced() {
 		return introduced;
 	}
 
-	public void setIntroduced(String introduced) {
+	public void setIntroduced(LocalDate introduced) {
 		this.introduced = introduced;
 	}
 
-	public String getDiscontinued() {
+	public LocalDate getDiscontinued() {
 		return discontinued;
 	}
 
-	public void setDiscontinued(String discontinued) {
+	public void setDiscontinued(LocalDate discontinued) {
 		this.discontinued = discontinued;
 	}
 

@@ -2,6 +2,8 @@ package com.excilys.formation.computerdatabase.ui;
 
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -66,7 +68,7 @@ public class CLIC {
 		_OUT.println("1. List computers");
 		_OUT.println("2. List companies");
 		_OUT.println("3. Show computer details");
-		_OUT.println("4. Create computer"); 
+		_OUT.println("4. Create computer");
 		_OUT.println("5. Update computer");
 		_OUT.println("6. Delete computer");
 		_OUT.println("7. Exit");
@@ -97,12 +99,13 @@ public class CLIC {
 			_OUT.println("---------------------------------------");
 			_OUT.println("AFFICHAGE ORDINATEURS        page : " + pageA);
 			_OUT.println("---------------------------------------");
-		
-		ArrayList<Company> cl = cD.list(pageA);
-		for (Company c : cl) {
-			_OUT.println(c.toString());
+
+			ArrayList<Company> cl = cD.list(pageA);
+			for (Company c : cl) {
+				_OUT.println(c.toString());
+			}
+			pageA = pagination((GenericDao) cD, pageA);
 		}
-		pageA = pagination((GenericDao) cD, pageA);}
 	}
 
 	public static void showComputer() {
@@ -138,11 +141,36 @@ public class CLIC {
 
 			_OUT.println("Veuillez Saisir le construteur");
 			String companyName = SC.nextLine();
-			_OUT.println("Veuillez Saisir la Date d'introduction, companieNameformat (0000-00-00)");
-			String introduced = SC.nextLine();
+			_OUT.println("Veuillez Saisir la Date d'introduction, format (0000-00-00)");
+			boolean b = true;
+			LocalDate introduced = null;
+			do {
+				String sIntroduced = SC.nextLine();
+				try {
+					introduced = LocalDate.parse(sIntroduced);
+					b = false;
+				} catch (DateTimeParseException e) {
+					_OUT.println("FORMAT INCORRECT,reessayer (0000-00-00)");
+				}
+
+			} while (b);
 			_OUT.println("Veuillez Saisir la Date de discontinued, format (0000-00-00)");
-			String discontinued = SC.nextLine();
+
+			b = true;
+			LocalDate discontinued = null;
+			do {
+				String sDiscontinued = SC.nextLine();
+				try {
+					discontinued = LocalDate.parse(sDiscontinued);
+					b = false;
+				} catch (DateTimeParseException e) {
+					_OUT.println("FORMAT INCORRECT,reessayer (0000-00-00)");
+				}
+
+			} while (b);
+
 			c = new Computer(name, introduced, discontinued, companyName);
+
 			cD.create(c);
 		} else {
 			c = new Computer(name);
@@ -169,19 +197,36 @@ public class CLIC {
 				_OUT.println("vide pour inchangé");
 
 				String name = SC.nextLine();
-				System.out.println("---" + name + "----");
 				if (name != "") {
 					c.setName(name);
 				}
+				boolean b=true;
+				do {
+					String sIntroduced = SC.nextLine();
+					try {
+						c.setIntroduced(LocalDate.parse(sIntroduced));
+						b = false;
+					} catch (DateTimeParseException e) {
+						_OUT.println("FORMAT INCORRECT,reessayer (0000-00-00)");
+					}
 
-				String introduced = SC.nextLine();
-				if (introduced != "") {
-					c.setIntroduced(introduced);
-				}
-				String discontinued = SC.nextLine();
-				if (discontinued != "") {
-					c.setDiscontinued(discontinued);
-				}
+				} while (b);
+			
+				
+				do {
+					String sDiscontinued = SC.nextLine();
+					if (sDiscontinued==""){b=false;} else{
+					try {
+						c.setDiscontinued((LocalDate.parse(sDiscontinued)));
+						b = false;
+					} catch (DateTimeParseException e) {
+						_OUT.println("FORMAT INCORRECT,reessayer (0000-00-00)");
+					}
+					}
+				} while (b);
+			
+			
+
 
 				String companyName = SC.nextLine();
 				if (companyName != "") {
