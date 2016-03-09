@@ -1,5 +1,8 @@
 package com.excylis.formation.test.dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 import com.excilys.formation.computerdatabase.connection.ConnectionManager;
@@ -10,55 +13,87 @@ import com.excilys.formation.computerdatabase.modele.Computer;
 
 import junit.framework.TestCase;
 
-
-
 public class TestDao extends TestCase {
-	
-	public void testListCompanie(){
-		
-		CompanyDao cD= new CompanyDao((ConnectionManager.getConnectionManager().getConn()));
-		ArrayList<Company> cl= cD.list();
-		assertTrue(cl.size()>0);
-		assertTrue(cl.get(0).getName().equals("Apple Inc.") );		
+
+	public void testListCompanie() {
+
+		CompanyDao cD = new CompanyDao((ConnectionManager.getConnectionManager().getConn()));
+		ArrayList<Company> cl = cD.list();
+		assertTrue(cl.size() > 0);
+		assertTrue(cl.get(0).getName().equals("Apple Inc."));
 	}
-	
-	public void testListComputeur(){
-		ComputerDao cD= new ComputerDao((ConnectionManager.getConnectionManager().getConn()));
-		ArrayList<Computer> cl= cD.list();
-		assertTrue(cl.size()>0);
-		assertTrue(cl.get(0).getName()!=null );		
-		
-		
+
+	public void testListComputeur() {
+		ComputerDao cD = new ComputerDao((ConnectionManager.getConnectionManager().getConn()));
+		ArrayList<Computer> cl = cD.list();
+		assertTrue(cl.size() > 0);
+		assertTrue(cl.get(0).getName() != null);
+
 	}
-	
-	public void testFindComputer(){
-		ComputerDao cD= new ComputerDao((ConnectionManager.getConnectionManager().getConn()));
-		Computer c= cD.find(13);
+
+	public void testFindComputer() {
+		ComputerDao cD = new ComputerDao((ConnectionManager.getConnectionManager().getConn()));
+		Computer c = cD.find(13);
 		System.out.println(c.toString());
-		assertTrue(c.getName()!=null);
-		
+		assertTrue(c.getName() != null);
+
 	}
-	public void testAjoutComputer(){
-		ComputerDao cD= new ComputerDao((ConnectionManager.getConnectionManager().getConn()));
-		ArrayList<Computer> cl= cD.list();
+
+	public void testAjoutComputer() {
+		ComputerDao cD = new ComputerDao((ConnectionManager.getConnectionManager().getConn()));
+		ArrayList<Computer> cl = cD.list();
 		int size1 = cl.size();
-		Computer c=new Computer("testertezeez");
+		Computer c = new Computer("testertezeez");
 		cD.create(c);
-		cl= cD.list();
+		cl = cD.list();
 		int size2 = cl.size();
-		assertTrue(size2==(1+size1));
-		assertTrue(c.getId()!=0);
-		
+		assertTrue(size2 == (1 + size1));
+		assertTrue(c.getId() != 0);
+
 	}
-	public void testDeleteComputer(){
-		ComputerDao cD= new ComputerDao((ConnectionManager.getConnectionManager().getConn()));
-		ArrayList<Computer> cl= cD.list();
+
+	public void testUpdate() {
+		ComputerDao cD = new ComputerDao((ConnectionManager.getConnectionManager().getConn()));
+		int aModifier = 0;
+
+		try {
+			Statement stat = ConnectionManager.getConnectionManager().getConn().createStatement();
+			ResultSet rs = stat.executeQuery("select MAX(id) from computer");
+			rs.first();
+			aModifier = rs.getInt("max(id)");
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+
+		}
+		Computer c2 = cD.find(aModifier);
+		c2.setCompanieName("Apple Inc.");
+		cD.update(c2);
+
+	}
+
+	public void testDeleteComputer() {
+		ComputerDao cD = new ComputerDao((ConnectionManager.getConnectionManager().getConn()));
+		ArrayList<Computer> cl = cD.list();
 		int size1 = cl.size();
-		Computer c2 = cD.find(575);
+		int aSupprimer = 0;
+
+		try {
+			Statement stat = ConnectionManager.getConnectionManager().getConn().createStatement();
+			ResultSet rs = stat.executeQuery("select MAX(id) from computer");
+			rs.first();
+			aSupprimer = rs.getInt("max(id)");
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+
+		}
+
+		Computer c2 = cD.find(aSupprimer);
 		cD.delete(c2);
-		cl= cD.list();
+		cl = cD.list();
 		int size2 = cl.size();
-		assertTrue(size2==(size1-1));
+		assertTrue(size2 == (size1 - 1));
 	}
-	
+
 }

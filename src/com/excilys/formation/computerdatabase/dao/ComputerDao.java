@@ -50,7 +50,7 @@ public class ComputerDao extends GenericDao<Computer> {
 
 			try {
 				Statement stm = super.connect.createStatement();
-				result = stm.executeQuery("select id from company where name=" + obj.getCompanieName());
+				result = stm.executeQuery("select id from company where name='" + obj.getCompanieName()+"'");
 				if (result.first()) {
 					companyName = result.getString("id");
 					query = "INSERT into computer(name,company_id,introduced,discontinued) values ('" + obj.getName()
@@ -87,13 +87,49 @@ public class ComputerDao extends GenericDao<Computer> {
 
 	@Override
 	public boolean delete(Computer obj) {
-		// TODO Auto-generated method stub
-		return super.delete(obj);
+
+		try {
+			Statement stat = connect.createStatement();
+			stat.executeUpdate("DELETE FROM computer where id=" + obj.getId());
+			return true;
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+			return false;
+		}
+
 	}
 
 	@Override
 	public boolean update(Computer obj) {
-		// TODO Auto-generated method stub
+		String intro= (obj.getIntroduced()==null)? "0000-00-00" : obj.getIntroduced();
+		String disc= (obj.getDiscontinued()==null)? "0000-00-00" : obj.getDiscontinued();
+		String companyName;
+		String query;
+		if (obj.getCompanieName() != null) {
+			ResultSet result;
+
+			try {
+				Statement stm = super.connect.createStatement();
+				result = stm.executeQuery("select id from company where name='" + obj.getCompanieName()+"'");
+				if (result.first()) {
+					companyName = result.getString("id");
+					query = "UPDATE computer SET name='" + obj.getName()
+							+ "', company_id=" + companyName + ",introduced='" + intro + "',discontinued='" + disc + "' where	id="+obj.getId();
+				} else
+					query = "UPDATE computer SET name='" + obj.getName()
+					+ "',introduced='" + intro + "',discontinued='" + disc + "' where	id="+obj.getId();
+			} catch (SQLException e) {
+				System.out.println("Exception sql lors de l'update");
+				e.printStackTrace();
+			}
+
+		} else
+			query = "UPDATE computer SET name='" + obj.getName()
+			+ "',introduced='" + intro + "',discontinued='" + disc + "' where	id="+obj.getId();
+		
+		
+		
 		return super.update(obj);
 	}
 
@@ -124,13 +160,17 @@ public class ComputerDao extends GenericDao<Computer> {
 	private Computer mapComputer(ResultSet rs) throws SQLException {
 		Computer c1 = new Computer(rs.getInt("computer.id"), rs.getString("computer.name"));
 
-		if (rs.getTimestamp(3) != null)
+		if (rs.getTimestamp(3) != null) {
 			c1.setIntroduced(rs.getTimestamp(3).toString());
-		if (rs.getTimestamp(4) != null)
+		}
+		if (rs.getTimestamp(4) != null) {
 			c1.setDiscontinued(rs.getTimestamp(4).toString());
+		}
 		if (rs.getString("company.name") != null) {
 
-			c1.setCompanieName(rs.getString("company.name"));
+			{
+				c1.setCompanieName(rs.getString("company.name"));
+			}
 		}
 		return c1;
 	}
