@@ -7,6 +7,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import com.excilys.formation.computerdatabase.modele.Company;
+import com.excilys.formation.computerdatabase.modele.Computer;
 
 public class CompanyDao extends GenericDao<Company> {
 	
@@ -65,8 +66,51 @@ public class CompanyDao extends GenericDao<Company> {
 		
 		
 	}
+	public int getNumberOfElement(){
+		String query="SELECT count(*) from company";
+		ResultSet result;
+		try {
+			Statement stm = connect.createStatement();
+			result = stm.executeQuery(query);
 
-	
+			if (result.first()) {
+				return result.getInt(1);
+			} else {
+				return 0;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return 0;
+
+		}
+	}
+
+
+	public ArrayList<Company> list(int page) {
+		int first=page*ROW_BY_PAGE;
+		String query = "Select * from company"
+				+ " LIMIT "+first+","+ROW_BY_PAGE;
+		ResultSet result;
+		ArrayList<Company> companies;
+
+		try {
+			Statement stm = super.connect.createStatement();
+			result = stm.executeQuery(query);
+			companies = new ArrayList<>();
+			while (result.next()) {
+				Company c1=new Company(result.getString("name"), result.getInt("id"));
+				companies.add(c1);
+
+			}
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+			return null;
+		}
+
+		return companies;
+	}
 
 	
 }

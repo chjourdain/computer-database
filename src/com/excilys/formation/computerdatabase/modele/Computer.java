@@ -1,10 +1,17 @@
 package com.excilys.formation.computerdatabase.modele;
-
+/**
+ * Class de modélisation d'un ordianteur
+ * @author excilys
+ *
+ */
 public class Computer {
 	
 	protected int id;
-	protected final String name;
+	protected String name;
 	protected String introduced;
+	public void setName(String name) {
+		this.name = name;
+	}
 	protected String discontinued;
 	protected String companieName;
 	
@@ -17,6 +24,13 @@ public class Computer {
 	public Computer(int pId, String pName){
 		this.id=pId;
 		this.name=pName;
+		
+	}
+	public Computer(String pName, String pIntroduced,String pDiscontinued, String pCompanieName  ){
+		this.name=pName;
+		this.introduced=pIntroduced;
+		this.discontinued=pDiscontinued;
+		this.companieName=pCompanieName;
 		
 	}
 	
@@ -68,10 +82,10 @@ public class Computer {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder("Ordianteur : "+name);
-		sb.append((companieName==null) ? ", de marque non renseignée" : ",  de marque : "+companieName);
-		sb.append((introduced==null) ? ", Aucun Renseignement sur l'introduction" : ",  introduit le : "+introduced);
-		sb.append((discontinued==null) ? ", Aucun Renseignement sur la fin de production" : ",   Fin de production : "+discontinued);
-		
+		sb.append((companieName==null) ? "" : ",  de marque : "+companieName);
+		sb.append((introduced==null) ? "" : ",  introduit le : "+introduced);
+		sb.append((discontinued==null) ? "" : ",   Fin de production : "+discontinued);
+		sb.append(", ID : ").append(id);
 		
 		return sb.toString();
 	}

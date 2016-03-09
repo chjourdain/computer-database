@@ -18,24 +18,24 @@ public class ConnectionManager {
 
 	private ConnectionManager() throws ClassNotFoundException {
 		Class.forName("com.mysql.jdbc.Driver");
-	
-			try {
-				conn = DriverManager.getConnection(URL, USER_NAME, USER_PWD);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		
+
+		try {
+			conn = DriverManager.getConnection(URL, USER_NAME, USER_PWD);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
 	}
 
 	public static ConnectionManager getConnectionManager() {
-		if (instance == null)
+		if (instance == null) {
 			try {
 				instance = new ConnectionManager();
 			} catch (ClassNotFoundException e) {
 
 				e.printStackTrace();
 			}
+		}
 		return instance;
 	}
 

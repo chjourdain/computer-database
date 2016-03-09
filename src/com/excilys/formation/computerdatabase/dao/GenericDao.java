@@ -1,10 +1,12 @@
 package com.excilys.formation.computerdatabase.dao;
 
 import java.sql.Connection;
+
 import java.util.ArrayList;
 
 public abstract class GenericDao<T> {
-	
+	public final static int ROW_BY_PAGE = 20;
+
 		  protected Connection connect = null;
 		   
 		  public GenericDao(Connection conn){
@@ -20,6 +22,11 @@ public abstract class GenericDao<T> {
 		  public boolean update(T obj){ return false;}
 
 		  public T find(int id){ return null;}
+
+		public int getNumberOfElement() {
+			
+			return 0;
+		}
 		}
 	
 	
