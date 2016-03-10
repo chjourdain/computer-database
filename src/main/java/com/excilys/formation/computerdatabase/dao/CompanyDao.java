@@ -54,7 +54,7 @@ public class CompanyDao extends GenericDao<Company> {
 			Statement stm = connect.createStatement();
 			result = stm.executeQuery(query);
 			
-			while (result.next()) {
+			if (result.next()) {
 				company=new Company(result.getString("name"), result.getInt("id"));
 			
 
@@ -116,5 +116,29 @@ public class CompanyDao extends GenericDao<Company> {
 		return companies;
 	}
 
-	
+	public Company findByName(String id) {
+		String query = "Select id, name from company where name="+id;
+		ResultSet result;
+		Company company=null;
+
+		try {
+			Statement stm = connect.createStatement();
+			result = stm.executeQuery(query);
+			
+			if (result.next()) {
+				company=new Company(result.getString("name"), result.getInt("id"));
+			
+
+			}
+
+		} catch (SQLException e) {
+
+			daoLogger.error(e.getMessage());
+			return null;
+		}
+
+		return company;
+		
+		
+	}
 }

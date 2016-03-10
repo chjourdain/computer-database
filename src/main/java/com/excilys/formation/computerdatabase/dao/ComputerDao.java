@@ -1,209 +1,185 @@
 package com.excilys.formation.computerdatabase.dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.excilys.formation.computerdatabase.connection.ConnectionFactory;
+import com.excilys.formation.computerdatabase.dao.exception.DAOException;
 import com.excilys.formation.computerdatabase.modele.Computer;
 
 public class ComputerDao extends GenericDao<Computer> {
 
 	private Logger daoLogger = Logger.getLogger(this.getClass());
+	private final PreparedStatement mCreateStatement;
+	private final PreparedStatement mUpdateStatement;
+	private final PreparedStatement mDeleteStatement;
+	private final PreparedStatement mFindStatement;
 
 	public ComputerDao(Connection conn) {
 		super(conn);
 		daoLogger.info("initialisation de computer dao");
+		try {
+
+			mCreateStatement = connect.prepareStatement(
+					"INSERT INTO `computer` (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?);",
+					Statement.RETURN_GENERATED_KEYS);
+			mUpdateStatement = connect.prepareStatement(
+					"UPDATE `computer` SET name=?, introduced=?, discontinued=?, company_id=? WHERE id = ?;");
+			mDeleteStatement = connect.prepareStatement("DELETE FROM `computer` WHERE id = ?");
+			mFindStatement = connect.prepareStatement("SELECT * FROM `computer` WHERE id = ?");
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
-	@Override
-	public ArrayList<Computer> list() {
-		String query = "Select computer.id, computer.name,introduced,discontinued,company_id, company.name from computer left join company on computer.company_id=company.id";
-		ResultSet result;
-		ArrayList<Computer> computers;
+	private void prepareStatement(Computer pT, PreparedStatement pPreparedStatement) throws SQLException {
+		pPreparedStatement.setString(1, pT.getName());
+		if (pT.getIntroduced() != null) {
+			pPreparedStatement.setString(2, pT.getIntroduced().toString());
+		} else {
+			pPreparedStatement.setString(2, null);
+		}
+		if (pT.getDiscontinued() != null) {
+			pPreparedStatement.setString(3, pT.getIntroduced().toString());
+		} else {
+			pPreparedStatement.setString(3, null);
+		}
+		if (pT.getCompanieName() != null) {
+			pPreparedStatement.setInt(4, pT.getCompanieName().getId());
+		} else {
+			pPreparedStatement.setNull(4, Types.BIGINT);
+		}
+	}
 
+	public List<Computer> findAll(int pStart, int pSize) {
+		Statement statement;
 		try {
-			Statement stm = super.connect.createStatement();
-			result = stm.executeQuery(query);
-			computers = new ArrayList<>();
-			while (result.next()) {
-				Computer c1 = mapComputer(result);
-				computers.add(c1);
+			statement = connect.createStatement();
+			if (pSize > 0) {
+				statement.setMaxRows(pSize);
+			} else {
+				statement.setMaxRows(0);
+				pSize = 0;
 			}
 
+			ResultSet resultSet = statement.executeQuery("SELECT * FROM computer LIMIT " + pSize + " OFFSET " + pStart);
+			List<Computer> mCompanies = new ArrayList<>(resultSet.getFetchSize());
+
+			while (resultSet.next()) {
+				Computer computer = mapComputer(resultSet);
+				mCompanies.add(computer);
+			}
+			return mCompanies;
 		} catch (SQLException e) {
-
-			e.printStackTrace();
-			return null;
+			daoLogger.error(e);
+			throw new DAOException(e);
 		}
-
-		return computers;
 	}
 
-	public ArrayList<Computer> list(int page) {
+	@Deprecated
+	public List<Computer> list(int page) {
 		int first = page * ROW_BY_PAGE;
-		String query = "Select computer.id, computer.name,introduced,discontinued,company_id, company.name from computer"
-				+ " left join company on computer.company_id=company.id" + " LIMIT " + first + "," + ROW_BY_PAGE;
-
-		ResultSet result;
-		ArrayList<Computer> computers;
-
-		try {
-			Statement stm = super.connect.createStatement();
-			result = stm.executeQuery(query);
-			computers = new ArrayList<>();
-			while (result.next()) {
-				Computer c1 = mapComputer(result);
-				computers.add(c1);
-			}
-
-		} catch (SQLException e) {
-
-			e.printStackTrace();
-			return null;
-		}
+		List<Computer> computers;
+		computers = findAll(first, ROW_BY_PAGE);
 
 		return computers;
 	}
 
 	@Override
 	public boolean create(Computer obj) {
-		String companyName = "null";
-		LocalDate pIntro = obj.getIntroduced();
-		LocalDate pDis = obj.getDiscontinued();
-		String query = "";
+		try {
+			mCreateStatement.clearParameters();
 
-		if (obj.getCompanieName() != null) {
-			ResultSet result;
+			prepareStatement(obj, mCreateStatement);
 
-			try {
-				Statement stm = super.connect.createStatement();
-				result = stm.executeQuery("select id from company where name='" + obj.getCompanieName() + "'");
-				if (result.first()) {
-					companyName = result.getString("id");
-					query = "INSERT into computer(name,company_id,introduced,discontinued) values ('" + obj.getName()
-							+ "','" + companyName + "','" + pIntro + "','" + pDis + "'	)";
-				} else
-					query = "INSERT into computer(name,introduced,discontinued) values ('" + obj.getName() + "','"
-							+ pIntro + "','" + pDis + "'	)";
-			} catch (SQLException e) {
-				System.out.println("Company inconnu de la bdd");
-				daoLogger.error(e.getMessage());
+			int nbResult = mCreateStatement.executeUpdate();
+			if (nbResult == 1) {
+				ResultSet a = mCreateStatement.getGeneratedKeys();
+				a.next();
+				obj.setId(a.getInt(1));
+				if (daoLogger.isInfoEnabled()) {
+					daoLogger.info("Création de " + obj);
+				}
+
+				return true;
+
 			}
 
-		} else
-			query = "INSERT into computer(name,introduced,discontinued) values ('" + obj.getName() + "'," + pIntro + ","
-					+ pDis + "	)";
-
-		try {
-			Statement stm = super.connect.createStatement();
-			stm.executeUpdate(query);
-			ResultSet rs;
-			Statement stat = connect.createStatement();
-			rs = stat.executeQuery("SELECT id from computer where name='" + obj.getName() + "'");
-			if (rs.last())
-				obj.setId(rs.getInt("id"));
-			daoLogger.info("creation de " + obj);
-			return true;
+			daoLogger.error("Erreur de création");
+			return false;
 		} catch (SQLException e) {
 			daoLogger.error(e.getMessage());
-			return false;
+			throw new DAOException(e);
 		}
-
 	}
 
 	@Override
 	public boolean delete(Computer obj) {
 
-		try {
-			Statement stat = connect.createStatement();
-			stat.executeUpdate("DELETE FROM computer where id=" + obj.getId());
-			return true;
-		} catch (SQLException e) {
-			daoLogger.error(e.getMessage());
-			return false;
-		} catch (NullPointerException e2) {
-			System.out.println("Aucun ordinateur a supprimer ayant cet ID");
-			return false;
+		if (obj == null || obj.getId() <= 0) {
+			throw new IllegalArgumentException("Null or Not Persisted Object");
 		}
-
+		
+		try {
+			mDeleteStatement.setLong(1, obj.getId());
+			int nbLines = mDeleteStatement.executeUpdate();
+			
+			daoLogger.info("Supreession de "+obj.getId()+(nbLines == 1 ? "reussi" : " raté"));
+			return nbLines == 1;
+		} catch (SQLException e) {
+			daoLogger.error(e);
+			throw new DAOException(e);
+		}
 	}
-
+	
 	@Override
 	public boolean update(Computer obj) {
-		/**
-		 * Creation de l'obj2 pour le logger
-		 */
-		Computer obj2=obj;
-		LocalDate intro2 = obj.getIntroduced();
-		String intro = (intro2 == null) ? null : "'" + intro2 + "'";
-		LocalDate disc2 = obj.getDiscontinued();
-		String disc = (disc2 == null) ? null : "'" + disc2 + "'";
-		String companyName;
-		String query = "";
-		if (obj.getCompanieName() != null) {
-			ResultSet result;
-
-			try {
-				Statement stm = super.connect.createStatement();
-				result = stm.executeQuery("select id from company where name='" + obj.getCompanieName() + "'");
-				if (result.first()) {
-					companyName = result.getString("id");
-					query = "UPDATE computer SET name='" + obj.getName() + "', company_id=" + companyName
-							+ ",introduced=" + intro + ",discontinued=" + disc + " where	id=" + obj.getId();
-				} else
-					query = "UPDATE computer SET name='" + obj.getName() + "',introduced=" + intro + ",discontinued="
-							+ disc + " where	id=" + obj.getId();
-			} catch (SQLException e) {
-				System.out.println("Exception sql lors de l'update");
-				e.printStackTrace();
-
-			}
-
-		} else {
-			query = "UPDATE computer SET name='" + obj.getName() + "',introduced=" + intro + ",discontinued=" + disc
-					+ " where	id=" + obj.getId();
+		if (obj == null || obj.getId() <= 0) {
+			throw new IllegalArgumentException("Pas d'objet ou objet non enregistré");
 		}
-
+		
 		try {
-			Statement stt = connect.createStatement();
-
-			stt.executeUpdate(query);
-		} catch (SQLException e) {
-			daoLogger.error(e.getMessage());
+			prepareStatement(obj, mUpdateStatement);
+			mUpdateStatement.setInt(5, obj.getId());
+			int nbResult = mUpdateStatement.executeUpdate();
+			if (nbResult == 1) {
+				if (daoLogger.isInfoEnabled()) {
+					daoLogger.info("Update de "+obj.getId()+" reussi");
+				}
+				
+				return true;
+			}
+			daoLogger.error("Error on update");
 			return false;
+		} catch (SQLException e) {
+			daoLogger.error(e);
+			throw new DAOException(e);
 		}
-		daoLogger.info("update de "+obj2+"  pour : "+obj);
-		return true;
 	}
 
-	public Computer find(int id) throws NullPointerException {
-		String query = "Select computer.id,computer.name,introduced,discontinued,company.name from computer left join company on computer.company_id=company.id where computer.id="
-				+ id;
-		ResultSet result;
-		Computer computer = null;
-
+	public Computer find(int id)  {
 		try {
-			Statement stm = super.connect.createStatement();
-			result = stm.executeQuery(query);
-
-			if (result.first()) {
-				computer = mapComputer(result);
-			} else {
-				System.out.println("Aucun ordinateur avec cet ID");
+			mFindStatement.setLong(1, id);
+			ResultSet resultSet = mFindStatement.executeQuery();
+			
+			if (!resultSet.isBeforeFirst()) {
+				return null;
 			}
+			resultSet.next();
+			return mapComputer(resultSet);
 		} catch (SQLException e) {
-			System.out.println("Aucun ordinateur avec cet ID");
-			throw new NullPointerException();
-
+			daoLogger.error(e);
+			throw new DAOException(e);
 		}
-
-		return computer;
-
 	}
 
 	public int getNumberOfElement() {
@@ -223,7 +199,7 @@ public class ComputerDao extends GenericDao<Computer> {
 			return 0;
 
 		}
-	}
+		}
 
 	private Computer mapComputer(ResultSet rs) throws SQLException {
 		Computer c1 = new Computer(rs.getInt("computer.id"), rs.getString("computer.name"));
@@ -234,10 +210,10 @@ public class ComputerDao extends GenericDao<Computer> {
 		if (rs.getTimestamp(4) != null) {
 			c1.setDiscontinued(rs.getDate(4).toLocalDate());
 		}
-		if (rs.getString("company.name") != null) {
-
+		if (rs.getString("company_id") != null) {
+			CompanyDao cCD = new CompanyDao((ConnectionFactory.getConnectionManager().getConn()));
 			{
-				c1.setCompanieName(rs.getString("company.name"));
+				c1.setCompanieName(cCD.findByName(rs.getString("company_id")));
 			}
 		}
 		return c1;

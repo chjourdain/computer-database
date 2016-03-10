@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.excilys.formation.computerdatabase.connection.ConnectionFactory;
 import com.excilys.formation.computerdatabase.dao.CompanyDao;
@@ -26,7 +27,7 @@ public class TestDao extends TestCase {
 
 	public void testListComputeur() {
 		ComputerDao cD = new ComputerDao((ConnectionFactory.getConnectionManager().getConn()));
-		ArrayList<Computer> cl = cD.list();
+		List<Computer> cl = cD.findAll(0,10);
 		assertTrue(cl.size() > 0);
 		assertTrue(cl.get(0).getName() != null);
 
@@ -42,12 +43,12 @@ public class TestDao extends TestCase {
 
 	public void testAjoutComputer() {
 		ComputerDao cD = new ComputerDao((ConnectionFactory.getConnectionManager().getConn()));
-		ArrayList<Computer> cl = cD.list();
-		int size1 = cl.size();
+	
+		int size1 = cD.getNumberOfElement();
 		Computer c = new Computer("testertezeez");
 		cD.create(c);
-		cl = cD.list();
-		int size2 = cl.size();
+		
+		int size2 = cD.getNumberOfElement();
 		assertTrue(size2 == (1 + size1));
 		assertTrue(c.getId() != 0);
 
@@ -68,7 +69,7 @@ public class TestDao extends TestCase {
 
 		}
 		Computer c2 = cD.find(aModifier);
-		c2.setCompanieName("Apple Inc.");
+	
 		c2.setName("echange");
 		cD.update(c2);
 	
@@ -91,15 +92,15 @@ public class TestDao extends TestCase {
 		Computer c2 = cD.find(aModifier);
 		c2.setDiscontinued(LocalDate.parse("2015-02-03"));
 		c2.setIntroduced(LocalDate.parse("2015-01-03"));
-		c2.setCompanieName("Apple Inc.");
+
 		assertTrue(cD.update(c2));
 
 	}
 
 	public void testDeleteComputer() {
 		ComputerDao cD = new ComputerDao((ConnectionFactory.getConnectionManager().getConn()));
-		ArrayList<Computer> cl = cD.list();
-		int size1 = cl.size();
+	
+		int size1 = cD.getNumberOfElement();
 		int aSupprimer = 0;
 
 		try {
@@ -115,8 +116,8 @@ public class TestDao extends TestCase {
 
 		Computer c2 = cD.find(aSupprimer);
 		cD.delete(c2);
-		cl = cD.list();
-		int size2 = cl.size();
+		
+		int size2 = cD.getNumberOfElement();
 		assertTrue(size2 == (size1 - 1));
 	}
 

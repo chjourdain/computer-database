@@ -13,4 +13,8 @@ public static List<Company> list(Integer pageA) {
 	
 	return cD.list(pageA);
 }
+
+public static Company findByName(String companyName) {
+	return cD.findByName(companyName);
+}
 }

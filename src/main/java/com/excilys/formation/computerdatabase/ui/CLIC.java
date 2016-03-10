@@ -26,7 +26,7 @@ public class CLIC {
 			try {
 				i = SC.nextInt();
 			} catch (InputMismatchException e) {
-				_OUT.println("Entrée non valide");
+				_OUT.println("Entrée non va1lide");
 				SC.nextLine();
 				i = -1;
 			}
@@ -165,8 +165,8 @@ public class CLIC {
 				}
 
 			} while (b);
-
-			c = new Computer(name, introduced, discontinued, companyName);
+			Company company=CompanyService.findByName(companyName);
+			c = new Computer(name, introduced, discontinued, company);
 
 			ComputerService.create(c);
 		} else {
@@ -224,7 +224,9 @@ public class CLIC {
 
 				String companyName = SC.nextLine();
 				if (companyName != "") {
-					c.setCompanieName(companyName);
+					Company company=CompanyService.findByName(companyName);
+					
+					c.setCompanieName(company);
 				}
 				ComputerService.update(c);
 			} catch (NullPointerException e2) {

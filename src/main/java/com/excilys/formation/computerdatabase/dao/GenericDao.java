@@ -13,7 +13,7 @@ public abstract class GenericDao<T> {
 		    this.connect = conn;
 		  }
 		   
-		  public abstract ArrayList<T> list();
+		
 		  
 		  public  boolean create(T obj){ return false;}
 
