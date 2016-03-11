@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.excilys.formation.computerdatabase.connection.ConnectionFactory;
 import com.excilys.formation.computerdatabase.dao.ComputerDao;
-import com.excilys.formation.computerdatabase.modele.Computer;
+import com.excilys.formation.computerdatabase.model.Computer;
 
 public class ComputerService {
 	static ComputerDao cD = new ComputerDao((ConnectionFactory.getConnectionManager().getConn()));

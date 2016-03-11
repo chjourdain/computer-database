@@ -17,7 +17,6 @@ public class TestConnectionFactory {
 		try {
 			assertTrue(con.isValid(1000));
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

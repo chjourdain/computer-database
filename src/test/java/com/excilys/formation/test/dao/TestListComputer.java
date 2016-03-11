@@ -6,7 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import com.excilys.formation.computerdatabase.connection.ConnectionFactory;
 import com.excilys.formation.computerdatabase.dao.ComputerDao;
-import com.excilys.formation.computerdatabase.modele.Computer;
+import com.excilys.formation.computerdatabase.model.Computer;
 
 public class TestListComputer {
 	ComputerDao cD;

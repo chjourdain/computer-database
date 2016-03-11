@@ -10,8 +10,8 @@ import java.util.List;
 import com.excilys.formation.computerdatabase.connection.ConnectionFactory;
 import com.excilys.formation.computerdatabase.dao.CompanyDao;
 import com.excilys.formation.computerdatabase.dao.ComputerDao;
-import com.excilys.formation.computerdatabase.modele.Company;
-import com.excilys.formation.computerdatabase.modele.Computer;
+import com.excilys.formation.computerdatabase.model.Company;
+import com.excilys.formation.computerdatabase.model.Computer;
 
 import junit.framework.TestCase;
 

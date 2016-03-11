@@ -1,6 +1,6 @@
 /bin/
-/.settings
-/WebContent/
-/target/
-/.project
+.settings
+WebContent/
+target/
+.project
 log

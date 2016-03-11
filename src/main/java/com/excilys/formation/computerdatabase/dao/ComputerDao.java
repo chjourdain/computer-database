@@ -14,7 +14,7 @@ import org.apache.log4j.Logger;
 
 import com.excilys.formation.computerdatabase.connection.ConnectionFactory;
 import com.excilys.formation.computerdatabase.dao.exception.DAOException;
-import com.excilys.formation.computerdatabase.modele.Computer;
+import com.excilys.formation.computerdatabase.model.Computer;
 
 public class ComputerDao extends GenericDao<Computer> {
 
@@ -28,7 +28,6 @@ public class ComputerDao extends GenericDao<Computer> {
 		super(conn);
 		daoLogger.info("initialisation de computer dao");
 		try {
-
 			mCreateStatement = connect.prepareStatement(
 					"INSERT INTO `computer` (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?);",
 					Statement.RETURN_GENERATED_KEYS);
@@ -53,8 +52,8 @@ public class ComputerDao extends GenericDao<Computer> {
 		} else {
 			pPreparedStatement.setString(3, null);
 		}
-		if (pT.getCompanieName() != null) {
-			pPreparedStatement.setInt(4, pT.getCompanieName().getId());
+		if (pT.getCompany() != null) {
+			pPreparedStatement.setInt(4, pT.getCompany().getId());
 		} else {
 			pPreparedStatement.setNull(4, Types.BIGINT);
 		}
@@ -70,10 +69,8 @@ public class ComputerDao extends GenericDao<Computer> {
 				statement.setMaxRows(0);
 				pSize = 0;
 			}
-
 			ResultSet resultSet = statement.executeQuery("SELECT * FROM computer LIMIT " + pSize + " OFFSET " + pStart);
 			List<Computer> mCompanies = new ArrayList<>(resultSet.getFetchSize());
-
 			while (resultSet.next()) {
 				Computer computer = mapComputer(resultSet);
 				mCompanies.add(computer);
@@ -90,7 +87,6 @@ public class ComputerDao extends GenericDao<Computer> {
 		int first = page * ROW_BY_PAGE;
 		List<Computer> computers;
 		computers = findAll(first, ROW_BY_PAGE);
-
 		return computers;
 	}
 
@@ -98,9 +94,7 @@ public class ComputerDao extends GenericDao<Computer> {
 	public boolean create(Computer obj) {
 		try {
 			mCreateStatement.clearParameters();
-
 			prepareStatement(obj, mCreateStatement);
-
 			int nbResult = mCreateStatement.executeUpdate();
 			if (nbResult == 1) {
 				ResultSet a = mCreateStatement.getGeneratedKeys();
@@ -109,11 +103,8 @@ public class ComputerDao extends GenericDao<Computer> {
 				if (daoLogger.isInfoEnabled()) {
 					daoLogger.info("Création de " + obj);
 				}
-
 				return true;
-
 			}
-
 			daoLogger.error("Erreur de création");
 			return false;
 		} catch (SQLException e) {
@@ -124,38 +115,33 @@ public class ComputerDao extends GenericDao<Computer> {
 
 	@Override
 	public boolean delete(Computer obj) {
-
 		if (obj == null || obj.getId() <= 0) {
 			throw new IllegalArgumentException("Null or Not Persisted Object");
 		}
-		
 		try {
 			mDeleteStatement.setLong(1, obj.getId());
 			int nbLines = mDeleteStatement.executeUpdate();
-			
-			daoLogger.info("Supreession de "+obj.getId()+(nbLines == 1 ? "reussi" : " raté"));
+			daoLogger.info("Supreession de " + obj.getId() + (nbLines == 1 ? "reussi" : " raté"));
 			return nbLines == 1;
 		} catch (SQLException e) {
 			daoLogger.error(e);
 			throw new DAOException(e);
 		}
 	}
-	
+
 	@Override
 	public boolean update(Computer obj) {
 		if (obj == null || obj.getId() <= 0) {
 			throw new IllegalArgumentException("Pas d'objet ou objet non enregistré");
 		}
-		
 		try {
 			prepareStatement(obj, mUpdateStatement);
 			mUpdateStatement.setInt(5, obj.getId());
 			int nbResult = mUpdateStatement.executeUpdate();
 			if (nbResult == 1) {
 				if (daoLogger.isInfoEnabled()) {
-					daoLogger.info("Update de "+obj.getId()+" reussi");
+					daoLogger.info("Update de " + obj.getId() + " reussi");
 				}
-				
 				return true;
 			}
 			daoLogger.error("Error on update");
@@ -166,11 +152,10 @@ public class ComputerDao extends GenericDao<Computer> {
 		}
 	}
 
-	public Computer find(int id)  {
+	public Computer find(int id) {
 		try {
 			mFindStatement.setLong(1, id);
 			ResultSet resultSet = mFindStatement.executeQuery();
-			
 			if (!resultSet.isBeforeFirst()) {
 				return null;
 			}
@@ -188,9 +173,14 @@ public class ComputerDao extends GenericDao<Computer> {
 		try {
 			Statement stm = connect.createStatement();
 			result = stm.executeQuery(query);
-
 			if (result.first()) {
 				return result.getInt(1);
+				/**
+				 * Class de modélisation d'un ordianteur
+				 * 
+				 * @author excilys
+				 *
+				 */
 			} else {
 				return 0;
 			}
@@ -199,7 +189,7 @@ public class ComputerDao extends GenericDao<Computer> {
 			return 0;
 
 		}
-		}
+	}
 
 	private Computer mapComputer(ResultSet rs) throws SQLException {
 		Computer c1 = new Computer(rs.getInt("computer.id"), rs.getString("computer.name"));
@@ -213,7 +203,7 @@ public class ComputerDao extends GenericDao<Computer> {
 		if (rs.getString("company_id") != null) {
 			CompanyDao cCD = new CompanyDao((ConnectionFactory.getConnectionManager().getConn()));
 			{
-				c1.setCompanieName(cCD.findByName(rs.getString("company_id")));
+				c1.setCompany(cCD.findByName(rs.getString("company_id")));
 			}
 		}
 		return c1;

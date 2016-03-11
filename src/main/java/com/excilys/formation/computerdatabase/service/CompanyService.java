@@ -4,17 +4,17 @@ import java.util.List;
 
 import com.excilys.formation.computerdatabase.connection.ConnectionFactory;
 import com.excilys.formation.computerdatabase.dao.CompanyDao;
-import com.excilys.formation.computerdatabase.modele.Company;
+import com.excilys.formation.computerdatabase.model.Company;
 
 public class CompanyService {
- static CompanyDao cD = new CompanyDao((ConnectionFactory.getConnectionManager().getConn()));
+ static CompanyDao companyDao = new CompanyDao((ConnectionFactory.getConnectionManager().getConn()));
 
 public static List<Company> list(Integer pageA) {
 	
-	return cD.list(pageA);
+	return companyDao.list(pageA);
 }
 
 public static Company findByName(String companyName) {
-	return cD.findByName(companyName);
+	return companyDao.findByName(companyName);
 }
 }

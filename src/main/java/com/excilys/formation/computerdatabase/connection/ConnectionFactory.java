@@ -1,5 +1,7 @@
 package com.excilys.formation.computerdatabase.connection;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,17 +10,19 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
+
 public class ConnectionFactory {
 	private static final String CONFIG_FILENAME = "config_bd.properties";
-	private static String USER_NAME;// = "admincdb";
-	private static String USER_PWD;// = "qwerty1234";
-	private static String URL;// =								// "jdbc:mysql://127.0.0.1:3306/computer-database-db?zeroDateTimeBehavior=convertToNull";
-	private static Connection conn;
+	private static String USER_NAME;
+	private static String USER_PWD;
+	private static String URL;
+	private Connection conn;
 	private static ConnectionFactory instance = null;
+	private static final Logger logger = Logger.getLogger(ConnectionFactory.class);
 
 	static {
 		try {
-			// chargement des propriétés
 			Properties prop = loadProp(CONFIG_FILENAME);
 			URL = prop.getProperty("url", "");
 			USER_NAME = prop.getProperty("user", "");
@@ -26,10 +30,6 @@ public class ConnectionFactory {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	public Connection getConn() {
-		return conn;
 	}
 
 	private ConnectionFactory() throws ClassNotFoundException {
@@ -54,9 +54,20 @@ public class ConnectionFactory {
 
 	public static Properties loadProp(String filename) throws IOException, FileNotFoundException {
 		Properties properties = new Properties();
-		InputStream input =  ConnectionFactory.class.getClassLoader().getResourceAsStream(filename);
+		InputStream input = ConnectionFactory.class.getClassLoader().getResourceAsStream(filename);
+		if (input != null) {
 			properties.load(input);
 			return properties;
-		
+		}
+		if (new File(CONFIG_FILENAME).exists()) {
+			FileInputStream file = new FileInputStream(new File(CONFIG_FILENAME));
+			properties.load(file);
+			return properties;
+		}
+		return null;
+	}
+
+	public Connection getConn() {
+		return conn;
 	}
 }
