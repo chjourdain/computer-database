@@ -1,1 +1,6 @@
 /bin/
+/.settings
+/WebContent/
+/target/
+/.project
+log

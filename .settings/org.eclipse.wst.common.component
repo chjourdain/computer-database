@@ -3,7 +3,8 @@
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/ressource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java/ressource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/ressources"/>
         <property name="context-root" value="computer-database"/>
         <property name="java-output-path" value="/computer-database/target/classes"/>
     </wb-module>
