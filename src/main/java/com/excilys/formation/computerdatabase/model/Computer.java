@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public class Computer {
 
-	private int id;
+	private long id;
 	private String name;
 	private LocalDate introduced;
 	private Company company;
@@ -62,11 +62,11 @@ public class Computer {
 		this.company = company;
 	}
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -76,30 +76,53 @@ public class Computer {
 
 	@Override
 	public int hashCode() {
-		return (id*11);
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((company == null) ? 0 : company.hashCode());
+		result = prime * result + ((discontinued == null) ? 0 : discontinued.hashCode());
+		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + ((introduced == null) ? 0 : introduced.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
+		if (this == obj)
 			return true;
-		}
-		if (obj == null) {
+		if (obj == null)
 			return false;
-		}
-		if (obj.getClass() != this.getClass()) {
+		if (getClass() != obj.getClass())
 			return false;
-		}
-		Computer autre = (Computer) obj;
-		if (this.getId() == autre.getId()) {
-			return true;
-		}
-		return false;
+		Computer other = (Computer) obj;
+		if (company == null) {
+			if (other.company != null)
+				return false;
+		} else if (!company.equals(other.company))
+			return false;
+		if (discontinued == null) {
+			if (other.discontinued != null)
+				return false;
+		} else if (!discontinued.equals(other.discontinued))
+			return false;
+		if (id != other.id)
+			return false;
+		if (introduced == null) {
+			if (other.introduced != null)
+				return false;
+		} else if (!introduced.equals(other.introduced))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Computer [mId=" + id + ", mName=" + name + ", introduced=" + introduced + ", discontinued="
-				+ discontinued + ", company=" + company + "]";
+		return "Computer [id=" + id + ", name=" + name + ", introduced=" + introduced + ", company=" + company
+				+ ", discontinued=" + discontinued + "]";
 	}
 }

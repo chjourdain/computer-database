@@ -1,29 +1,39 @@
-package com.excilys.formation.computerdatabase.dao;
+package com.excilys.formation.computerdatabase.persist.dao.impl;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
 import com.excilys.formation.computerdatabase.model.Company;
+import com.excilys.formation.computerdatabase.persist.connection.ConnectionFactory;
+import com.excilys.formation.computerdatabase.persist.dao.CompanyDao;
 
-public class CompanyDao extends GenericDao<Company> {
+public class CompanyDaoImpl implements CompanyDao {
 
-	Logger daoLogger = Logger.getLogger(this.getClass());
+	private Logger daoLogger = Logger.getLogger(this.getClass());
+	private static CompanyDaoImpl instance = new CompanyDaoImpl();
 
-	public CompanyDao(Connection con) {
-		super(con);
+	private CompanyDaoImpl() {
 		daoLogger.info("Initialisation du DAO Company");
+	}
+	public static CompanyDao getCompanyDaoImpl(){
+		return instance;
 	}
 
 	public ArrayList<Company> list() {
 		String query = "Select id, name from company";
 		ResultSet result;
 		ArrayList<Company> companies;
+		Statement stm = null;
+		Connection connect = null;
 		try {
-			Statement stm = super.connect.createStatement();
+			connect = ConnectionFactory.getConnectionManager().getConn();
+			stm = connect.createStatement();
 			result = stm.executeQuery(query);
 			companies = new ArrayList<>();
 			while (result.next()) {
@@ -34,6 +44,9 @@ public class CompanyDao extends GenericDao<Company> {
 			daoLogger.error(e);
 			return null;
 		}
+		finally {
+			 ConnectionFactory.getConnectionManager().closeConnection(connect, stm);
+		}
 		return companies;
 	}
 
@@ -42,8 +55,10 @@ public class CompanyDao extends GenericDao<Company> {
 		String query = "Select id, name from company where id=" + id;
 		ResultSet result;
 		Company company = null;
+		Connection connect = ConnectionFactory.getConnectionManager().getConn();
+		Statement stm = null;
 		try {
-			Statement stm = connect.createStatement();
+			stm = connect.createStatement();
 			result = stm.executeQuery(query);
 			if (result.next()) {
 				company = new Company(result.getString("name"), result.getInt("id"));
@@ -52,14 +67,19 @@ public class CompanyDao extends GenericDao<Company> {
 			daoLogger.error(e);
 			return null;
 		}
+		finally {
+			 ConnectionFactory.getConnectionManager().closeConnection(connect, stm);
+		}
 		return company;
 	}
 
-	public int getNumberOfElement() {
+	public int count() {
+		Connection connect = ConnectionFactory.getConnectionManager().getConn();
 		String query = "SELECT count(*) from company";
 		ResultSet result;
+		Statement stm = null;
 		try {
-			Statement stm = connect.createStatement();
+			stm = connect.createStatement();
 			result = stm.executeQuery(query);
 			if (result.first()) {
 				return result.getInt(1);
@@ -70,15 +90,20 @@ public class CompanyDao extends GenericDao<Company> {
 			e.printStackTrace();
 			return 0;
 		}
+		finally {
+			 ConnectionFactory.getConnectionManager().closeConnection(connect, stm);
+		}
 	}
 
-	public ArrayList<Company> list(int page) {
-		int first = page * ROW_BY_PAGE;
-		String query = "Select * from company" + " LIMIT " + first + "," + ROW_BY_PAGE;
+	@Override
+	public List<Company> findAll(long index, int nbrElement) {
+		Connection connect = ConnectionFactory.getConnectionManager().getConn();
+		String query = "Select * from company" + " LIMIT " + index + "," + nbrElement;
 		ResultSet result;
 		ArrayList<Company> companies;
+		Statement stm=null;
 		try {
-			Statement stm = super.connect.createStatement();
+			stm = connect.createStatement();
 			result = stm.executeQuery(query);
 			companies = new ArrayList<>();
 			while (result.next()) {
@@ -89,15 +114,20 @@ public class CompanyDao extends GenericDao<Company> {
 			daoLogger.error(e);
 			return null;
 		}
+		finally {
+			 ConnectionFactory.getConnectionManager().closeConnection(connect, stm);
+		}
 		return companies;
 	}
 
 	public Company findByName(String id) {
+		Connection connect = ConnectionFactory.getConnectionManager().getConn();
 		String query = "Select id, name from company where name=" + id;
 		ResultSet result;
 		Company company = null;
+		Statement stm = null;
 		try {
-			Statement stm = connect.createStatement();
+			stm = connect.createStatement();
 			result = stm.executeQuery(query);
 			if (result.next()) {
 				company = new Company(result.getString("name"), result.getInt("id"));
@@ -106,6 +136,9 @@ public class CompanyDao extends GenericDao<Company> {
 			daoLogger.error(e.getMessage());
 			return null;
 		}
+		finally {
+			 ConnectionFactory.getConnectionManager().closeConnection(connect, stm);
+		}
 		return company;
-	}
+	}	
 }

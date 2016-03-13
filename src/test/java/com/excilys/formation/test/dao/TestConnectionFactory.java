@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 import org.junit.Test;
 
-import com.excilys.formation.computerdatabase.connection.ConnectionFactory;
+import com.excilys.formation.computerdatabase.persist.connection.ConnectionFactory;
 
 public class TestConnectionFactory {
 	

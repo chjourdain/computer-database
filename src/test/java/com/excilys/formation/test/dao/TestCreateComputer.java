@@ -9,47 +9,47 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.excilys.formation.computerdatabase.connection.ConnectionFactory;
-import com.excilys.formation.computerdatabase.dao.ComputerDao;
 import com.excilys.formation.computerdatabase.model.Company;
 import com.excilys.formation.computerdatabase.model.Computer;
+import com.excilys.formation.computerdatabase.persist.connection.ConnectionFactory;
+import com.excilys.formation.computerdatabase.persist.dao.impl.ComputerDaoImpl;
 
 public class TestCreateComputer {// extends JdbcBasedDBTestCase{
-	static ComputerDao computerDao;
+	static ComputerDaoImpl computerDao;
 
 	@Before
 	public void initialize() {
-		computerDao = new ComputerDao((ConnectionFactory.getConnectionManager().getConn()));
+		computerDao =  ComputerDaoImpl.INSTANCE;
 	}
 
 	@Test
 	public void testCreateStandart() {
-		int a = computerDao.getNumberOfElement();
+		int a = computerDao.count();
 		Computer newOne = new Computer("newOne");
 		computerDao.create(newOne);
-		assertTrue(1 + a == computerDao.getNumberOfElement());
+		assertTrue(1 + a == computerDao.count());
 	}
 
 	@Test
 	public void testCreateNoCompany() {
-		int a = computerDao.getNumberOfElement();
+		int a = computerDao.count();
 		Company pCompany = null;
 		Computer newOne = new Computer("newOne", LocalDate.parse("2015-02-02"), LocalDate.parse("2015-02-02"),
 				pCompany);
 		computerDao.create(newOne);
-		assertTrue(1 + a == computerDao.getNumberOfElement());
+		assertTrue(1 + a == computerDao.count());
 	}
 
 	@Test
 	public void testCreateVoid() {
-		int a = computerDao.getNumberOfElement();
+		int a = computerDao.count();
 		Company pCompany = null;
 		Computer newOne = null;
 		try {
 			computerDao.create(newOne);
 		} catch (Exception e) {
 		}
-		assertTrue(a == computerDao.getNumberOfElement());
+		assertTrue(a == computerDao.count());
 	}
 
 	@AfterClass

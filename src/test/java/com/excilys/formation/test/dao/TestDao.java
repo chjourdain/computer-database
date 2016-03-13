@@ -7,26 +7,19 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.excilys.formation.computerdatabase.connection.ConnectionFactory;
-import com.excilys.formation.computerdatabase.dao.CompanyDao;
-import com.excilys.formation.computerdatabase.dao.ComputerDao;
 import com.excilys.formation.computerdatabase.model.Company;
 import com.excilys.formation.computerdatabase.model.Computer;
+import com.excilys.formation.computerdatabase.persist.connection.ConnectionFactory;
+import com.excilys.formation.computerdatabase.persist.dao.CompanyDao;
+import com.excilys.formation.computerdatabase.persist.dao.impl.CompanyDaoImpl;
+import com.excilys.formation.computerdatabase.persist.dao.impl.ComputerDaoImpl;
 
 import junit.framework.TestCase;
 
 public class TestDao extends TestCase {
 
-	public void testListCompanie() {
-
-		CompanyDao cD = new CompanyDao((ConnectionFactory.getConnectionManager().getConn()));
-		ArrayList<Company> cl = cD.list();
-		assertTrue(cl.size() > 0);
-		assertTrue(cl.get(0).getName().equals("Apple Inc."));
-	}
-
 	public void testListComputeur() {
-		ComputerDao cD = new ComputerDao((ConnectionFactory.getConnectionManager().getConn()));
+		ComputerDaoImpl cD =  ComputerDaoImpl.INSTANCE;
 		List<Computer> cl = cD.findAll(0,10);
 		assertTrue(cl.size() > 0);
 		assertTrue(cl.get(0).getName() != null);
@@ -34,7 +27,7 @@ public class TestDao extends TestCase {
 	}
 
 	public void testFindComputer() {
-		ComputerDao cD = new ComputerDao((ConnectionFactory.getConnectionManager().getConn()));
+		ComputerDaoImpl cD =  ComputerDaoImpl.INSTANCE;
 		Computer c = cD.find(13);
 		System.out.println(c.toString());
 		assertTrue(c.getName() != null);
@@ -42,20 +35,20 @@ public class TestDao extends TestCase {
 	}
 
 	public void testAjoutComputer() {
-		ComputerDao cD = new ComputerDao((ConnectionFactory.getConnectionManager().getConn()));
+		ComputerDaoImpl cD =  ComputerDaoImpl.INSTANCE;
 	
-		int size1 = cD.getNumberOfElement();
+		int size1 = cD.count();
 		Computer c = new Computer("testertezeez");
 		cD.create(c);
 		
-		int size2 = cD.getNumberOfElement();
+		int size2 = cD.count();
 		assertTrue(size2 == (1 + size1));
 		assertTrue(c.getId() != 0);
 
 	}
 
 	public void testUpdate() {
-		ComputerDao cD = new ComputerDao((ConnectionFactory.getConnectionManager().getConn()));
+		ComputerDaoImpl cD =  ComputerDaoImpl.INSTANCE;
 		int aModifier = 0;
 
 		try {
@@ -76,7 +69,7 @@ public class TestDao extends TestCase {
 
 	}
 	public void testUpdateValid() {
-		ComputerDao cD = new ComputerDao((ConnectionFactory.getConnectionManager().getConn()));
+		ComputerDaoImpl cD =  ComputerDaoImpl.INSTANCE;
 		int aModifier = 0;
 
 		try {
@@ -93,14 +86,14 @@ public class TestDao extends TestCase {
 		c2.setDiscontinued(LocalDate.parse("2015-02-03"));
 		c2.setIntroduced(LocalDate.parse("2015-01-03"));
 
-		assertTrue(cD.update(c2));
+		assertTrue(cD.update(c2)!=null);
 
 	}
 
 	public void testDeleteComputer() {
-		ComputerDao cD = new ComputerDao((ConnectionFactory.getConnectionManager().getConn()));
+		ComputerDaoImpl cD =  ComputerDaoImpl.INSTANCE;
 	
-		int size1 = cD.getNumberOfElement();
+		int size1 = cD.count();
 		int aSupprimer = 0;
 
 		try {
@@ -117,7 +110,7 @@ public class TestDao extends TestCase {
 		Computer c2 = cD.find(aSupprimer);
 		cD.delete(c2);
 		
-		int size2 = cD.getNumberOfElement();
+		int size2 = cD.count();
 		assertTrue(size2 == (size1 - 1));
 	}
 

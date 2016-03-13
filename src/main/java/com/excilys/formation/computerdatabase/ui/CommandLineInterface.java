@@ -3,13 +3,14 @@ package com.excilys.formation.computerdatabase.ui;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.InputMismatchException;
-import java.util.List;
 import java.util.Scanner;
 
 import com.excilys.formation.computerdatabase.model.Company;
 import com.excilys.formation.computerdatabase.model.Computer;
-import com.excilys.formation.computerdatabase.service.CompanyService;
-import com.excilys.formation.computerdatabase.service.ComputerService;
+import com.excilys.formation.computerdatabase.model.Pager;
+import com.excilys.formation.computerdatabase.service.GenericService;
+import com.excilys.formation.computerdatabase.service.impl.CompanyServiceImpl;
+import com.excilys.formation.computerdatabase.service.impl.ComputerServiceImpl;
 
 public class CommandLineInterface {
 
@@ -29,10 +30,10 @@ public class CommandLineInterface {
 
 			switch (i) {
 			case 1:
-				listComputer();
+				listComputer(null);
 				break;
 			case 2:
-				listCompanies();
+				listCompanies(null);
 				break;
 			case 3:
 				showComputer();
@@ -69,55 +70,65 @@ public class CommandLineInterface {
 
 	}
 
-	public static void listComputer() {
-		Integer pageA = 0;
+	public static void listComputer(Pager<Computer> pager) {
+		if (pager == null) {
+			GenericService<Computer> service = ComputerServiceImpl.getComputerService();
+			pager = new Pager<Computer>(20,1, service);
+		}
+		pager.printListe();
+		System.out.println("Page suivante : n | Page précédente : p Quitter : q ");
+		Scanner scanner = new Scanner(System.in);
+		String choix = null;
 
-		while (pageA != -1) {
-			System.out.println("---------------------------------------");
-			System.out.println("AFFICHAGE ORDINATEURS        page : " + pageA);
-			System.out.println("---------------------------------------");
-
-			List<Computer> cl = ComputerService.listComputer(pageA);
-			/**
-			 * Class de modélisation d'un ordianteur
-			 * 
-			 * @author excilys
-			 *
-			 */
-			for (Computer c : cl) {
-				System.out.println(c.toString());
-			}
-			pageA = pagination(pageA);
-
+		choix = scanner.next().trim();
+		if ("n".equals(choix)) {
+			pager.next();
+			listComputer(pager);
+		} else if ("p".equals(choix)) {
+			pager.prev();
+			listComputer(pager);
+		} else if ("q".equals(choix)) {
+		} else {
+			listComputer(pager);
 		}
 	}
 
-	public static void listCompanies() {
-		Integer pageA = 0;		
-		while (pageA != -1) {
-			System.out.println("---------------------------------------");
-			System.out.println("AFFICHAGE ORDINATEURS        page : " + pageA);
-			System.out.println("---------------------------------------");
+	public static void listCompanies(Pager<Company> pager) {
+		if (pager == null) {
+			GenericService<Company> service = CompanyServiceImpl.getCompanyService();
+		
+			pager = new Pager<>(20, 1, service);
+		}
+		pager.printListe();
+		System.out.println("Page suivante : n | Page précédente : p Quitter : q ");
+		Scanner scanner = new Scanner(System.in);
+		String choix = null;
 
-			List<Company> cl = CompanyService.list(pageA);
-			for (Company c : cl) {
-				System.out.println(c.toString());
-			}
-			pageA = pagination(pageA);
+		choix = scanner.next().trim();
+		if ("n".equals(choix)) {
+			pager.next();
+			listCompanies(pager);
+		} else if ("p".equals(choix)) {
+			pager.prev();
+			listCompanies(pager);
+		} else if ("q".equals(choix)) {
+		} else {
+			listCompanies(pager);
 		}
 	}
 
 	public static void showComputer() {
 		System.out.println("---------------------------------------");
 		System.out.println("            SHOW COMPUTER              ");
-		System.out.println("-------	private final static PrintStream System.out = System.out;--------------------------------");
+		System.out.println(
+				"-------	private final static PrintStream System.out = System.out;--------------------------------");
 		System.out.println("Veuillez saisir l'id de l'ordinateur à afficher");
 		System.out.println("(-1 pour annuler)");
 		int id = SC.nextInt();
 		if (id != -1) {
 
 			try {
-				Computer c = ComputerService.find(id);
+				Computer c = ComputerServiceImpl.getComputerService().find(id);
 				System.out.println(c.toString());
 			} catch (NullPointerException e2) {
 				System.out.println("Aucun ordinateur avec cet ID");
@@ -166,13 +177,13 @@ public class CommandLineInterface {
 				}
 
 			} while (b);
-			Company company=CompanyService.findByName(companyName);
+			Company company = (new CompanyServiceImpl()).findByName(companyName);
 			c = new Computer(name, introduced, discontinued, company);
 
-			ComputerService.create(c);
+			ComputerServiceImpl.getComputerService().create(c);
 		} else {
 			c = new Computer(name);
-			ComputerService.create(c);
+			ComputerServiceImpl.getComputerService().create(c);
 		}
 
 	}
@@ -188,7 +199,7 @@ public class CommandLineInterface {
 		SC.nextLine();
 		if (id != -1) {
 			try {
-				c = ComputerService.find(id);
+				c = ComputerServiceImpl.getComputerService().find(id);
 				System.out.println(c.toString());
 				System.out.println("Entrez dans l'ordre nom,introduced,discontinued,company_name ");
 				System.out.println("vide pour inchangé");
@@ -221,15 +232,15 @@ public class CommandLineInterface {
 							System.out.println("FORMAT INCORRECT,reessayer (0000-00-00)");
 						}
 					}
-				}while (b);
+				} while (b);
 
 				String companyName = SC.nextLine();
 				if (companyName != "") {
-					Company company=CompanyService.findByName(companyName);
-					
+					Company company = (new CompanyServiceImpl()).findByName(companyName);
+
 					c.setCompany(company);
 				}
-				ComputerService.update(c);
+				ComputerServiceImpl.getComputerService().update(c);
 			} catch (NullPointerException e2) {
 				System.out.print("Aucune modification faite");
 			} // TODO Auto-generated method stub
@@ -247,8 +258,8 @@ public class CommandLineInterface {
 		int id = SC.nextInt();
 		if (id != -1) {
 
-			c = ComputerService.find(id);
-			ComputerService.delete(c);
+			c = ComputerServiceImpl.getComputerService().find(id);
+			ComputerServiceImpl.getComputerService().delete(c);
 		}
 	}
 
@@ -256,37 +267,36 @@ public class CommandLineInterface {
 		SC.close();
 	}
 
-	public static int pagination(Integer page) {
-		System.out.print("(0) |< ");
-		System.out.print("(1) << ");
-		System.out.print("(2) >> ");
-		System.out.print("(3) |> ");
-		System.out.print("(-1) X ");
-		int b = 0;
-		try {
-			b = SC.nextInt();
-		} catch (InputMismatchException e) {
-			b = -1;
-		}
-		switch (b) {
-		case 0:
-			page = 0;
-			break;
-		case 1:
-			page -= 1;
-			break;
-		case 2:
-			page += 1;
-			System.out.println(page);
-			break;
-		case 3:
-			page = ComputerService.getNumberOfElement() / 20;
-			break;
-		default:
-			page = -1;
-
-		}
-		return page;
-	}
-
+//	public static int pagination(Integer page) {
+//		System.out.print("(0) |< ");
+//		System.out.print("(1) << ");
+//		System.out.print("(2) >> ");
+//		System.out.print("(3) |> ");
+//		System.out.print("(-1) X ");
+//		int b = 0;
+//		try {
+//			b = SC.nextInt();
+//		} catch (InputMismatchException e) {
+//			b = -1;
+//		}
+//		switch (b) {
+//		case 0:
+//			page = 0;
+//			break;
+//		case 1:
+//			page -= 1;
+//			break;
+//		case 2:
+//			page += 1;
+//			System.out.println(page);
+//			break;
+//		case 3:
+//			page = ComputerServiceImpl.getComputerService().count() / 20;
+//			break;
+//		default:
+//			page = -1;
+//
+//		}
+//		return page;
+//	}
 }

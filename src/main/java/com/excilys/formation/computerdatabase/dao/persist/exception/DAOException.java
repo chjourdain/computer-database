@@ -1,4 +1,4 @@
-package com.excilys.formation.computerdatabase.dao.exception;
+package com.excilys.formation.computerdatabase.dao.persist.exception;
 
 import java.sql.SQLException;
 

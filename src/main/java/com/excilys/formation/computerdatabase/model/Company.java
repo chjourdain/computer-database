@@ -2,15 +2,18 @@ package com.excilys.formation.computerdatabase.model;
 
 public class Company {
 
-	private final int id;
-	private final String name;
+	private long id;
+	private String name;
 
 	public Company(String pName, int pId) {
 		this.name = pName;
 		this.id = pId;
 	}
+	private Company(){
+		
+	}
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
@@ -18,29 +21,44 @@ public class Company {
 		return name;
 	}
 
-	@Override
-	public int hashCode() {
-		return (id * 11);
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	@Override
-	public String toString() {
-		return "Company [Id=" + id + ", Name=" + name + "]";
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
+		if (this == obj)
 			return true;
-		}
-		if (obj.getClass() != this.getClass()) {
+		if (obj == null)
 			return false;
-		}
-		Company autre = (Company) obj;
-		if (this.getId() == autre.getId()) {
-			return true;
-		}
-		return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Company other = (Company) obj;
+		if (id != other.id)
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
+	}
 
+	@Override
+	public String toString() {
+		return "Company [id=" + id + ", name=" + name + "]";
 	}
 }

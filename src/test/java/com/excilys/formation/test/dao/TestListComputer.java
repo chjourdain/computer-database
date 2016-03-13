@@ -1,19 +1,22 @@
 package com.excilys.formation.test.dao;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
-import com.excilys.formation.computerdatabase.connection.ConnectionFactory;
-import com.excilys.formation.computerdatabase.dao.ComputerDao;
+
 import com.excilys.formation.computerdatabase.model.Computer;
+import com.excilys.formation.computerdatabase.persist.dao.impl.ComputerDaoImpl;
 
 public class TestListComputer {
-	ComputerDao cD;
+	ComputerDaoImpl cD;
 
 	@Before
 	public void initialize() {
-		cD = new ComputerDao((ConnectionFactory.getConnectionManager().getConn()));
+		cD = ComputerDaoImpl.INSTANCE;
 	}
 
 	@Test
@@ -40,7 +43,7 @@ public class TestListComputer {
 	@Test
 	public void listerOver() {
 		List<Computer> test = cD.findAll(0, 10000);
-		assertTrue(test.size() == cD.getNumberOfElement());
+		assertTrue(test.size() == cD.count());
 	
 	}
 
