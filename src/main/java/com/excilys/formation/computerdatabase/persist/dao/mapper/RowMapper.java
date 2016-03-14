@@ -1,4 +1,4 @@
-package com.excilys.formation.computerdatabase.dao.persist.mapper;
+package com.excilys.formation.computerdatabase.persist.dao.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

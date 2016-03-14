@@ -3,7 +3,6 @@ package com.excilys.formation.computerdatabase.service.impl;
 import java.util.List;
 
 import com.excilys.formation.computerdatabase.model.Computer;
-import com.excilys.formation.computerdatabase.persist.connection.ConnectionFactory;
 import com.excilys.formation.computerdatabase.persist.dao.impl.ComputerDaoImpl;
 import com.excilys.formation.computerdatabase.service.ComputerService;
 

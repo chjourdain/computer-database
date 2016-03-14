@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app>
+    <servlet>
+        <servlet-name>CreateComputer</servlet-name>
+        <servlet-class>com.excilys.formation.computerdatabase.servlets.CreateComputer</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>CreateComputer</servlet-name>
+        <url-pattern>/create</url-pattern>
+    </servlet-mapping>
+</web-app>

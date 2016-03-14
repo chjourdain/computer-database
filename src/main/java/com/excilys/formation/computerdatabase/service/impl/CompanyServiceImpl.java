@@ -8,7 +8,7 @@ import com.excilys.formation.computerdatabase.persist.dao.impl.CompanyDaoImpl;
 import com.excilys.formation.computerdatabase.service.CompanyService;
 import com.excilys.formation.computerdatabase.service.GenericService;
 
-public class CompanyServiceImpl implements CompanyService{
+public class CompanyServiceImpl implements CompanyService {
 	private CompanyDao companyDao = CompanyDaoImpl.getCompanyDaoImpl();
 	private static CompanyServiceImpl instance = new CompanyServiceImpl();
 
@@ -18,7 +18,7 @@ public class CompanyServiceImpl implements CompanyService{
 		}
 		return companyDao.findByName(companyName);
 	}
-	
+
 	@Override
 	public List<Company> findAll(Long index, int nbrElement) {
 		if (index < 0 || nbrElement <= 0) {
@@ -30,6 +30,14 @@ public class CompanyServiceImpl implements CompanyService{
 	@Override
 	public int count() {
 		return companyDao.count();
+	}
+
+	@Override
+	public Company find(int id) {
+		if (id == 0) {
+			return null;
+		}
+		return companyDao.find(id);
 	}
 
 	public static GenericService getCompanyService() {

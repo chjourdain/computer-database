@@ -16,7 +16,7 @@ public class ConnectionFactory {
 	private static String USER_NAME;
 	private static String USER_PWD;
 	private static String URL;
-	private static String DRIVER;
+	private static String DRIVER="";
 	private Connection conn;
 	private static ConnectionFactory instance = null;
 	private static final Logger LOGGER = Logger.getLogger(ConnectionFactory.class);
@@ -60,6 +60,7 @@ public class ConnectionFactory {
 //			properties.load(file);
 //			return properties;
 //		}
+		LOGGER.error("Impossible de charger le fichier de conf");
 		return null;
 	}
 

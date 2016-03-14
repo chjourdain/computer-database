@@ -11,12 +11,12 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.excilys.formation.computerdatabase.dao.persist.exception.DAOException;
-import com.excilys.formation.computerdatabase.dao.persist.mapper.RowMapper;
 import com.excilys.formation.computerdatabase.model.Computer;
 import com.excilys.formation.computerdatabase.persist.connection.ConnectionFactory;
 import com.excilys.formation.computerdatabase.persist.dao.CompanyDao;
 import com.excilys.formation.computerdatabase.persist.dao.ComputerDao;
+import com.excilys.formation.computerdatabase.persist.dao.exception.DAOException;
+import com.excilys.formation.computerdatabase.persist.dao.mapper.RowMapper;
 
 public class ComputerDaoImpl implements ComputerDao {
 
