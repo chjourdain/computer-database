@@ -15,16 +15,18 @@ public class CreateComputer extends HttpServlet {
 	public static final String VUE = "/WEB-INF/views/addComputer.jsp";
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Map<Integer, String> map= CompanyServiceImpl.getMap();
-		 request.setAttribute("map", map );	
+		Map<Integer, String> map = CompanyServiceImpl.getMap();
+		request.setAttribute("map", map);
 		this.getServletContext().getRequestDispatcher(VUE).forward(request, response);
 	}
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ComputerServiceJspImpl service = new ComputerServiceJspImpl();
 		service.create(request);
-		 request.setAttribute("service", service );	
-		this.getServletContext().getRequestDispatcher(VUE).forward(request,response);
+		Map<Integer, String> map = CompanyServiceImpl.getMap();
+		request.setAttribute("map", map);
+		request.setAttribute("service", service);
+		this.getServletContext().getRequestDispatcher(VUE).forward(request, response);
 
 	}
 

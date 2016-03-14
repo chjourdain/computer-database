@@ -97,7 +97,7 @@ public class ComputerDaoImpl implements ComputerDao {
 			return null;
 		} catch (SQLException e) {
 			daoLogger.error(e.getMessage());
-			throw new DAOException(e);
+			return null;
 		} finally {
 			ConnectionFactory.getConnectionManager().closeConnection(connect, CreateStatement);
 		}

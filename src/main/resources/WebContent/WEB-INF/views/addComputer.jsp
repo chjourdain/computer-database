@@ -42,13 +42,10 @@
                             <div class="form-group">
                                 <label for="companyId">Company</label>
                                 <select class="form-control" id="companyId" name="companyId">
-                                ${map}${map.value}
                                     <option value="0">--</option>
                                     <c:forEach items="${map}" var="entry">
                                     <option value="${entry.key}">${entry.value}</option>
-                                    </c:forEach>
-                                    
-                                    
+                                    </c:forEach>                                    
                                 </select>
                             </div>                  
                         </fieldset>

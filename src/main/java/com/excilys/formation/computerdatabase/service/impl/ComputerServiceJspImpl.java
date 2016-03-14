@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.excilys.formation.computerdatabase.model.Company;
 import com.excilys.formation.computerdatabase.model.Computer;
+import com.excilys.formation.computerdatabase.persist.dao.exception.DAOException;
 import com.excilys.formation.computerdatabase.persist.dao.impl.ComputerDaoImpl;
 import com.excilys.formation.computerdatabase.service.ComputerService;
 
@@ -46,10 +47,10 @@ public class ComputerServiceJspImpl implements ComputerService {
 		if (Name == null) {
 			return null;
 		}
-		if (!Pattern.matches(regex, introduced) && introduced != null) {
+		if (!Pattern.matches(regex, introduced) && (introduced != "")) {
 			erreur.put("introduced", "Erreur de format, renseigner YYYY-MM-JJ");
 		}
-		if (!Pattern.matches(regex, discontinued) && discontinued != null) {
+		if (!Pattern.matches(regex, discontinued) && discontinued != "") {
 			erreur.put("discontinued", "Erreur de format, renseigner YYYY-MM-JJ");
 		}
 		Company company = null;

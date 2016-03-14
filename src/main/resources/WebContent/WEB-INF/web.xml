@@ -4,9 +4,17 @@
         <servlet-name>CreateComputer</servlet-name>
         <servlet-class>com.excilys.formation.computerdatabase.servlets.CreateComputer</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>DashBoard</servlet-name>
+        <servlet-class>com.excilys.formation.computerdatabase.servlets.DashBoard</servlet-class>
+    </servlet>
     
     <servlet-mapping>
         <servlet-name>CreateComputer</servlet-name>
         <url-pattern>/create</url-pattern>
+    </servlet-mapping>
+     <servlet-mapping>
+        <servlet-name>DashBoard</servlet-name>
+        <url-pattern>/dashboard</url-pattern>
     </servlet-mapping>
 </web-app>
