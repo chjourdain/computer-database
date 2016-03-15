@@ -64,14 +64,6 @@ public class ComputerDaoImpl implements ComputerDao {
 		}
 	}
 
-	@Deprecated
-	public List<Computer> list(int page) {
-		int first = page * ROW_BY_PAGE;
-		List<Computer> computers;
-		computers = findAll(first, ROW_BY_PAGE);
-		return computers;
-	}
-
 	@Override
 	public Computer create(Computer obj) {
 		Connection connect = null;

@@ -20,20 +20,8 @@ public class ComputerServiceImpl implements ComputerService {
 		return instance;
 	}
 
-	public List<Computer> listComputer(int page) {
-		return computerDao.list(page);
-
-	}
-
 	public int count() {
 		return computerDao.count();
-	}
-
-	public Computer find(int id) {
-		if (id < 0) {
-			return null;
-		}
-		return computerDao.find(id);
 	}
 
 	public Computer create(Computer c) {

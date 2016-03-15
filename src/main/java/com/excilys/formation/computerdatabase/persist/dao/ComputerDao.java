@@ -6,8 +6,6 @@ import com.excilys.formation.computerdatabase.model.Computer;
 public interface ComputerDao extends GenericDao<Computer>{
 	static final String KEY = "computerDao";
 	
-	@Deprecated
-	public List<Computer> list(int page);
 	@Override
 	public Computer create(Computer obj) ;
 	@Override

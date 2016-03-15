@@ -13,7 +13,6 @@ public class Pager<T> {
 	GenericService<T> service;
 
 	public Pager(int nbParPage, int page, GenericService<T> service) {
-		System.out.println(service);
 			this.nbEntries = service.count();
 			this.nbParPage = nbParPage;
 			this.nbPages = (int) Math.ceil(nbEntries/nbParPage);
@@ -43,7 +42,6 @@ public class Pager<T> {
 		}
 
 	public void updateListe(){
-			System.out.println(service);
 			this.liste = service.findAll((long)(pageActuelle - 1)*nbParPage, nbParPage);
 		}
 
