@@ -15,17 +15,25 @@ import com.excilys.formation.computerdatabase.service.impl.ComputerServiceImpl;
 
 public class DashBoard extends HttpServlet {
 	private static final String VUE = "/WEB-INF/views/dashboard.jsp";
-	
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
+	private Pager<ComputerDTO> pager;
+
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		int count = ComputerServiceImpl.getComputerService().count();
 		request.setAttribute("count", count);
 		GenericService<ComputerDTO> service = ComputerServiceDtoImpl.getInstance();
 		int page = 1;
-		if (request.getParameter("Page") != "" && request.getParameter("Page") != null){
-			page = Integer.parseInt(request.getParameter("Page")); 
+		if (pager == null) {
+			pager = new Pager<ComputerDTO>(10, page, service);
 		}
-		Pager<ComputerDTO> pager = new Pager<ComputerDTO>(10, page, service);
-		request.setAttribute("pager",pager);
+		if (request.getParameter("Page") != "" && request.getParameter("Page") != null) {
+			page = Integer.parseInt(request.getParameter("Page"));
+			pager.setPageActuelle(page);
+		}
+		if (request.getParameter("Nb") != "" && request.getParameter("Nb") != null) {
+			page = Integer.parseInt(request.getParameter("Nb"));
+			pager.setNbParPage(page);
+		}
+		request.setAttribute("pager", pager);
 		this.getServletContext().getRequestDispatcher(VUE).forward(request, response);
 	}
 }

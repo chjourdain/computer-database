@@ -16,13 +16,12 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard"> Application - Computer
-				Database </a>
+			<a class="navbar-brand" href="dashboard"> Application - Computer Database </a>
 		</div>
 	</header>
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${count}Computers found</h1>
+			<h1 id="homeTitle">${count} Computers found</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -34,7 +33,7 @@
 					</form>
 				</div>
 				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href="/create">Add
+					<a class="btn btn-success" id="addComputer" href="create">Add
 						Computer</a> <a class="btn btn-default" id="editComputer" href="#"
 						onclick="$.fn.toggleEditMode();">Edit</a>
 				</div>
@@ -100,9 +99,9 @@
 			</ul>
 
 			<div class="btn-group btn-group-sm pull-right" role="group">
-				<button type="button" class="btn btn-default">10</button>
-				<button type="button" class="btn btn-default">50</button>
-				<button type="button" class="btn btn-default">100</button>
+				<a href="dashboard?Nb=10" class="btn btn-default">10</a>
+				<a href="dashboard?Nb=50" class="btn btn-default">50</a>
+				<a href="dashboard?Nb=100" class="btn btn-default">100</a>
 			</div>
 		</div>
 	</footer>

@@ -59,6 +59,8 @@ public class Pager<T> {
 
 	public void setNbParPage(int nbParPage) {
 			this.nbParPage = nbParPage;
+			updateListe();	
+			this.nbPages = (int) Math.ceil(nbEntries/nbParPage);
 		}
 
 	public int getNbPages() {

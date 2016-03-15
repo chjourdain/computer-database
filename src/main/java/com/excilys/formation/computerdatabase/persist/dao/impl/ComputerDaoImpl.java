@@ -103,7 +103,7 @@ public class ComputerDaoImpl implements ComputerDao {
 			throw new IllegalArgumentException("Null or Not Persisted Object");
 		}
 		try {
-			DeleteStatement = connect.prepareStatement("DELETE FROM `comComputer cputer` WHERE id = ?");
+			DeleteStatement = connect.prepareStatement("DELETE FROM computer WHERE id = ?");
 			DeleteStatement.setLong(1, obj.getId());
 			int nbLines = DeleteStatement.executeUpdate();
 			daoLogger.info("Supreession de " + obj.getId()+" reussi" );
