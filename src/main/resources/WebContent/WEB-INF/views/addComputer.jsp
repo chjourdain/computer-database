@@ -49,7 +49,7 @@
 								<label for="discontinued">Discontinued date</label>&emsp; <b
 									style="color: red;"> ${service.erreur['discontinued']}</b> <input
 									type="date" class="form-control" id="discontinued"
-									data-validation="custom"ard?Nb=100
+									data-validation="custom"
 									data-validation-regexp="^[0-9]{4}-[0-1][0-9]-[0-3][0-9]$"
 									name="discontinued" placeholder="Discontinued date">
 							</div>
@@ -64,7 +64,7 @@
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
-							<input type="submit" value="Add" class="btn btn-primary">
+							<input id="submit" type="submit" value="Add" class="btn btn-primary">
 							or <a href="dashboard" class="btn btn-default">Cancel</a>
 						</div>
 					</form>

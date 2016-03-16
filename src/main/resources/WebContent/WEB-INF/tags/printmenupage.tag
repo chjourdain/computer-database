@@ -10,12 +10,12 @@
 <c:choose>
 	<c:when test="${pager.pageActuelle < 3 }">
 		<c:forEach var="i" begin="1" end="${iteration}" step="1">
-			<li><a href="dashboard?Page=${i}"> ${i} </a></li>
+			<li><a href="dashboard?Page=${i}&Nb=${pager.nbParPage}"> ${i} </a></li>
 		</c:forEach>
 	</c:when>
 	<c:otherwise>
 		<c:forEach var="i" begin="${pager.pageActuelle -2 }" end="${iteration+ pager.pageActuelle - 3}" step="1">
-			<li><a href="dashboard?Page=${i}"> ${i} </a></li>
+			<li><a href="dashboard?Page=${i}&Nb=${pager.nbParPage}"> ${i} </a></li>
 		</c:forEach>
 	</c:otherwise>
 </c:choose>

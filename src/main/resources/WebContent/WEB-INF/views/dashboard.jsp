@@ -21,7 +21,7 @@
 	</header>
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${count} Computers found</h1>
+			<h1 id="homeTitle">${pager.nbEntries} Computers found</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -108,6 +108,5 @@
 	<script src="static/js/jquery.min.js"></script>
 	<script src="static/js/bootstrap.min.js"></script>
 	<script src="static/js/dashboard.js"></script>
-
 </body>
 </html>

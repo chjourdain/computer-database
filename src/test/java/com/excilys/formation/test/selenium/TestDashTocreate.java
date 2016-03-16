@@ -51,6 +51,42 @@ public class TestDashTocreate {
    assertTrue(b == 50);
   }
   
+  @Test
+  public void testcreateDateFalse() throws Exception {
+    driver.get(baseUrl + "/dashboard");
+    driver.findElement(By.id("addComputer")).click();
+    driver.findElement(By.id("introduced")).clear();
+    driver.findElement(By.id("introduced")).sendKeys("cjhcjchjv");
+   // assertTrue(!driver.findElement(By.id("submit")).isEnabled());
+  }
+  
+  @Test
+  public void testMenuPager() throws Exception {
+    driver.get(baseUrl + "/dashboard?Nb=10");
+    driver.findElement(By.linkText("4")).click();
+    driver.findElement(By.linkText("5")).click();
+    driver.findElement(By.linkText("6")).click();
+    driver.findElement(By.linkText("7")).click();
+    driver.findElement(By.linkText("8")).click();
+    driver.findElement(By.linkText("9")).click();
+    driver.findElement(By.linkText("10")).click();
+    driver.findElement(By.linkText("11")).click();
+    driver.findElement(By.linkText("12")).click();
+    driver.findElement(By.linkText("13")).click();
+    driver.findElement(By.linkText("14")).click();
+    driver.findElement(By.linkText("15")).click();
+    driver.findElement(By.linkText("16")).click();
+    driver.findElement(By.linkText("17")).click();
+    driver.findElement(By.linkText("18")).click();
+    driver.findElement(By.linkText("19")).click();
+    driver.findElement(By.linkText("«")).click();
+    driver.findElement(By.linkText("4")).click();
+    driver.findElement(By.linkText("5")).click();
+    driver.findElement(By.linkText("10")).click();
+    driver.findElement(By.linkText("50")).click();
+    driver.findElement(By.linkText("3")).click();
+  }
+  
   @After
   public void tearDown() throws Exception {
     driver.quit();

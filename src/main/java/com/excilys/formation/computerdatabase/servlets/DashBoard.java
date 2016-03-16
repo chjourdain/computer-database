@@ -22,9 +22,7 @@ public class DashBoard extends HttpServlet {
 		request.setAttribute("count", count);
 		GenericService<ComputerDTO> service = ComputerServiceDtoImpl.getInstance();
 		int page = 1;
-		if (pager == null) {
 			pager = new Pager<ComputerDTO>(10, page, service);
-		}
 		if (request.getParameter("Page") != "" && request.getParameter("Page") != null) {
 			page = Integer.parseInt(request.getParameter("Page"));
 			pager.setPageActuelle(page);
