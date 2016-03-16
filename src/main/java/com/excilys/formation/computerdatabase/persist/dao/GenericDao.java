@@ -3,7 +3,7 @@ package com.excilys.formation.computerdatabase.persist.dao;
 import java.util.List;
 
 public interface GenericDao<T> {
-	final static int ROW_BY_PAGE = 20;
+	static int ROW_BY_PAGE = 20;
 
 	default T create(T obj) {
 		throw new UnsupportedOperationException();
@@ -22,7 +22,6 @@ public interface GenericDao<T> {
 	}
 
 	List<T> findAll(long index, int nbrElement);
-	
 	default int count() {
 		throw new UnsupportedOperationException();
 	}

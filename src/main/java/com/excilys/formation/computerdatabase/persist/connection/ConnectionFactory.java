@@ -13,10 +13,10 @@ import org.apache.log4j.Logger;
 
 public class ConnectionFactory {
 	private static final String CONFIG_FILENAME = "config_bd.properties";
-	private static String USER_NAME;
-	private static String USER_PWD;
-	private static String URL;
-	private static String DRIVER="";
+	private static String userName;
+	private static String userPsswd;
+	private static String url;
+	private static String driver = "";
 	private Connection conn;
 	private static ConnectionFactory instance = null;
 	private static final Logger LOGGER = Logger.getLogger(ConnectionFactory.class);
@@ -24,10 +24,10 @@ public class ConnectionFactory {
 	static {
 		try {
 			Properties prop = loadProp(CONFIG_FILENAME);
-			URL = prop.getProperty("url", "");
-			USER_NAME = prop.getProperty("user", "");
-			USER_PWD = prop.getProperty("password", "");
-			DRIVER = prop.getProperty("driver", "");
+			url = prop.getProperty("url", "");
+			userName = prop.getProperty("user", "");
+			userPsswd = prop.getProperty("password", "");
+			driver = prop.getProperty("driver", "");
 		} catch (Exception e) {
 			LOGGER.error(e);
 		}
@@ -35,15 +35,15 @@ public class ConnectionFactory {
 
 	private ConnectionFactory() {
 		try {
-			Class.forName(DRIVER);
+			Class.forName(driver);
 		} catch (ClassNotFoundException e) {
 			LOGGER.error(e);
 		}
 	}
 
-	public synchronized static ConnectionFactory getConnectionManager() {
+	public static synchronized ConnectionFactory getConnectionManager() {
 		if (instance == null) {
-				instance = new ConnectionFactory();
+			instance = new ConnectionFactory();
 		}
 		return instance;
 	}
@@ -55,35 +55,34 @@ public class ConnectionFactory {
 			properties.load(input);
 			return properties;
 		}
-//		if (new File(CONFIG_FILENAME).exists()) {
-//			FileInputStream file = new FileInputStream(new File(CONFIG_FILENAME));
-//			properties.load(file);
-//			return properties;
-//		}
 		LOGGER.error("Impossible de charger le fichier de conf");
 		return null;
 	}
 
 	public Connection getConn() {
 		try {
-			return DriverManager.getConnection(URL, USER_NAME, USER_PWD);
+			return DriverManager.getConnection(url, userName, userPsswd);
 		} catch (SQLException e) {
 			LOGGER.error(e);
 			throw new RuntimeException();
 		}
 	}
-	
+
 	public void closeConnection(Connection conn, Statement stmt) {
 		closeConnection(conn, stmt, null);
 	}
+
 	public void closeConnection(Connection conn, Statement stmt, ResultSet rs) {
 		try {
-			if (conn != null)
+			if (conn != null) {
 				conn.close();
-			if (stmt != null)
+			}
+			if (stmt != null) {
 				stmt.close();
-			if (rs != null)
+			}
+			if (rs != null) {
 				rs.close();
+			}
 		} catch (SQLException e) {
 			String message = new StringBuilder("Couldn't close jdbc connection: ").append(e.getMessage()).toString();
 			throw new RuntimeException(message);

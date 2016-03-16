@@ -41,6 +41,5 @@ public class ComputerDTO {
 
 	public String getDiscontinued() {
 		return discontinued;
-	}	
-	
+	}		
 }

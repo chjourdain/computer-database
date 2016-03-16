@@ -20,9 +20,11 @@ public class ComputerDaoImpl implements ComputerDao {
 
 	private Logger daoLogger = Logger.getLogger(this.getClass());
 	public static final ComputerDaoImpl INSTANCE = new ComputerDaoImpl();
-	
-	private ComputerDaoImpl(){}
-	public static ComputerDao getComputerDao(){
+
+	private ComputerDaoImpl() {
+	}
+
+	public static ComputerDao getComputerDao() {
 		return INSTANCE;
 	}
 
@@ -44,6 +46,7 @@ public class ComputerDaoImpl implements ComputerDao {
 			pPreparedStatement.setNull(4, Types.BIGINT);
 		}
 	}
+
 	@Override
 	public List<Computer> findAll(long pStart, int pSize) {
 		Connection connect = ConnectionFactory.getConnectionManager().getConn();
@@ -56,7 +59,7 @@ public class ComputerDaoImpl implements ComputerDao {
 				statement.setMaxRows(0);
 				pSize = 0;
 			}
-			ResultSet resultSet = statement.executeQuery("SELECT * FROM computer LIMIT " + pSize + " OFFSET " + pStart);				
+			ResultSet resultSet = statement.executeQuery("SELECT * FROM computer LIMIT " + pSize + " OFFSET " + pStart);
 			return (new ComputerMapper()).mapRows(resultSet);
 		} catch (SQLException e) {
 			daoLogger.error(e);
@@ -67,17 +70,17 @@ public class ComputerDaoImpl implements ComputerDao {
 	@Override
 	public Computer create(Computer obj) {
 		Connection connect = null;
-		PreparedStatement CreateStatement = null;
+		PreparedStatement createStatement = null;
 		try {
 			connect = ConnectionFactory.getConnectionManager().getConn();
-			CreateStatement = connect.prepareStatement(
+			createStatement = connect.prepareStatement(
 					"INSERT INTO `computer` (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?);",
 					Statement.RETURN_GENERATED_KEYS);
-			CreateStatement.clearParameters();
-			prepareStatement(obj, CreateStatement);
-			int nbResult = CreateStatement.executeUpdate();
+			createStatement.clearParameters();
+			prepareStatement(obj, createStatement);
+			int nbResult = createStatement.executeUpdate();
 			if (nbResult == 1) {
-				ResultSet a = CreateStatement.getGeneratedKeys();
+				ResultSet a = createStatement.getGeneratedKeys();
 				a.next();
 				obj.setId(a.getInt(1));
 				if (daoLogger.isInfoEnabled()) {
@@ -91,28 +94,28 @@ public class ComputerDaoImpl implements ComputerDao {
 			daoLogger.error(e.getMessage());
 			return null;
 		} finally {
-			ConnectionFactory.getConnectionManager().closeConnection(connect, CreateStatement);
+			ConnectionFactory.getConnectionManager().closeConnection(connect, createStatement);
 		}
 	}
 
 	@Override
 	public boolean delete(Computer obj) {
-		PreparedStatement DeleteStatement = null;
+		PreparedStatement deleteStatement = null;
 		Connection connect = ConnectionFactory.getConnectionManager().getConn();
 		if (obj == null || obj.getId() <= 0) {
 			throw new IllegalArgumentException("Null or Not Persisted Object");
 		}
 		try {
-			DeleteStatement = connect.prepareStatement("DELETE FROM computer WHERE id = ?");
-			DeleteStatement.setLong(1, obj.getId());
-			int nbLines = DeleteStatement.executeUpdate();
-			daoLogger.info("Supreession de " + obj.getId()+" reussi" );
+			deleteStatement = connect.prepareStatement("DELETE FROM computer WHERE id = ?");
+			deleteStatement.setLong(1, obj.getId());
+			int nbLines = deleteStatement.executeUpdate();
+			daoLogger.info("Supreession de " + obj.getId() + " reussi");
 			return nbLines == 1;
 		} catch (SQLException e) {
 			daoLogger.error(e);
 			throw new DAOException(e);
 		} finally {
-			ConnectionFactory.getConnectionManager().closeConnection(connect, DeleteStatement);
+			ConnectionFactory.getConnectionManager().closeConnection(connect, deleteStatement);
 		}
 	}
 

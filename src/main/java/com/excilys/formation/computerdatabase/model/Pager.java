@@ -15,13 +15,13 @@ public class Pager<T> {
 	public Pager(int nbParPage, int page, GenericService<T> service) {
 			this.nbEntries = service.count();
 			this.nbParPage = nbParPage;
-			this.nbPages = (int) Math.ceil(nbEntries/nbParPage);
-			pageActuelle=page;
+			this.nbPages = (int) Math.ceil(nbEntries / nbParPage);
+			pageActuelle = page;
 			this.service = service;
 			updateListe();
 		}
 
-	public void printListe(){
+	public void printListe() {
 			for (Object object : liste) {
 				System.out.println(object);
 			}
@@ -42,7 +42,7 @@ public class Pager<T> {
 		}
 
 	public void updateListe(){
-			this.liste = service.findAll((long)(pageActuelle - 1)*nbParPage, nbParPage);
+			this.liste = service.findAll((long)(pageActuelle - 1) * nbParPage, nbParPage);
 		}
 
 	public int getNbEntries() {
@@ -60,7 +60,7 @@ public class Pager<T> {
 	public void setNbParPage(int nbParPage) {
 			this.nbParPage = nbParPage;
 			updateListe();	
-			this.nbPages = (int) Math.ceil(nbEntries/nbParPage);
+			this.nbPages = (int) Math.ceil(nbEntries / nbParPage);
 		}
 
 	public int getNbPages() {

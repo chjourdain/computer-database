@@ -23,9 +23,7 @@ public class ComputerMapper implements RowMapper<Computer> {
 		}
 		if (rs.getString("company_id") != null) {
 			CompanyDao cCD = CompanyDaoImpl.getCompanyDaoImpl();
-			{
-				c1.setCompany(cCD.find(Integer.parseInt(rs.getString("company_id"))));
-			}
+			c1.setCompany(cCD.find(Integer.parseInt(rs.getString("company_id"))));
 		}
 		return c1;
 	}

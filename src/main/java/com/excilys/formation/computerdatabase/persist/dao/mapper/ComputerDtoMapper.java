@@ -22,7 +22,7 @@ public class ComputerDtoMapper implements RowMapper<ComputerDTO> {
 			companyName = company.getName();
 		}
 		ComputerDTO c1 = new ComputerDTO(rs.getString("id"), rs.getString("name"), rs.getString("introduced"),
-				companyName, companyId , rs.getString("discontinued"));
+				companyName, companyId, rs.getString("discontinued"));
 		return c1;
 	}
 
@@ -38,7 +38,7 @@ public class ComputerDtoMapper implements RowMapper<ComputerDTO> {
 				companyName = company.getName();
 			}
 			ComputerDTO c1 = new ComputerDTO(rs.getString("id"), rs.getString("name"), rs.getString("introduced"),
-					companyName, companyId , rs.getString("discontinued"));
+					companyName, companyId, rs.getString("discontinued"));
 			computers.add(c1);
 		}
 		return computers;

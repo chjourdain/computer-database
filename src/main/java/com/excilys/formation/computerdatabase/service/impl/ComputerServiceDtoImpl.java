@@ -12,7 +12,7 @@ public class ComputerServiceDtoImpl implements GenericService<ComputerDTO> {
 	private static ComputerServiceDtoImpl instance;
 	private ComputerDaoImpl computerDao = ComputerDaoImpl.INSTANCE;
 	private ComputerDaoDtoImpl computerDtoDao = ComputerDaoDtoImpl.getComputerDTOImpl();
-	
+
 	private ComputerServiceDtoImpl() {
 	}
 

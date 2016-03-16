@@ -4,7 +4,7 @@ public class TagLibPager {
 
 	public static String printPageMenu() {
 		String s = "";
-		int page =3;
+		int page = 3;
 		int nbrpage = 50;
 		if (page < 3) {
 			int i = 1;

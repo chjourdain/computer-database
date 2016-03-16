@@ -24,7 +24,7 @@ public class ComputerServiceJspImpl implements ComputerService {
 	private ComputerDaoImpl computerDao = ComputerDaoImpl.INSTANCE;
 	public Map<String, String> erreur = new HashMap<>();
 	public String resultat;
-	public String color="red";
+	public String color = "red";
 
 	public int count() {
 		return computerDao.count();
@@ -74,7 +74,7 @@ public class ComputerServiceJspImpl implements ComputerService {
 			resultat = "Ordinateur non crée";
 		} else {
 			resultat = "Ordinateur crée : " + computer;
-			color="green";
+			color = "green";
 		}
 		return computer;
 	}

@@ -21,7 +21,8 @@ public class CompanyDaoImpl implements CompanyDao {
 	private CompanyDaoImpl() {
 		daoLogger.info("Initialisation du DAO Company");
 	}
-	public static CompanyDao getCompanyDaoImpl(){
+
+	public static CompanyDao getCompanyDaoImpl() {
 		return instance;
 	}
 
@@ -43,9 +44,8 @@ public class CompanyDaoImpl implements CompanyDao {
 		} catch (SQLException e) {
 			daoLogger.error(e);
 			return null;
-		}
-		finally {
-			 ConnectionFactory.getConnectionManager().closeConnection(connect, stm);
+		} finally {
+			ConnectionFactory.getConnectionManager().closeConnection(connect, stm);
 		}
 		return companies;
 	}
@@ -66,9 +66,8 @@ public class CompanyDaoImpl implements CompanyDao {
 		} catch (SQLException e) {
 			daoLogger.error(e);
 			return null;
-		}
-		finally {
-			 ConnectionFactory.getConnectionManager().closeConnection(connect, stm);
+		} finally {
+			ConnectionFactory.getConnectionManager().closeConnection(connect, stm);
 		}
 		return company;
 	}
@@ -89,9 +88,8 @@ public class CompanyDaoImpl implements CompanyDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return 0;
-		}
-		finally {
-			 ConnectionFactory.getConnectionManager().closeConnection(connect, stm);
+		} finally {
+			ConnectionFactory.getConnectionManager().closeConnection(connect, stm);
 		}
 	}
 
@@ -101,7 +99,7 @@ public class CompanyDaoImpl implements CompanyDao {
 		String query = "Select * from company" + " LIMIT " + index + "," + nbrElement;
 		ResultSet result;
 		ArrayList<Company> companies;
-		Statement stm=null;
+		Statement stm = null;
 		try {
 			stm = connect.createStatement();
 			result = stm.executeQuery(query);
@@ -113,9 +111,8 @@ public class CompanyDaoImpl implements CompanyDao {
 		} catch (SQLException e) {
 			daoLogger.error(e);
 			return null;
-		}
-		finally {
-			 ConnectionFactory.getConnectionManager().closeConnection(connect, stm);
+		} finally {
+			ConnectionFactory.getConnectionManager().closeConnection(connect, stm);
 		}
 		return companies;
 	}
@@ -135,10 +132,9 @@ public class CompanyDaoImpl implements CompanyDao {
 		} catch (SQLException e) {
 			daoLogger.error(e.getMessage());
 			return null;
-		}
-		finally {
-			 ConnectionFactory.getConnectionManager().closeConnection(connect, stm);
+		} finally {
+			ConnectionFactory.getConnectionManager().closeConnection(connect, stm);
 		}
 		return company;
-	}	
+	}
 }

@@ -71,7 +71,7 @@
 				<tbody id="results">
 
 					<c:forEach var="computer" items="${pager.liste}">
-						<tr>
+						<tr class="computer">
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="0"></td>
 							<td><a href="editComputer.html" onclick="">${computer.name}</a>

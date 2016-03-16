@@ -73,7 +73,7 @@ public class CommandLineInterface {
 	public static void listComputer(Pager<Computer> pager) {
 		if (pager == null) {
 			GenericService<Computer> service = ComputerServiceImpl.getComputerService();
-			pager = new Pager<Computer>(20,1, service);
+			pager = new Pager<Computer>(20, 1, service);
 		}
 		pager.printListe();
 		System.out.println("Page suivante : n | Page précédente : p Quitter : q ");
@@ -96,7 +96,7 @@ public class CommandLineInterface {
 	public static void listCompanies(Pager<Company> pager) {
 		if (pager == null) {
 			GenericService<Company> service = CompanyServiceImpl.getCompanyService();
-		
+
 			pager = new Pager<>(20, 1, service);
 		}
 		pager.printListe();
@@ -267,36 +267,36 @@ public class CommandLineInterface {
 		SC.close();
 	}
 
-//	public static int pagination(Integer page) {
-//		System.out.print("(0) |< ");
-//		System.out.print("(1) << ");
-//		System.out.print("(2) >> ");
-//		System.out.print("(3) |> ");
-//		System.out.print("(-1) X ");
-//		int b = 0;
-//		try {
-//			b = SC.nextInt();
-//		} catch (InputMismatchException e) {
-//			b = -1;
-//		}
-//		switch (b) {
-//		case 0:
-//			page = 0;
-//			break;
-//		case 1:
-//			page -= 1;
-//			break;
-//		case 2:
-//			page += 1;
-//			System.out.println(page);
-//			break;
-//		case 3:
-//			page = ComputerServiceImpl.getComputerService().count() / 20;
-//			break;
-//		default:
-//			page = -1;
-//
-//		}
-//		return page;
-//	}
+	// public static int pagination(Integer page) {
+	// System.out.print("(0) |< ");
+	// System.out.print("(1) << ");
+	// System.out.print("(2) >> ");
+	// System.out.print("(3) |> ");
+	// System.out.print("(-1) X ");
+	// int b = 0;
+	// try {
+	// b = SC.nextInt();
+	// } catch (InputMismatchException e) {
+	// b = -1;
+	// }
+	// switch (b) {
+	// case 0:
+	// page = 0;
+	// break;
+	// case 1:
+	// page -= 1;
+	// break;
+	// case 2:
+	// page += 1;
+	// System.out.println(page);
+	// break;
+	// case 3:
+	// page = ComputerServiceImpl.getComputerService().count() / 20;
+	// break;
+	// default:
+	// page = -1;
+	//
+	// }
+	// return page;
+	// }
 }
