@@ -5,10 +5,17 @@
 	<artifactId>computer-database</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<name>computer-database</name>
+	<packaging>war</packaging>
 
 	<build>
-
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<webXml>src\main\resources\WebContent\WEB-INF\web.xml</webXml>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -18,8 +25,62 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.19.1</version>
+				<configuration>
+					<excludes>
+						<exclude>**/selenium/**</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>2.12.4</version>
+				<configuration>
+					<includes>
+						<include>**/selenium/**</include>
+					</includes>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.0</version>
+				<configuration>
+					<path>/</path>
+				</configuration>
+				<executions>
+					<execution>
+						<id>start-tomcat</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<fork>true</fork>
+						</configuration>
+					</execution>
+					<execution>
+						<id>stop-tomcat</id>
+						<phase>post-integration-test</phase>
+						<goals>
+							<goal>shutdown</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
-
 	</build>
 
 	<reporting>
@@ -35,38 +96,59 @@
 			</plugin>
 		</plugins>
 	</reporting>
+
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.12</version>
+			<version>${jUnitVersion}</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.38</version>
+			<version>${mysqlVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>jstl</groupId>
 			<artifactId>jstl</artifactId>
-			<version>1.2</version>
+			<version>${jstlVersion}</version>
+			<scope>provided</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
-			<version>1.2.17</version>
+			<version>${log4jVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
-			<version>3.0.1</version>
-			<scope>provided</scope>
+			<version>${servletVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
-			<version>2.52.0</version>
+			<version>${seleniumVersion}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
+	<properties>
+		<jUnitVersion>4.12</jUnitVersion>
+		<mysqlVersion>(5.1,)</mysqlVersion>
+		<jstlVersion>1.2</jstlVersion>
+		<log4jVersion>1.2.17</log4jVersion>
+		<servletVersion>3.0.1</servletVersion>
+		<seleniumVersion>2.52.0</seleniumVersion>
+	</properties>
+	<profiles>
+		<profile>
+			<id>integration-test</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+			</build>
+		</profile>
+	</profiles>
 </project>

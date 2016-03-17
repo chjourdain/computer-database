@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,14 +13,18 @@ import org.junit.Test;
 import com.excilys.formation.computerdatabase.model.Company;
 import com.excilys.formation.computerdatabase.model.Computer;
 import com.excilys.formation.computerdatabase.persist.connection.ConnectionFactory;
+import com.excilys.formation.computerdatabase.persist.dao.CompanyDao;
+import com.excilys.formation.computerdatabase.persist.dao.impl.CompanyDaoImpl;
 import com.excilys.formation.computerdatabase.persist.dao.impl.ComputerDaoImpl;
 
 public class TestCreateComputer {// extends JdbcBasedDBTestCase{
 	static ComputerDaoImpl computerDao;
+	static CompanyDao companydao;
 
 	@Before
 	public void initialize() {
 		computerDao =  ComputerDaoImpl.INSTANCE;
+		companydao =  CompanyDaoImpl.getCompanyDaoImpl();
 	}
 
 	@Test
@@ -51,6 +56,32 @@ public class TestCreateComputer {// extends JdbcBasedDBTestCase{
 		}
 		assertTrue(a == computerDao.count());
 	}
+	
+	@Test
+	public void testCreateComplet() {
+		int a = computerDao.count();
+		Company company = companydao.find(10);
+		LocalDate d = LocalDate.parse("2015-02-02");
+		Computer newOne = new Computer("newOne", d, d, company);
+		try {
+			newOne = computerDao.create(newOne);
+		} catch (Exception e) {
+		}
+		assertTrue(a + 1 == computerDao.count());
+		assertTrue(newOne.getId() != 0);
+	}
+	
+	@Test
+	public void testCreateDateFausse() {
+		Company company = companydao.find(10);
+		LocalDate d = LocalDate.parse("2040-02-02");
+		Computer newOne = null;
+		try {
+			newOne = computerDao.create(new Computer("newOne", d, d, company));
+		} catch (Exception e) {
+		}
+		assertNull(newOne);
+	}
 
 	@AfterClass
 	public static void cleanbdd() {
@@ -62,32 +93,4 @@ public class TestCreateComputer {// extends JdbcBasedDBTestCase{
 		}
 
 	}
-
-
-//	@Override
-//	protected String getConnectionUrl() {
-//		return "jdbc:mysql://localhost/computer-database-db?zeroDateTimeBehavior=convertToNull;create=true";
-//	}
-//
-//	@Override
-//	protected String getDriverClass() {
-//		
-//		return "java.sql.DriverManager";
-//	}
-//	  protected String getPassword(){  
-//	      return "qwerty1234";  
-//	   }  
-//	   protected String getUsername(){  
-//	      return "admincdb";  
-//	   }
-//
-//	@Override
-//	protected IDataSet getDataSet() throws Exception {
-//		
-//		
-//		return getConnection().createDataSet();
-//	}  
-
-
-
 }
