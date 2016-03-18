@@ -12,6 +12,11 @@ import com.excilys.formation.computerdatabase.persist.dao.GenericDao;
 import com.excilys.formation.computerdatabase.persist.dao.exception.DAOException;
 import com.excilys.formation.computerdatabase.persist.dao.mapper.ComputerDtoMapper;
 
+/**
+ * DAO which works directly with computerDTO
+ * @author charles
+ *
+ */
 public class ComputerDaoDtoImpl implements GenericDao<ComputerDTO> {
 
 	private Logger daoLogger = Logger.getLogger(this.getClass());

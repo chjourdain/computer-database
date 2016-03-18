@@ -14,6 +14,7 @@ import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.Select;
 
 public class TestDashTocreate {
   private WebDriver driver;
@@ -24,8 +25,9 @@ public class TestDashTocreate {
   @Before
   public void setUp() throws Exception {
     driver = new FirefoxDriver();
-    baseUrl = "http://localhost:8080/computer-database";
-    driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+    //baseUrl = "http://localhost:8080/computer-database";
+    baseUrl = "http://localhost:8080/computer-database-1.0-SNAPSHOT";
+    driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
   }
 
   @Test
@@ -85,6 +87,25 @@ public class TestDashTocreate {
     driver.findElement(By.linkText("10")).click();
     driver.findElement(By.linkText("50")).click();
     driver.findElement(By.linkText("3")).click();
+  }
+  
+  @Test
+  public void testCreationComputerNomInvalide() throws Exception {
+    driver.get(baseUrl + "/create");
+    driver.findElement(By.id("computerName")).clear();
+    driver.findElement(By.id("computerName")).sendKeys("a");
+    driver.findElement(By.id("introduced")).clear();
+    int b = driver.findElements(By.cssSelector("span[class='help-block form-error']")).size();
+    assertTrue(b == 1);
+  }
+  @Test
+  public void testCreationComputerNomValide() throws Exception {
+    driver.get(baseUrl + "/create");
+    driver.findElement(By.id("computerName")).clear();
+    driver.findElement(By.id("computerName")).sendKeys("abee");
+    driver.findElement(By.id("introduced")).clear();
+    int b = driver.findElements(By.cssSelector("span[class='help-block form-error']")).size();
+    assertTrue(b == 0);
   }
   
   @After

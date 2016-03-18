@@ -10,7 +10,11 @@ import java.sql.Statement;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
-
+/**
+ * Class to manage the connection, create return and close the connection
+ * @author charles
+ *
+ */
 public class ConnectionFactory {
 	private static final String CONFIG_FILENAME = "config_bd.properties";
 	private static String userName;
@@ -48,6 +52,12 @@ public class ConnectionFactory {
 		return instance;
 	}
 
+	/**
+	 * method which load the properties of the connection
+	 * @param filename 
+	 * @return properties which must contain user & password url and driver use to connect
+	 * @throws IOException
+	 */
 	public static Properties loadProp(String filename) throws IOException {
 		Properties properties = new Properties();
 		InputStream input = ConnectionFactory.class.getClassLoader().getResourceAsStream(filename);

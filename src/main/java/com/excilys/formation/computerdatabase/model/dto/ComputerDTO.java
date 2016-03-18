@@ -1,5 +1,10 @@
 package com.excilys.formation.computerdatabase.model.dto;
 
+/**
+ * DTO of the POJO computer, used to transfer data to jsp pages
+ * @author charles
+ *
+ */
 public class ComputerDTO {
 
 	public String id;

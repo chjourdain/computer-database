@@ -2,6 +2,10 @@ package com.excilys.formation.computerdatabase.persist.dao;
 
 import java.util.List;
 
+/**
+ * CRUD interface
+ * @author charles 
+ */
 public interface GenericDao<T> {
 	static int ROW_BY_PAGE = 20;
 
