@@ -18,79 +18,79 @@ import com.excilys.formation.computerdatabase.persist.dao.impl.CompanyDaoImpl;
 import com.excilys.formation.computerdatabase.persist.dao.impl.ComputerDaoImpl;
 
 public class TestCreateComputer {// extends JdbcBasedDBTestCase{
-	static ComputerDaoImpl computerDao;
-	static CompanyDao companydao;
+    static ComputerDaoImpl computerDao;
+    static CompanyDao companydao;
 
-	@Before
-	public void initialize() {
-		computerDao =  ComputerDaoImpl.INSTANCE;
-		companydao =  CompanyDaoImpl.getCompanyDaoImpl();
+    @Before
+    public void initialize() {
+	computerDao = ComputerDaoImpl.INSTANCE;
+	companydao = CompanyDaoImpl.getCompanyDaoImpl();
+    }
+
+    @Test
+    public void testCreateStandart() {
+	int a = computerDao.count();
+	Computer newOne = new Computer("newOne");
+	computerDao.create(newOne);
+	assertTrue(1 + a == computerDao.count());
+    }
+
+    @Test
+    public void testCreateNoCompany() {
+	int a = computerDao.count();
+	Company pCompany = null;
+	Computer newOne = new Computer("newOne", LocalDate.parse("2015-02-02"), LocalDate.parse("2015-02-02"),
+		pCompany);
+	computerDao.create(newOne);
+	assertTrue(1 + a == computerDao.count());
+    }
+
+    @Test
+    public void testCreateVoid() {
+	int a = computerDao.count();
+	Company pCompany = null;
+	Computer newOne = null;
+	try {
+	    computerDao.create(newOne);
+	} catch (Exception e) {
+	}
+	assertTrue(a == computerDao.count());
+    }
+
+    @Test
+    public void testCreateComplet() {
+	int a = computerDao.count();
+	Company company = companydao.find(10);
+	LocalDate d = LocalDate.parse("2015-02-02");
+	Computer newOne = new Computer("newOne", d, d, company);
+	try {
+	    newOne = computerDao.create(newOne);
+	} catch (Exception e) {
+	}
+	assertTrue(a + 1 == computerDao.count());
+	assertTrue(newOne.getId() != 0);
+    }
+
+    @Test
+    public void testCreateDateFausse() {
+	Company company = companydao.find(10);
+	LocalDate d = LocalDate.parse("2040-02-02");
+	Computer newOne = null;
+	try {
+	    newOne = computerDao.create(new Computer("newOne", d, d, company));
+	} catch (Exception e) {
+	}
+	assertNull(newOne);
+    }
+
+    @AfterClass
+    public static void cleanbdd() {
+	try {
+	    Statement st = ConnectionFactory.getConnectionManager().getConn().createStatement();
+	    st.executeUpdate("DELETE from computer where name='newOne' ");
+	} catch (SQLException e) {
+	    e.printStackTrace();
 	}
 
-	@Test
-	public void testCreateStandart() {
-		int a = computerDao.count();
-		Computer newOne = new Computer("newOne");
-		computerDao.create(newOne);
-		assertTrue(1 + a == computerDao.count());
-	}
-
-	@Test
-	public void testCreateNoCompany() {
-		int a = computerDao.count();
-		Company pCompany = null;
-		Computer newOne = new Computer("newOne", LocalDate.parse("2015-02-02"), LocalDate.parse("2015-02-02"),
-				pCompany);
-		computerDao.create(newOne);
-		assertTrue(1 + a == computerDao.count());
-	}
-
-	@Test
-	public void testCreateVoid() {
-		int a = computerDao.count();
-		Company pCompany = null;
-		Computer newOne = null;
-		try {
-			computerDao.create(newOne);
-		} catch (Exception e) {
-		}
-		assertTrue(a == computerDao.count());
-	}
-	
-	@Test
-	public void testCreateComplet() {
-		int a = computerDao.count();
-		Company company = companydao.find(10);
-		LocalDate d = LocalDate.parse("2015-02-02");
-		Computer newOne = new Computer("newOne", d, d, company);
-		try {
-			newOne = computerDao.create(newOne);
-		} catch (Exception e) {
-		}
-		assertTrue(a + 1 == computerDao.count());
-		assertTrue(newOne.getId() != 0);
-	}
-	
-	@Test
-	public void testCreateDateFausse() {
-		Company company = companydao.find(10);
-		LocalDate d = LocalDate.parse("2040-02-02");
-		Computer newOne = null;
-		try {
-			newOne = computerDao.create(new Computer("newOne", d, d, company));
-		} catch (Exception e) {
-		}
-		assertNull(newOne);
-	}
-
-	@AfterClass
-	public static void cleanbdd() {
-		try {
-			Statement st = ConnectionFactory.getConnectionManager().getConn().createStatement();
-			st.executeUpdate("DELETE from computer where name='newOne' ");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-	}
+    }
 }

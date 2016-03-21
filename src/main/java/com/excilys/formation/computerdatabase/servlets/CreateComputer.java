@@ -8,26 +8,34 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.excilys.formation.computerdatabase.model.Computer;
+import com.excilys.formation.computerdatabase.persist.dao.mapper.ComputerMapper;
+import com.excilys.formation.computerdatabase.service.ComputerService;
 import com.excilys.formation.computerdatabase.service.impl.CompanyServiceImpl;
-import com.excilys.formation.computerdatabase.service.impl.ComputerServiceJspImpl;
+import com.excilys.formation.computerdatabase.service.impl.ComputerServiceImpl;
 
 public class CreateComputer extends HttpServlet {
-	public static final String VUE = "/WEB-INF/views/addComputer.jsp";
+    public static final String VUE = "/WEB-INF/views/addComputer.jsp";
 
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Map<Integer, String> map = CompanyServiceImpl.getMap();
-		request.setAttribute("map", map);
-		this.getServletContext().getRequestDispatcher(VUE).forward(request, response);
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	Map<Integer, String> map = CompanyServiceImpl.getMap();
+	request.setAttribute("map", map);
+	this.getServletContext().getRequestDispatcher(VUE).forward(request, response);
+    }
+
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	ComputerService service = ComputerServiceImpl.getComputerService();
+	ComputerMapper cM = new ComputerMapper();
+	Computer c1 = cM.mapRow(request);
+	if (c1 != null) {
+	    service.create(c1);
 	}
+	Map<Integer, String> map = CompanyServiceImpl.getMap();
+	request.setAttribute("map", map);
+	request.setAttribute("error", cM.getErreur());
+	request.setAttribute("result", cM.resultat);
+	this.getServletContext().getRequestDispatcher(VUE).forward(request, response);
 
-	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ComputerServiceJspImpl service = new ComputerServiceJspImpl();
-		service.create(request);
-		Map<Integer, String> map = CompanyServiceImpl.getMap();
-		request.setAttribute("map", map);
-		request.setAttribute("service", service);
-		this.getServletContext().getRequestDispatcher(VUE).forward(request, response);
-
-	}
+    }
 
 }

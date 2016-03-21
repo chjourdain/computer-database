@@ -7,7 +7,19 @@
 	<name>computer-database</name>
 	<packaging>war</packaging>
 
+	<properties>
+		<javasourceversion>1.8</javasourceversion>
+		<javabuildversion>1.8</javabuildversion>
+		<jUnitVersion>4.12</jUnitVersion>
+		<mysqlVersion>(5.1,)</mysqlVersion>
+		<jstlVersion>1.2</jstlVersion>
+		<log4jVersion>1.2.17</log4jVersion>
+		<servletVersion>3.0.1</servletVersion>
+		<seleniumVersion>2.52.0</seleniumVersion>
+		<bonecpVersion>0.8.0.RELEASE</bonecpVersion>
+	</properties>
 	<build>
+	<finalName>computer-database</finalName>
 		<plugins>
 
 			<plugin>
@@ -15,10 +27,12 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.5.1</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>${javasourceversion}</source>
+					<target>${javabuildversion}</target>
 				</configuration>
 			</plugin>
+
+			<!-- exclude integration test from the the unit test -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -29,6 +43,7 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			<!-- include integration test in the right plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
@@ -47,6 +62,8 @@
 					</execution>
 				</executions>
 			</plugin>
+
+			<!-- Run the integration test with a embedded tomcat server -->
 			<plugin>
 				<groupId>org.codehaus.cargo</groupId>
 				<artifactId>cargo-maven2-plugin</artifactId>
@@ -97,27 +114,22 @@
 	</reporting>
 
 	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${jUnitVersion}</version>
-			<scope>test</scope>
-		</dependency>
+
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>${mysqlVersion}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.jolbox</groupId>
+			<artifactId>bonecp</artifactId>
+			<version>${bonecpVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>jstl</groupId>
 			<artifactId>jstl</artifactId>
 			<version>${jstlVersion}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>${log4jVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -125,20 +137,21 @@
 			<version>${servletVersion}</version>
 		</dependency>
 		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${log4jVersion}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
 			<version>${seleniumVersion}</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${jUnitVersion}</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
-
-	<properties>
-		<jUnitVersion>4.12</jUnitVersion>
-		<mysqlVersion>(5.1,)</mysqlVersion>
-		<jstlVersion>1.2</jstlVersion>
-		<log4jVersion>1.2.17</log4jVersion>
-		<servletVersion>3.0.1</servletVersion>
-		<seleniumVersion>2.52.0</seleniumVersion>
-	</properties>
-
 </project>

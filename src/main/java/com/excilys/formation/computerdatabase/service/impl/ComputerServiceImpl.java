@@ -7,52 +7,52 @@ import com.excilys.formation.computerdatabase.persist.dao.impl.ComputerDaoImpl;
 import com.excilys.formation.computerdatabase.service.ComputerService;
 
 public class ComputerServiceImpl implements ComputerService {
-	private static ComputerServiceImpl instance;
-	private ComputerDaoImpl computerDao = ComputerDaoImpl.INSTANCE;
+    private static ComputerServiceImpl instance;
+    private ComputerDaoImpl computerDao = ComputerDaoImpl.INSTANCE;
 
-	private ComputerServiceImpl() {
+    private ComputerServiceImpl() {
+    }
+
+    public static ComputerService getComputerService() {
+	if (instance == null) {
+	    instance = new ComputerServiceImpl();
+	}
+	return instance;
+    }
+
+    public int count() {
+	return computerDao.count();
+    }
+
+    public Computer create(Computer c) {
+	if (c == null) {
+	    return null;
+	}
+	return computerDao.create(c);
+
+    }
+
+    public Computer update(Computer c) {
+	if (c == null) {
+	    return null;
+	}
+	return computerDao.update(c);
+
+    }
+
+    public void delete(Computer c) {
+	if (c != null) {
+	    computerDao.delete(c);
 	}
 
-	public static ComputerService getComputerService() {
-		if (instance == null) {
-			instance = new ComputerServiceImpl();
-		}
-		return instance;
+    }
+
+    @Override
+    public List<Computer> findAll(Long index, int nbrElement) {
+	if (index < 0 || nbrElement <= 0) {
+	    return null;
 	}
-
-	public int count() {
-		return computerDao.count();
-	}
-
-	public Computer create(Computer c) {
-		if (c == null) {
-			return null;
-		}
-		return computerDao.create(c);
-
-	}
-
-	public Computer update(Computer c) {
-		if (c == null) {
-			return null;
-		}
-		return computerDao.update(c);
-
-	}
-
-	public void delete(Computer c) {
-		if (c != null) {
-			computerDao.delete(c);
-		}
-
-	}
-
-	@Override
-	public List<Computer> findAll(Long index, int nbrElement) {
-		if (index < 0 || nbrElement <= 0) {
-			return null;
-		}
-		return computerDao.findAll(index, nbrElement);
-	}
+	return computerDao.findAll(index, nbrElement);
+    }
 
 }

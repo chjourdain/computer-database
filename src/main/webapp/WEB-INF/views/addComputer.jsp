@@ -21,7 +21,7 @@
 
 	<section id="main">
 		<h4 align="center" style="color:${service.color};">
-			<c:out value="${service.resultat}" />
+			<c:out value="${result}" />
 		</h4>
 		<div class="container">
 			<div class="row">
@@ -34,11 +34,11 @@
 									type="text" class="form-control" id="computerName"
 									name="computerName" placeholder="Computer name"
 									data-validation="length" data-validation-length="min3">
-								<b style="color: 'red'"> ${service.erreur['name']} </b>
+								<b style="color: 'red'"> ${error['name']} </b>
 							</div>
 							<div class="form-group">
 								<label for="introduced">Introduced date</label>&emsp; <b
-									style="color: red;"> ${service.erreur['introduced']}</b> <input
+									style="color: red;"> ${error['introduced']}</b> <input
 									type="date" class="form-control" id="introduced"
 									data-validation="custom"
 									data-validation-regexp="^[0-9]{4}-[0-1][0-9]-[0-3][0-9]$"
@@ -47,7 +47,7 @@
 							</div>
 							<div class="form-group">
 								<label for="discontinued">Discontinued date</label>&emsp; <b
-									style="color: red;"> ${service.erreur['discontinued']}</b> <input
+									style="color: red;"> ${error['discontinued']}</b> <input
 									type="date" class="form-control" id="discontinued"
 									data-validation="custom"
 									data-validation-regexp="^[0-9]{4}-[0-1][0-9]-[0-3][0-9]$"

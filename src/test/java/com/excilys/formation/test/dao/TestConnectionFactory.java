@@ -10,16 +10,16 @@ import org.junit.Test;
 import com.excilys.formation.computerdatabase.persist.connection.ConnectionFactory;
 
 public class TestConnectionFactory {
-	
-	@Test
-	public void TestConnection(){
-	Connection con=	ConnectionFactory.getConnectionManager().getConn();
-		try {
-			assertTrue(con.isValid(1000));
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
+
+    @Test
+    public void TestConnection() {
+	Connection con = ConnectionFactory.getConnectionManager().getConn();
+	try {
+	    assertTrue(con.isValid(1000));
+	} catch (SQLException e) {
+	    e.printStackTrace();
 	}
+
+    }
 
 }
