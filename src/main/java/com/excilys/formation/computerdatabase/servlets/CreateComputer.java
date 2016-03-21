@@ -27,13 +27,19 @@ public class CreateComputer extends HttpServlet {
 	ComputerService service = ComputerServiceImpl.getComputerService();
 	ComputerMapper cM = new ComputerMapper();
 	Computer c1 = cM.mapRow(request);
+	String result = null;
 	if (c1 != null) {
-	    service.create(c1);
+	    if(service.create(c1) == null){
+		result="Computer not created";
+	    }
+	    else {
+		result="Computer added";
+	    };
 	}
 	Map<Integer, String> map = CompanyServiceImpl.getMap();
 	request.setAttribute("map", map);
 	request.setAttribute("error", cM.getErreur());
-	request.setAttribute("result", cM.resultat);
+	request.setAttribute("result", result);
 	this.getServletContext().getRequestDispatcher(VUE).forward(request, response);
 
     }

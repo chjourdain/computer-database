@@ -8,6 +8,10 @@
         <servlet-name>DashBoard</servlet-name>
         <servlet-class>com.excilys.formation.computerdatabase.servlets.DashBoard</servlet-class>
     </servlet>
+     <servlet>
+        <servlet-name>Delete</servlet-name>
+        <servlet-class>com.excilys.formation.computerdatabase.servlets.Delete</servlet-class>
+    </servlet>
     
     <servlet-mapping>
         <servlet-name>CreateComputer</servlet-name>
@@ -16,5 +20,9 @@
      <servlet-mapping>
         <servlet-name>DashBoard</servlet-name>
         <url-pattern>/dashboard</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Delete</servlet-name>
+        <url-pattern>/delete</url-pattern>
     </servlet-mapping>
 </web-app>

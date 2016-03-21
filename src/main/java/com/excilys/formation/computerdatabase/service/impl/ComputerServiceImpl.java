@@ -55,4 +55,12 @@ public class ComputerServiceImpl implements ComputerService {
 	return computerDao.findAll(index, nbrElement);
     }
 
+    @Override
+    public Computer find(int id) {
+	if (id != 0) {
+	    return computerDao.find(id);
+	}
+	return null;
+    }
+
 }

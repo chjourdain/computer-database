@@ -39,8 +39,7 @@
 				</div>
 			</div>
 		</div>
-
-		<form id="deleteForm" action="#" method="POST">
+		<form id="deleteForm" <f:link pager="${pager}" action="action" type="delete"></f:link> method="POST">
 			<input type="hidden" name="selection" value="">
 		</form>
 
@@ -73,7 +72,7 @@
 					<c:forEach var="computer" items="${pager.liste}">
 						<tr class="computer">
 							<td class="editMode"><input type="checkbox" name="cb"
-								class="cb" value="0"></td>
+								class="cb" value="${computer.id}"></td>
 							<td><a href="editComputer.html" onclick="">${computer.name}</a>
 							</td>
 							<td>${computer.introduced}</td>

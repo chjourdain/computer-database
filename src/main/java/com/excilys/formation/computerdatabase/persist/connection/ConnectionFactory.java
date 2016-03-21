@@ -11,6 +11,10 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
+import com.excilys.formation.computerdatabase.persist.dao.exception.DAOConfigurationException;
+import com.jolbox.bonecp.BoneCP;
+import com.jolbox.bonecp.BoneCPConfig;
+
 /**
  * Class to manage the connection, create return and close the connection.
  * 
@@ -23,9 +27,9 @@ public class ConnectionFactory {
     private static String userPsswd;
     private static String url;
     private static String driver = "";
-    private Connection conn;
     private static ConnectionFactory instance = null;
     private static final Logger LOGGER = Logger.getLogger(ConnectionFactory.class);
+    private BoneCP connectionPool = null;
 
     static {
 	try {
@@ -37,13 +41,27 @@ public class ConnectionFactory {
 	} catch (Exception e) {
 	    LOGGER.error(e);
 	}
+	try {
+	    Class.forName(driver);
+	} catch (ClassNotFoundException e) {
+	    throw new DAOConfigurationException("driver not found in classpath.", e);
+	}
     }
 
     private ConnectionFactory() {
 	try {
-	    Class.forName(driver);
-	} catch (ClassNotFoundException e) {
+
+	    BoneCPConfig config = new BoneCPConfig();
+	    config.setJdbcUrl(url);
+	    config.setUsername(userName);
+	    config.setPassword(userPsswd);
+	    config.setMinConnectionsPerPartition(5);
+	    config.setMaxConnectionsPerPartition(10);
+	    config.setPartitionCount(2);
+	    connectionPool = new BoneCP(config);
+	} catch (SQLException e) {
 	    LOGGER.error(e);
+	    throw new DAOConfigurationException("Configs error.", e);
 	}
     }
 
@@ -74,8 +92,9 @@ public class ConnectionFactory {
     }
 
     public Connection getConn() {
+
 	try {
-	    return DriverManager.getConnection(url, userName, userPsswd);
+	    return connectionPool.getConnection();
 	} catch (SQLException e) {
 	    LOGGER.error(e);
 	    throw new RuntimeException();

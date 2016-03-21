@@ -25,8 +25,6 @@ public class ComputerMapper implements RowMapper<Computer> {
     public static final String ATT_DISCONTINUED = "discontinued";
     public static final String regex = "^[0-9]{4}-[0-1][0-9]-[0-3][0-9]$";
     public Map<String, String> erreur = new HashMap<>();
-    public String resultat;
-    public String color = "red";
 
     @Override
     public Computer mapRow(ResultSet rs) throws SQLException {
@@ -77,12 +75,6 @@ public class ComputerMapper implements RowMapper<Computer> {
 	    }
 	    computer = new Computer(Name, intro, disco, company);
 	}
-	if (computer == null) {
-	    resultat = "Ordinateur non crée";
-	} else {
-	    resultat = "Ordinateur crée : " + computer;
-	    color = "green";
-	}
 	return computer;
     }
 
@@ -108,19 +100,7 @@ public class ComputerMapper implements RowMapper<Computer> {
 	}
 	return computers;
     }
-
-    public String getResultat() {
-        return resultat;
-    }
-
-    public String getColor() {
-        return color;
-    }
     
-    public void setResultat(String resultat) {
-        this.resultat = resultat;
-    }
-
     public Map<String, String> getErreur() {
 	return erreur;
     }
