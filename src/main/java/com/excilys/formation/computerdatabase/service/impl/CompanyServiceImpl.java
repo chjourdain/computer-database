@@ -1,21 +1,27 @@
 package com.excilys.formation.computerdatabase.service.impl;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import org.apache.log4j.Logger;
 import com.excilys.formation.computerdatabase.model.Company;
 import com.excilys.formation.computerdatabase.model.Computer;
 import com.excilys.formation.computerdatabase.model.Pager;
+import com.excilys.formation.computerdatabase.persist.connection.ConnectionFactory;
 import com.excilys.formation.computerdatabase.persist.dao.CompanyDao;
 import com.excilys.formation.computerdatabase.persist.dao.impl.CompanyDaoImpl;
 import com.excilys.formation.computerdatabase.service.CompanyService;
 import com.excilys.formation.computerdatabase.service.GenericService;
 
+
 public class CompanyServiceImpl implements CompanyService {
     private static CompanyDao companyDao = CompanyDaoImpl.getCompanyDaoImpl();
     private static CompanyServiceImpl instance = new CompanyServiceImpl();
     private static Map<Integer, String> map;
+    private Logger logger = org.apache.log4j.Logger.getLogger(this.getClass());
 
     public Company findByName(String companyName) {
 	if (companyName == null || companyName.isEmpty()) {
@@ -63,5 +69,27 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public List<Computer> findAll(Pager pager) {
 	throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void delete(Company c) {
+	Connection con = ConnectionFactory.getConnectionManager().getConn();
+	try {
+	    con.setAutoCommit(false);
+	    Statement stm = con.createStatement();
+	    stm.executeUpdate("DELETE from computer where company_id="+c.getId());
+	    
+	    stm.executeUpdate("DELETE from company where id="+c.getId());
+	    con.commit();
+	} catch (SQLException e) {
+	   try {
+	    con.rollback();
+	    con.close();
+	} catch (SQLException e1) {
+
+	   logger.error(e1);
+	}
+	   logger.error(e);
+	}
     }
 }

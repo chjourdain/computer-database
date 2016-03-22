@@ -33,7 +33,7 @@ public class CommandLineInterface {
 		listComputer(null);
 		break;
 	    case 2:
-		//listCompanies(null);
+		deleteCompany();
 		break;
 	    case 3:
 		showComputer();
@@ -56,12 +56,14 @@ public class CommandLineInterface {
 
     }
 
+    
+
     public static void showMenu() {
 	System.out.println("---------------------------------------");
 	System.out.println("               MENU                    ");
 	System.out.println("---------------------------------------");
 	System.out.println("1. List computers");
-	System.out.println("2. List companies");
+	System.out.println("2. Delete companie");
 	System.out.println("3. Show computer details");
 	System.out.println("4. Create computer");
 	System.out.println("5. Update computer");
@@ -120,8 +122,7 @@ public class CommandLineInterface {
     public static void showComputer() {
 	System.out.println("---------------------------------------");
 	System.out.println("            SHOW COMPUTER              ");
-	System.out.println(
-		"-------	private final static PrintStream System.out = System.out;--------------------------------");
+	System.out.println("---------------------------------------");
 	System.out.println("Veuillez saisir l'id de l'ordinateur à afficher");
 	System.out.println("(-1 pour annuler)");
 	int id = SC.nextInt();
@@ -136,6 +137,18 @@ public class CommandLineInterface {
 	}
     }
 
+    private static void deleteCompany() {
+	System.out.println("---------------------------------------");
+	System.out.println("           DELETE COMPANY              ");
+	System.out.println("---------------------------------------");
+	System.out.println("Veuillez saisir l'id de la company a supprimer");
+	System.out.println("(-1 pour annuler)");
+	int id = SC.nextInt();
+	if (id != -1) {
+	    GenericService<Company> service = CompanyServiceImpl.getCompanyService();
+	service.delete(service.find(id));
+    }
+    }
     public static void createComputer() {
 	Computer c;
 	System.out.println("---------------------------------------");
