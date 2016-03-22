@@ -7,6 +7,7 @@
 <%@ attribute name="name" required="false" type="java.lang.String"%>
 <%@ attribute name="page" required="false" type="java.lang.String"%>
 <%@ attribute name="nbParPage" required="false" type="java.lang.String"%>
+<%@ attribute name="search" required="false" type="java.lang.String"%>
 <%@ attribute name="action" required="false" type="java.lang.String"%>
 
 <c:if test="${empty page}">
@@ -15,13 +16,16 @@
 <c:if test="${empty nbParPage}">
 	<c:set var="nb" value="${pager.nbParPage}" />
 </c:if>
+<c:if test="${empty search}">
+	<c:set var="search" value="${pager.search}" />
+</c:if>
 
 <c:choose>
 	<c:when test="${action == 'action'}">
-	<c:out value="action='${type}?Page=${page}&Nb=${nb}'" escapeXml="false"/>
+	<c:out value="action='${type}?Page=${page}&Nb=${nb}&search=${search}'" escapeXml="false"/>
 	</c:when>
 	<c:otherwise>
-	<a href="${type}?Page=${page}&Nb=${nb}">${name}</a>
+	<a href="${type}?Page=${page}&Nb=${nb}&search=${search}">${name}</a>
 	</c:otherwise>
 </c:choose>
 

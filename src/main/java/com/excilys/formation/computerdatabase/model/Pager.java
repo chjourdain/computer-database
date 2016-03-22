@@ -8,15 +8,35 @@ import com.excilys.formation.computerdatabase.service.GenericService;
 
 public class Pager {
 
-    List<ComputerDTO> list;
-    int nbEntries;
-    int nbParPage;
-    int nbPages;
-    int pageActuelle;
+    public List<ComputerDTO> list;
+    public int nbEntries = 0;
+    public int nbParPage;
+    public int nbPages;
+    public int pageActuelle;
+    public String search = null;
+
+    public String getSearch() {
+	return search;
+    }
+
+    public void setSearch(String search) {
+	this.search = search;
+    }
+
     GenericService<Computer> service;
 
     public Pager(int nbParPage, int page, GenericService<Computer> service) {
-	this.nbEntries = service.count();
+	nbEntries = service.count();
+	this.nbParPage = nbParPage;
+	this.nbPages = (int) Math.ceil(nbEntries / nbParPage) + 1;
+	pageActuelle = page;
+	this.service = service;
+	updateListe();
+    }
+    
+    public Pager(int nbParPage, int page, GenericService<Computer> service, String search) {
+	this.search = search;
+	nbEntries = service.count();
 	this.nbParPage = nbParPage;
 	this.nbPages = (int) Math.ceil(nbEntries / nbParPage);
 	pageActuelle = page;
@@ -45,8 +65,12 @@ public class Pager {
     }
 
     public void updateListe() {
-	List<Computer> listCompu = service.findAll((long) (pageActuelle - 1) * nbParPage, nbParPage);
-	list = ComputerDtoMapper.mapRows(listCompu);
+	if (search == null) {
+	    List<Computer> listCompu = service.findAll((long) (pageActuelle - 1) * nbParPage, nbParPage);
+	    list = ComputerDtoMapper.mapRows(listCompu);
+	} else {
+	    list = ComputerDtoMapper.mapRows(service.findAll(this));
+	}
     }
 
     public int getNbEntries() {
@@ -55,6 +79,7 @@ public class Pager {
 
     public void setNbEntries(int nbEntries) {
 	this.nbEntries = nbEntries;
+	this.nbPages = (int) Math.ceil(nbEntries / nbParPage);
     }
 
     public int getNbParPage() {
@@ -64,7 +89,7 @@ public class Pager {
     public void setNbParPage(int nbParPage) {
 	this.nbParPage = nbParPage;
 	updateListe();
-	this.nbPages = (int) Math.ceil(nbEntries / nbParPage);
+	this.nbPages = (int) Math.ceil(nbEntries / nbParPage) + 1;
     }
 
     public int getNbPages() {
@@ -86,6 +111,12 @@ public class Pager {
 
     public List<ComputerDTO> getListe() {
 	return list;
+    }
+
+    @Override
+    public String toString() {
+	return "Pager [nbEntries=" + nbEntries + ", nbParPage=" + nbParPage + ", nbPages=" + nbPages + ", pageActuelle="
+		+ pageActuelle + ", search=" + search + "]";
     }
 
 }

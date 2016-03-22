@@ -27,7 +27,14 @@ public class DashBoard extends HttpServlet {
 	request.setAttribute("count", count);
 	GenericService<Computer> service = ComputerServiceImpl.getComputerService();
 	int page = 1;
-	pager = new Pager(10, page, service);
+	String search = null;
+
+	if (request.getParameter("search") != "" && request.getParameter("search") != null) {
+	  search = request.getParameter("search");
+	    
+	}
+	
+	pager = new Pager(10, page, service, search);
 	if (request.getParameter("Page") != "" && request.getParameter("Page") != null) {
 	    page = Integer.parseInt(request.getParameter("Page"));
 	    pager.setPageActuelle(page);
@@ -36,6 +43,12 @@ public class DashBoard extends HttpServlet {
 	    page = Integer.parseInt(request.getParameter("Nb"));
 	    pager.setNbParPage(page);
 	}
+	
+	if (request.getParameter("search") != "" && request.getParameter("search") != null) {
+	    pager.setSearch(request.getParameter("search"));
+	    
+	}
+	
 	return pager;
     }
 }

@@ -3,11 +3,13 @@
 
 <%@ attribute name="pager" required="true"
 	type="com.excilys.formation.computerdatabase.model.Pager"%>
-
 <c:set var="iteration" value="5" />
 <c:if test="${ pager.nbPages - pager.pageActuelle < 2}">
 	<c:set var="iteration"
-		value="${ pager.nbPages - pager.pageActuelle + 4}" />
+		value="${ pager.nbPages - pager.pageActuelle + 3}" />
+</c:if>
+<c:if test="${ pager.nbPages < 5 }">
+	<c:set var="iteration" value="${pager.nbPages}" />
 </c:if>
 <c:choose>
 	<c:when test="${pager.pageActuelle < 3 }">

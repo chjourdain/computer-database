@@ -3,6 +3,7 @@ package com.excilys.formation.computerdatabase.service.impl;
 import java.util.List;
 
 import com.excilys.formation.computerdatabase.model.Computer;
+import com.excilys.formation.computerdatabase.model.Pager;
 import com.excilys.formation.computerdatabase.persist.dao.impl.ComputerDaoImpl;
 import com.excilys.formation.computerdatabase.service.ComputerService;
 
@@ -61,6 +62,11 @@ public class ComputerServiceImpl implements ComputerService {
 	    return computerDao.find(id);
 	}
 	return null;
+    }
+
+    @Override
+    public List<Computer> findAll(Pager pager) {
+	return computerDao.findWithSearch(pager);
     }
 
 }

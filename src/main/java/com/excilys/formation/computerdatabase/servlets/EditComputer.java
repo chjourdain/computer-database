@@ -37,15 +37,22 @@ public class EditComputer extends HttpServlet {
 	ComputerService service = ComputerServiceImpl.getComputerService();
 	ComputerMapper cM = new ComputerMapper();
 	Computer c1 = cM.mapRow(request);
-	if (c1 != null) {
+	System.out.println(c1);
+	if (!(c1 == null | (!cM.erreur.isEmpty()))) {
 	    c1 = service.update(c1) ;
 	}
+	System.out.println(c1);
 	if (c1 == null) {
+	    //update fail, send the computer and error details.
+	   long i = Long.valueOf(request.getParameter("id").toString());
+	   ComputerDTO computer = ComputerDtoMapper.mapRow(service.find(Long.valueOf(i)));
+	   request.setAttribute("computer", computer);
 	   request.setAttribute("result", "failure in updating Computer");
 	   request.setAttribute("error", cM.getErreur());
-	this.getServletContext().getRequestDispatcher(VUE).forward(request, response);
+	this.getServletContext().getRequestDispatcher(VUE_EDIT).forward(request, response);
 	}
-	response.sendRedirect("/computer-database/dashboard");
+	//update succeed redirect to dashboard.
+	response.sendRedirect("dashboard");
     }
     
 

@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.excilys.formation.computerdatabase.model.Company;
+import com.excilys.formation.computerdatabase.model.Computer;
+import com.excilys.formation.computerdatabase.model.Pager;
 import com.excilys.formation.computerdatabase.persist.dao.CompanyDao;
 import com.excilys.formation.computerdatabase.persist.dao.impl.CompanyDaoImpl;
 import com.excilys.formation.computerdatabase.service.CompanyService;
@@ -36,7 +38,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public Company find(int id) {
+    public Company find(long id) {
 	if (id == 0) {
 	    return null;
 	}
@@ -56,5 +58,10 @@ public class CompanyServiceImpl implements CompanyService {
 
     public static GenericService getCompanyService() {
 	return instance;
+    }
+
+    @Override
+    public List<Computer> findAll(Pager pager) {
+	throw new UnsupportedOperationException();
     }
 }

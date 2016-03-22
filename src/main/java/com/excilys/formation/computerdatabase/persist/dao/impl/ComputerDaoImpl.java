@@ -11,6 +11,8 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.excilys.formation.computerdatabase.model.Computer;
+import com.excilys.formation.computerdatabase.model.Pager;
+import com.excilys.formation.computerdatabase.model.dto.ComputerDTO;
 import com.excilys.formation.computerdatabase.persist.connection.ConnectionFactory;
 import com.excilys.formation.computerdatabase.persist.dao.ComputerDao;
 import com.excilys.formation.computerdatabase.persist.dao.exception.DAOException;
@@ -186,6 +188,32 @@ public class ComputerDaoImpl implements ComputerDao {
 	    return 0;
 	} finally {
 	    ConnectionFactory.getConnectionManager().closeConnection(connect, stm, result);
+	}
+    }
+
+    public List<Computer> findWithSearch(Pager pager) {
+	Connection connect = ConnectionFactory.getConnectionManager().getConn();
+	PreparedStatement statement, statement2;;
+	try {
+	    statement = connect.prepareStatement(
+		    "SELECT * FROM computer where name LIKE ? OR company_id IN (SELECT id FROM company where name LIKE ?) LIMIT ? OFFSET ?");
+	    statement2 = connect.prepareStatement(
+		    "SELECT count(*) FROM computer where name LIKE ? OR company_id IN (SELECT id FROM company where name LIKE ?)");
+	    statement.setInt(3, pager.nbParPage);
+	    statement.setInt(4, pager.nbParPage * (pager.pageActuelle - 1));
+	    statement.setString(1, "%"+pager.getSearch()+"%");
+	    statement.setString(2, "%"+pager.getSearch()+"%");
+	    statement2.setString(1, "%"+pager.getSearch()+"%");
+	    statement2.setString(2, "%"+pager.getSearch()+"%");
+	    ResultSet resultSet = statement.executeQuery();  
+	    ResultSet resultSetCount = statement2.executeQuery();
+	    resultSetCount.first();
+	    pager.setNbEntries(resultSetCount.getInt(1));
+	    return (new ComputerMapper()).mapRows(resultSet);
+	} catch (SQLException e) {
+	   e.printStackTrace();
+	    daoLogger.error(e);
+	    throw new DAOException(e);
 	}
     }
 }
