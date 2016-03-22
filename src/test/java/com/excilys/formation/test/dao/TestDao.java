@@ -28,7 +28,7 @@ public class TestDao extends TestCase {
 
     public void testFindComputer() {
 	ComputerDaoImpl cD = ComputerDaoImpl.INSTANCE;
-	Computer c = cD.find(13);
+	Computer c = cD.find(2);
 	assertTrue(c.getName() != null);
 
     }

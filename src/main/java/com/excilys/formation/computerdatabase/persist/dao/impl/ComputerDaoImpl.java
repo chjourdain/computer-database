@@ -52,7 +52,7 @@ public class ComputerDaoImpl implements ComputerDao {
     @Override
     public List<Computer> findAll(long pStart, int pSize) {
 	Connection connect = ConnectionFactory.getConnectionManager().getConn();
-	Statement statement;
+	Statement statement=null;
 	try {
 	    statement = connect.createStatement();
 	    if (pSize > 0) {
@@ -66,6 +66,8 @@ public class ComputerDaoImpl implements ComputerDao {
 	} catch (SQLException e) {
 	    daoLogger.error(e);
 	    throw new DAOException(e);
+	} finally {
+	    ConnectionFactory.getConnectionManager().closeConnection(connect, statement);
 	}
     }
 
@@ -193,7 +195,7 @@ public class ComputerDaoImpl implements ComputerDao {
 
     public List<Computer> findWithSearch(Pager pager) {
 	Connection connect = ConnectionFactory.getConnectionManager().getConn();
-	PreparedStatement statement, statement2;;
+	PreparedStatement statement = null, statement2;;
 	try {
 	    statement = connect.prepareStatement(
 		    "SELECT * FROM computer where name LIKE ? OR company_id IN (SELECT id FROM company where name LIKE ?) LIMIT ? OFFSET ?");
@@ -214,6 +216,8 @@ public class ComputerDaoImpl implements ComputerDao {
 	   e.printStackTrace();
 	    daoLogger.error(e);
 	    throw new DAOException(e);
+	}finally {
+	    ConnectionFactory.getConnectionManager().closeConnection(connect, statement);
 	}
     }
 }

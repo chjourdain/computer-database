@@ -13,7 +13,7 @@ import com.excilys.formation.computerdatabase.service.GenericService;
 import com.excilys.formation.computerdatabase.service.impl.ComputerServiceImpl;
 
 public class DashBoard extends HttpServlet {
-    private static final String VUE = "/WEB-INF/views/dashboard.jsp"; 
+    private static final String VUE = "/WEB-INF/views/dashboard.jsp";
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	Pager pager = createComputerPager(request);
@@ -30,10 +30,8 @@ public class DashBoard extends HttpServlet {
 	String search = null;
 
 	if (request.getParameter("search") != "" && request.getParameter("search") != null) {
-	  search = request.getParameter("search");
-	    
+	    search = request.getParameter("search");
 	}
-	
 	pager = new Pager(10, page, service, search);
 	if (request.getParameter("Page") != "" && request.getParameter("Page") != null) {
 	    page = Integer.parseInt(request.getParameter("Page"));
@@ -43,12 +41,10 @@ public class DashBoard extends HttpServlet {
 	    page = Integer.parseInt(request.getParameter("Nb"));
 	    pager.setNbParPage(page);
 	}
-	
+
 	if (request.getParameter("search") != "" && request.getParameter("search") != null) {
 	    pager.setSearch(request.getParameter("search"));
-	    
 	}
-	
 	return pager;
     }
 }

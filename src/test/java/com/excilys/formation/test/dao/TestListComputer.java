@@ -23,7 +23,7 @@ public class TestListComputer {
     public void lister2() {
 	List<Computer> test = cD.findAll(0, 2);
 	assertTrue(test.size() == 2);
-	assertTrue(test.get(0).equals(cD.find(1)));
+	assertTrue(test.get(0).equals(cD.find(2)));
     }
 
     @Test
