@@ -8,7 +8,7 @@ public interface ComputerService extends GenericService<Computer> {
 
     int count();
 
-    default Computer find(int id) {
+    default Computer find(long id) {
 	throw new UnsupportedOperationException();
     }
 

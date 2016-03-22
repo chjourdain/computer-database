@@ -18,8 +18,7 @@ public class CreateComputer extends HttpServlet {
     public static final String VUE = "/WEB-INF/views/addComputer.jsp";
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	Map<Integer, String> map = CompanyServiceImpl.getMap();
-	request.setAttribute("map", map);
+	CompaniesInHashMap(request);
 	this.getServletContext().getRequestDispatcher(VUE).forward(request, response);
     }
 
@@ -36,12 +35,18 @@ public class CreateComputer extends HttpServlet {
 		result="Computer added";
 	    };
 	}
-	Map<Integer, String> map = CompanyServiceImpl.getMap();
-	request.setAttribute("map", map);
+	CompaniesInHashMap(request);
 	request.setAttribute("error", cM.getErreur());
 	request.setAttribute("result", result);
 	this.getServletContext().getRequestDispatcher(VUE).forward(request, response);
-
+    }  
+    /**
+     * Method to list the companies in a hasmap, and put it as attribute of the request
+     * @param request
+     */
+    protected static void CompaniesInHashMap(HttpServletRequest request){
+	CompanyServiceImpl companyService= (CompanyServiceImpl) CompanyServiceImpl.getCompanyService();
+	Map<Integer, String> map = companyService.getMap();
+	request.setAttribute("map", map);	
     }
-
 }

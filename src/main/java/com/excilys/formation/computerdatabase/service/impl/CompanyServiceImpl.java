@@ -43,7 +43,7 @@ public class CompanyServiceImpl implements CompanyService {
 	return companyDao.find(id);
     }
 
-    public static Map<Integer, String> getMap() {
+    public Map<Integer, String> getMap() {
 	if (map == null) {
 	    map = new HashMap();
 	    List tempo = companyDao.findAll(0, 500);

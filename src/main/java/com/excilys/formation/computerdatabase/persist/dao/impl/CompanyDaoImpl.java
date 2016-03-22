@@ -51,7 +51,7 @@ public class CompanyDaoImpl implements CompanyDao {
     }
 
     @Override
-    public Company find(int id) {
+    public Company find(long id) {
 	String query = "Select id, name from company where id=" + id;
 	ResultSet result;
 	Company company = null;

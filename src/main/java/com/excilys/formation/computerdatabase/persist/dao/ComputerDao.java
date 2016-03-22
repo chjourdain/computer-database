@@ -15,7 +15,7 @@ public interface ComputerDao extends GenericDao<Computer> {
     @Override
     Computer update(Computer obj);
 
-    Computer find(int id);
+    Computer find(long id);
 
     List<Computer> findAll(long index, int number);
 

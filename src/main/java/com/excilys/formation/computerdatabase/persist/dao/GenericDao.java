@@ -21,7 +21,7 @@ public interface GenericDao<T> {
 	throw new UnsupportedOperationException();
     }
 
-    default T find(int id) {
+    default T find(long id) {
 	throw new UnsupportedOperationException();
     }
 

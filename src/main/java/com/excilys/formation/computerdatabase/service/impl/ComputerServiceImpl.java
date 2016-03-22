@@ -56,7 +56,7 @@ public class ComputerServiceImpl implements ComputerService {
     }
 
     @Override
-    public Computer find(int id) {
+    public Computer find(long id) {
 	if (id != 0) {
 	    return computerDao.find(id);
 	}

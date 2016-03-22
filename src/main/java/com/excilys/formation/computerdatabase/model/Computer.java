@@ -53,7 +53,7 @@ public class Computer {
      * @param discontinued
      * @param company
      */
-    public Computer(int id, String name, LocalDate introduced, LocalDate discontinued, Company company) {
+    public Computer(long id, String name, LocalDate introduced, LocalDate discontinued, Company company) {
 	this.id = id;
 	this.name = name;
 	this.introduced = introduced;

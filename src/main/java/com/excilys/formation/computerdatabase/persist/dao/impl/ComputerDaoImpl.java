@@ -36,7 +36,7 @@ public class ComputerDaoImpl implements ComputerDao {
 	    pPreparedStatement.setString(2, null);
 	}
 	if (computer.getDiscontinued() != null) {
-	    pPreparedStatement.setString(3, computer.getIntroduced().toString());
+	    pPreparedStatement.setString(3, computer.getDiscontinued().toString());
 	} else {
 	    pPreparedStatement.setString(3, null);
 	}
@@ -148,7 +148,7 @@ public class ComputerDaoImpl implements ComputerDao {
 	}
     }
 
-    public Computer find(int id) {
+    public Computer find(long id) {
 	Connection connect = ConnectionFactory.getConnectionManager().getConn();
 	PreparedStatement findStatement = null;
 	try {

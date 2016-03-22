@@ -23,7 +23,8 @@ public class ComputerMapper implements RowMapper<Computer> {
     public static final String ATT_COMPANY = "companyId";
     public static final String ATT_INTRODUCED = "introduced";
     public static final String ATT_DISCONTINUED = "discontinued";
-    public static final String regex = "^[0-9]{4}-[0-1][0-9]-[0-3][0-9]$";
+    public static final String ATT_ID = "id";
+    public static final String regex = "^[0-9]{4}-[0-1][0-9]-[0-3][0-9]$|^$";
     public Map<String, String> erreur = new HashMap<>();
 
     @Override
@@ -45,12 +46,16 @@ public class ComputerMapper implements RowMapper<Computer> {
 
     public Computer mapRow(HttpServletRequest request) {
 
-	String Name = request.getParameter(ATT_NAME);
+	String name = request.getParameter(ATT_NAME);
 	String introduced = request.getParameter(ATT_INTRODUCED);
 	String discontinued = request.getParameter(ATT_DISCONTINUED);
 	String companyId = request.getParameter(ATT_COMPANY);
-
-	if (Name == null) {
+	String id = request.getParameter(ATT_ID);
+	long id2=0;
+	if (id != null) {
+	    id2 = Long.valueOf(id);
+	}
+	if (name == null) {
 	    return null;
 	}
 	if (!Pattern.matches(regex, introduced) && (introduced != "")) {
@@ -60,7 +65,7 @@ public class ComputerMapper implements RowMapper<Computer> {
 	    erreur.put("discontinued", "Erreur de format, renseigner YYYY-MM-JJ");
 	}
 	Company company = null;
-	if (Integer.valueOf(companyId) != 0) {
+	if (companyId != null || Integer.valueOf(companyId) != 0) {
 	    company = (Company) CompanyServiceImpl.getCompanyService().find(Integer.valueOf(companyId));
 	}
 	Computer computer = null;
@@ -73,7 +78,7 @@ public class ComputerMapper implements RowMapper<Computer> {
 	    if (discontinued != null && discontinued != "") {
 		disco = LocalDate.parse(discontinued);
 	    }
-	    computer = new Computer(Name, intro, disco, company);
+	    computer = new Computer(id2,name, intro, disco, company);
 	}
 	return computer;
     }

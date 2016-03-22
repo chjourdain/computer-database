@@ -4,7 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import com.excilys.formation.computerdatabase.model.Company;
 import com.excilys.formation.computerdatabase.model.Computer;
 import com.excilys.formation.computerdatabase.model.dto.ComputerDTO;
@@ -52,18 +51,20 @@ public class ComputerDtoMapper implements RowMapper<ComputerDTO> {
 	    String intro = (c.getIntroduced() == null) ? null : c.getIntroduced().toString();
 	    String disco = (c.getDiscontinued() == null) ? null : c.getDiscontinued().toString();
 	    String company = (c.getCompany() == null) ? null : c.getCompany().getName();
-
-	    ComputerDTO c1 = new ComputerDTO.ComputerDTOBuilder()
-		    .introduced(intro)
-		    .discontinued(disco)
-		    .name(c.getName())
-		    .companyName(company)
-		    .id((new Long(c.getId())
-		    .toString()))
-		    .build();
+	    ComputerDTO c1 = new ComputerDTO.ComputerDTOBuilder().introduced(intro).discontinued(disco)
+		    .name(c.getName()).companyName(company).id((new Long(c.getId()).toString())).build();
 	    computers.add(c1);
 	}
 	return computers;
+    }
+
+    public static ComputerDTO mapRow(Computer c) {
+	String intro = (c.getIntroduced() == null) ? null : c.getIntroduced().toString();
+	String disco = (c.getDiscontinued() == null) ? null : c.getDiscontinued().toString();
+	String company = (c.getCompany() == null) ? null : c.getCompany().getName();
+
+	return new ComputerDTO.ComputerDTOBuilder().introduced(intro).discontinued(disco).name(c.getName())
+		.companyName(company).id((new Long(c.getId()).toString())).build();
     }
 
 }
