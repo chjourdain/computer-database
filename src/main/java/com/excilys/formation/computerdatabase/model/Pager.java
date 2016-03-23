@@ -14,14 +14,7 @@ public class Pager {
     public int nbPages;
     public int pageActuelle;
     public String search = null;
-
-    public String getSearch() {
-	return search;
-    }
-
-    public void setSearch(String search) {
-	this.search = search;
-    }
+    public String orderBy = null;
 
     GenericService<Computer> service;
 
@@ -31,9 +24,9 @@ public class Pager {
 	this.nbPages = (int) Math.ceil(nbEntries / nbParPage) + 1;
 	pageActuelle = page;
 	this.service = service;
-	updateListe();
+	// updateListe();
     }
-    
+
     public Pager(int nbParPage, int page, GenericService<Computer> service, String search) {
 	this.search = search;
 	nbEntries = service.count();
@@ -41,7 +34,7 @@ public class Pager {
 	this.nbPages = (int) Math.ceil(nbEntries / nbParPage);
 	pageActuelle = page;
 	this.service = service;
-	updateListe();
+	// updateListe();
     }
 
     public void printListe() {
@@ -53,24 +46,19 @@ public class Pager {
     public void next() {
 	if (pageActuelle < nbPages) {
 	    pageActuelle += 1;
-	    updateListe();
+	    // updateListe();
 	}
     }
 
     public void prev() {
 	if (pageActuelle > 1) {
 	    pageActuelle -= 1;
-	    updateListe();
+	    // updateListe();
 	}
     }
 
     public void updateListe() {
-	if (search == null) {
-	    List<Computer> listCompu = service.findAll((long) (pageActuelle - 1) * nbParPage, nbParPage);
-	    list = ComputerDtoMapper.mapRows(listCompu);
-	} else {
-	    list = ComputerDtoMapper.mapRows(service.findAll(this));
-	}
+	list = ComputerDtoMapper.mapRows(service.findAll(this));
     }
 
     public int getNbEntries() {
@@ -88,7 +76,7 @@ public class Pager {
 
     public void setNbParPage(int nbParPage) {
 	this.nbParPage = nbParPage;
-	updateListe();
+	// updateListe();
 	this.nbPages = (int) Math.ceil(nbEntries / nbParPage) + 1;
     }
 
@@ -106,17 +94,33 @@ public class Pager {
 
     public void setPageActuelle(int pageActuelle) {
 	this.pageActuelle = pageActuelle;
-	updateListe();
+	// updateListe();
     }
 
     public List<ComputerDTO> getListe() {
 	return list;
     }
 
+    public String getSearch() {
+	return search;
+    }
+
+    public void setSearch(String search) {
+	this.search = search;
+    }
+
+    public String getOrderBy() {
+	return orderBy;
+    }
+
+    public void setOrderBy(String orderBy) {
+	this.orderBy = orderBy;
+    }
+
     @Override
     public String toString() {
 	return "Pager [nbEntries=" + nbEntries + ", nbParPage=" + nbParPage + ", nbPages=" + nbPages + ", pageActuelle="
-		+ pageActuelle + ", search=" + search + "]";
+		+ pageActuelle + ", search=" + search + ", orderBy=" + orderBy + "]";
     }
 
 }

@@ -45,6 +45,11 @@ public class DashBoard extends HttpServlet {
 	if (request.getParameter("search") != "" && request.getParameter("search") != null) {
 	    pager.setSearch(request.getParameter("search"));
 	}
+	if (request.getParameter("order") != "" && request.getParameter("order") != null) {
+	    pager.setOrderBy(request.getParameter("order"));
+	}
+	pager.updateListe();
+	System.out.println(pager.toString());
 	return pager;
     }
 }

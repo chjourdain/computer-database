@@ -52,7 +52,7 @@ public class ComputerDaoImpl implements ComputerDao {
     @Override
     public List<Computer> findAll(long pStart, int pSize) {
 	Connection connect = ConnectionFactory.getConnectionManager().getConn();
-	Statement statement=null;
+	Statement statement = null;
 	try {
 	    statement = connect.createStatement();
 	    if (pSize > 0) {
@@ -61,7 +61,9 @@ public class ComputerDaoImpl implements ComputerDao {
 		statement.setMaxRows(0);
 		pSize = 0;
 	    }
-	    ResultSet resultSet = statement.executeQuery("SELECT * FROM computer LIMIT " + pSize + " OFFSET " + pStart);
+	    ResultSet resultSet = statement
+		    .executeQuery("SELECT * FROM computer LEFT JOIN company on computer.company_id=company_id"
+			    + " LIMIT " + pSize + " OFFSET " + pStart);
 	    return (new ComputerMapper()).mapRows(resultSet);
 	} catch (SQLException e) {
 	    daoLogger.error(e);
@@ -195,29 +197,60 @@ public class ComputerDaoImpl implements ComputerDao {
 
     public List<Computer> findWithSearch(Pager pager) {
 	Connection connect = ConnectionFactory.getConnectionManager().getConn();
-	PreparedStatement statement = null, statement2;;
+	PreparedStatement statement = null, statement2;
 	try {
-	    statement = connect.prepareStatement(
-		    "SELECT * FROM computer where name LIKE ? OR company_id IN (SELECT id FROM company where name LIKE ?) LIMIT ? OFFSET ?");
-	    statement2 = connect.prepareStatement(
-		    "SELECT count(*) FROM computer where name LIKE ? OR company_id IN (SELECT id FROM company where name LIKE ?)");
-	    statement.setInt(3, pager.nbParPage);
-	    statement.setInt(4, pager.nbParPage * (pager.pageActuelle - 1));
-	    statement.setString(1, "%"+pager.getSearch()+"%");
-	    statement.setString(2, "%"+pager.getSearch()+"%");
-	    statement2.setString(1, "%"+pager.getSearch()+"%");
-	    statement2.setString(2, "%"+pager.getSearch()+"%");
-	    ResultSet resultSet = statement.executeQuery();  
+	    System.out.println(queryOrdered(pager));
+	    statement = connect.prepareStatement(queryOrdered(pager));
+	    if (pager.search != null) {
+		statement2 = connect.prepareStatement(
+			"SELECT count(*) FROM computer where name LIKE ? OR company_id IN (SELECT id FROM company where name LIKE ?)");
+		statement.setInt(3, pager.nbParPage);
+		statement.setInt(4, pager.nbParPage * (pager.pageActuelle - 1));
+		statement.setString(1, "%" + pager.getSearch() + "%");
+		statement.setString(2, "%" + pager.getSearch() + "%");
+		statement2.setString(1, "%" + pager.getSearch() + "%");
+		statement2.setString(2, "%" + pager.getSearch() + "%");
+	    } else {
+		statement2 = connect.prepareStatement("SELECT count(*) FROM computer");
+		statement.setInt(1, pager.nbParPage);
+		statement.setInt(2, pager.nbParPage * (pager.pageActuelle - 1));
+	    }
+	    ResultSet resultSet = statement.executeQuery();
 	    ResultSet resultSetCount = statement2.executeQuery();
 	    resultSetCount.first();
 	    pager.setNbEntries(resultSetCount.getInt(1));
 	    return (new ComputerMapper()).mapRows(resultSet);
 	} catch (SQLException e) {
-	   e.printStackTrace();
+	    e.printStackTrace();
 	    daoLogger.error(e);
 	    throw new DAOException(e);
-	}finally {
+	} finally {
 	    ConnectionFactory.getConnectionManager().closeConnection(connect, statement);
 	}
+    }
+
+    private static String queryOrdered(Pager pager) {
+	String whereSentence = "";
+	if (pager.search != null && !pager.search.isEmpty()) {
+	    whereSentence = " where name LIKE ? OR company_id IN (SELECT id FROM company where name LIKE ?)";
+	}
+
+	if ("computer".equals(pager.getOrderBy() )) {
+	    return "SELECT * FROM computer LEFT JOIN company on computer.company_id=company.id " + whereSentence
+		    + " ORDER BY computer.name LIMIT ? OFFSET ?";
+	}
+	if ("intro".equals(pager.getOrderBy())) {
+	    return "SELECT * FROM computer LEFT JOIN company on computer.company_id=company.id " + whereSentence
+		    + " ORDER BY computer.introduced LIMIT ? OFFSET ?";
+	}
+	if ("disco".equals(pager.getOrderBy())) {
+	    return "SELECT * FROM computer LEFT JOIN company on computer.company_id=company.id " + whereSentence
+		    + " ORDER BY computer.discontinued LIMIT ? OFFSET ?";
+	}
+	if ("company".equals(pager.getOrderBy())) {
+	    return "SELECT * FROM computer LEFT JOIN company on computer.company_id=company.id " + whereSentence
+		    + " ORDER BY company.name LIMIT ? OFFSET ?";
+	}
+	return "SELECT * FROM computer " + whereSentence + " LIMIT ? OFFSET ?";
     }
 }

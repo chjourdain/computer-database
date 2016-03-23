@@ -57,12 +57,12 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th>Computer name</th>
-						<th>Introduced date</th>
+						<th><a  <f:link pager="${pager}" action="href" type="dashboard" orderBy="computer"></f:link> >Computer name</a></th>
+						<th><a  <f:link pager="${pager}" action="href" type="dashboard" orderBy="intro"></f:link> >Introduced date</a></th>
 						<!-- Table header for Discontinued Date -->
-						<th>Discontinued date</th>
+						<th><a  <f:link pager="${pager}" action="href" type="dashboard" orderBy="disco"></f:link> >Discontinued date</a></th>
 						<!-- Table header for Company -->
-						<th>Company</th>
+						<th><a  <f:link pager="${pager}" action="href" type="dashboard" orderBy="company"></f:link> >Company</a> </th>
 
 					</tr>
 				</thead>
@@ -98,9 +98,9 @@
 			</ul>
 
 			<div class="btn-group btn-group-sm pull-right" role="group">
-				<a href="dashboard?Nb=10" class="btn btn-default">10</a>
-				<a href="dashboard?Nb=50" class="btn btn-default">50</a>
-				<a href="dashboard?Nb=100" class="btn btn-default">100</a>
+				<a <f:link pager="${pager}" type="dashboard" action="href" nbParPage="10"></f:link> class="btn btn-default">10</a>
+				<a <f:link pager="${pager}" type="dashboard" action="href" nbParPage="50"></f:link> class="btn btn-default">50</a>
+				<a <f:link pager="${pager}" type="dashboard" action="href" nbParPage="100"></f:link>  class="btn btn-default">100</a>
 			</div>
 		</div>
 	</footer>
