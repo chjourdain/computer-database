@@ -30,7 +30,6 @@ public class ComputerServiceImpl implements ComputerService {
 	    return null;
 	}
 	return computerDao.create(c);
-
     }
 
     public Computer update(Computer c) {
@@ -38,14 +37,12 @@ public class ComputerServiceImpl implements ComputerService {
 	    return null;
 	}
 	return computerDao.update(c);
-
     }
 
     public void delete(Computer c) {
 	if (c != null) {
 	    computerDao.delete(c);
 	}
-
     }
 
     @Override
@@ -68,5 +65,4 @@ public class ComputerServiceImpl implements ComputerService {
     public List<Computer> findAll(Pager pager) {
 	return computerDao.findWithSearch(pager);
     }
-
 }

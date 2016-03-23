@@ -3,13 +3,13 @@ package com.excilys.formation.computerdatabase.persist.connection;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.excilys.formation.computerdatabase.persist.dao.exception.DAOConfigurationException;
 import com.jolbox.bonecp.BoneCP;
@@ -28,7 +28,7 @@ public class ConnectionFactory {
     private static String url;
     private static String driver = "";
     private static ConnectionFactory instance = null;
-    private static final Logger LOGGER = Logger.getLogger(ConnectionFactory.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(com.excilys.formation.computerdatabase.persist.connection.ConnectionFactory.class);
     private BoneCP connectionPool = null;
 
     static {
@@ -39,7 +39,7 @@ public class ConnectionFactory {
 	    userPsswd = prop.getProperty("password", "");
 	    driver = prop.getProperty("driver", "");
 	} catch (Exception e) {
-	    LOGGER.error(e);
+	    LOGGER.error(e.toString());
 	}
 	try {
 	    Class.forName(driver);
@@ -60,7 +60,7 @@ public class ConnectionFactory {
 	    config.setPartitionCount(2);
 	    connectionPool = new BoneCP(config);
 	} catch (SQLException e) {
-	    LOGGER.error(e);
+	    LOGGER.error(e.toString());
 	    throw new DAOConfigurationException("Configs error.", e);
 	}
     }
@@ -96,7 +96,7 @@ public class ConnectionFactory {
 	try {
 	    return connectionPool.getConnection();
 	} catch (SQLException e) {
-	    LOGGER.error(e);
+	    LOGGER.error(e.toString());
 	    throw new RuntimeException();
 	}
     }

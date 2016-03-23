@@ -6,7 +6,8 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.excilys.formation.computerdatabase.model.Company;
 import com.excilys.formation.computerdatabase.model.Computer;
 import com.excilys.formation.computerdatabase.model.Pager;
@@ -20,8 +21,8 @@ import com.excilys.formation.computerdatabase.service.GenericService;
 public class CompanyServiceImpl implements CompanyService {
     private static CompanyDao companyDao = CompanyDaoImpl.getCompanyDaoImpl();
     private static CompanyServiceImpl instance = new CompanyServiceImpl();
-    private static Map<Integer, String> map;
-    private Logger logger = org.apache.log4j.Logger.getLogger(this.getClass());
+    private static Map<Long, String> map;
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public Company findByName(String companyName) {
 	if (companyName == null || companyName.isEmpty()) {
@@ -51,18 +52,22 @@ public class CompanyServiceImpl implements CompanyService {
 	return companyDao.find(id);
     }
 
-    public Map<Integer, String> getMap() {
+    /**
+     * Method which return a hashmap with <company id, company name>
+     * @return
+     */
+    public Map<Long, String> getMap() {
 	if (map == null) {
-	    map = new HashMap();
-	    List tempo = companyDao.findAll(0, 500);
+	    map = new HashMap<>();
+	    List<Company> tempo = companyDao.findAll(0, 500);
 	    for (Object c : tempo) {
-		map.put((Integer) (int) ((Company) c).getId(), ((Company) c).getName());
+		map.put((Long)  ((Company) c).getId(), ((Company) c).getName());
 	    }
 	}
 	return map;
     }
 
-    public static GenericService getCompanyService() {
+    public static GenericService<Company> getCompanyService() {
 	return instance;
     }
 
@@ -86,10 +91,9 @@ public class CompanyServiceImpl implements CompanyService {
 	    con.rollback();
 	    con.close();
 	} catch (SQLException e1) {
-
-	   logger.error(e1);
+	   logger.error(e1.toString());
 	}
-	   logger.error(e);
+	   logger.error(e.toString());
 	}
     }
 }

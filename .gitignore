@@ -1,6 +1,5 @@
 .settings
 target/**
 .project
-log*
 .settings/**
 .classpath

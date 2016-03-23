@@ -18,8 +18,7 @@ public class EditComputer extends HttpServlet {
     private static final String VUE_EDIT = "/WEB-INF/views/editComputer.jsp";
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	// get the computer id, send back the user to dashboard.jsp if not
-	// valid.
+	// get the computer id, send back the user to dashboard.jsp if not valid.
 	String id = request.getParameter("id");
 	if (id == null || id.equals("0")) {
 	    this.getServletContext().getRequestDispatcher(VUE).forward(request, response);
@@ -54,6 +53,4 @@ public class EditComputer extends HttpServlet {
 	//update succeed redirect to dashboard.
 	response.sendRedirect("dashboard");
     }
-    
-
 }

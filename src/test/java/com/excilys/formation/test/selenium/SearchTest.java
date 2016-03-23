@@ -1,13 +1,17 @@
 package com.excilys.formation.test.selenium;
 
-import java.util.regex.Pattern;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import java.util.concurrent.TimeUnit;
-import org.junit.*;
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
-import org.openqa.selenium.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.support.ui.Select;
 
 public class SearchTest {
   private WebDriver driver;
@@ -29,18 +33,52 @@ public class SearchTest {
     driver.findElement(By.id("searchbox")).sendKeys("le");
     driver.findElement(By.id("searchsubmit")).click();
     driver.findElement(By.linkText("2")).click();
-    driver.findElement(By.linkText("3")).click();
-    driver.findElement(By.linkText("4")).click();
-    driver.findElement(By.linkText("5")).click();
+    int b = driver.findElements(By.cssSelector("tr[class='computer']")).size();
+    assertTrue(b ==10);
   }
   @Test
   public void testOfoun() throws Exception {
     driver.get(baseUrl + "/dashboard");
     driver.findElement(By.id("searchbox")).clear();
-    driver.findElement(By.id("searchbox")).sendKeys("zaezefezfze");
+    driver.findElement(By.id("searchbox")).sendKeys("zaezezfzeefzeffezfze");
     driver.findElement(By.id("searchsubmit")).click();
+    int b = driver.findElements(By.cssSelector("tr[class='computer']")).size();
+    assertTrue(b ==0);
   }
-
+  @Test
+  public void testMenu() throws Exception {
+    driver.get(baseUrl + "/dashboard");
+    driver.findElement(By.id("searchbox")).clear();
+    driver.findElement(By.id("searchbox")).sendKeys("a");
+    driver.findElement(By.id("searchsubmit")).click();
+    driver.findElement(By.linkText("Computer name")).click();
+    driver.findElement(By.linkText("Introduced date")).click();
+    driver.findElement(By.linkText("Discontinued date")).click();
+    driver.findElement(By.linkText("Company")).click();
+    driver.findElement(By.linkText("50")).click();
+    driver.findElement(By.linkText("Discontinued date")).click();
+    driver.findElement(By.linkText("Introduced date")).click();
+    driver.findElement(By.linkText("Computer name")).click();
+    int b = driver.findElements(By.cssSelector("tr[class='computer']")).size();
+    System.out.println(b);
+    assertTrue(b ==50);
+  }
+  @Test
+  public void testNbParPage() throws Exception {
+    driver.get(baseUrl + "/dashboard");
+    driver.findElement(By.id("searchbox")).clear();
+    driver.findElement(By.id("searchbox")).sendKeys("e");
+    driver.findElement(By.id("searchsubmit")).click();
+    int b = driver.findElements(By.cssSelector("tr[class='computer']")).size();
+    assertTrue(b ==10);
+    driver.findElement(By.linkText("50")).click();
+    b = driver.findElements(By.cssSelector("tr[class='computer']")).size();
+    assertTrue(b ==50);
+    driver.findElement(By.linkText("100")).click();
+    b = driver.findElements(By.cssSelector("tr[class='computer']")).size();
+    assertTrue(b ==100);
+  }
+  
   @After
   public void tearDown() throws Exception {
     driver.quit();

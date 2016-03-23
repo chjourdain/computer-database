@@ -40,12 +40,4 @@ public class TestListComputer {
 	} catch (Exception e) {
 	}
     }
-
-    @Test
-    public void listerOver() {
-	List<Computer> test = cD.findAll(0, 10000);
-	assertTrue(test.size() == cD.count());
-
-    }
-
 }

@@ -88,19 +88,19 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 			<ul class="pagination">
-				<li><a href="dashboard?Page=1" aria-label="Previous"> <span
+				<li><a <f:link pager="${pager}" type="dashboard" action="href" page="1"/> aria-label="Previous"> <span
 						aria-hidden="true">&laquo;</span>
 				</a></li>
 				<f:printmenupage pager="${ pager}" />
-				<li><a href="dashboard?Page=${pager.nbPages+1}"
+				<li><a <f:link pager="${pager}" type="dashboard" action="href" page="${pager.nbPages+1}"/>     
 					aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 				</a></li>
 			</ul>
 
 			<div class="btn-group btn-group-sm pull-right" role="group">
-				<a <f:link pager="${pager}" type="dashboard" action="href" nbParPage="10"></f:link> class="btn btn-default">10</a>
-				<a <f:link pager="${pager}" type="dashboard" action="href" nbParPage="50"></f:link> class="btn btn-default">50</a>
-				<a <f:link pager="${pager}" type="dashboard" action="href" nbParPage="100"></f:link>  class="btn btn-default">100</a>
+				<a <f:link pager="${pager}" type="dashboard" action="href" nbParPage="10"/> class="btn btn-default">10</a>
+				<a <f:link pager="${pager}" type="dashboard" action="href" nbParPage="50"/> class="btn btn-default">50</a>
+				<a <f:link pager="${pager}" type="dashboard" action="href" nbParPage="100"/>  class="btn btn-default">100</a>
 			</div>
 		</div>
 	</footer>

@@ -6,16 +6,15 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.log4j.Logger;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.excilys.formation.computerdatabase.model.Company;
 import com.excilys.formation.computerdatabase.persist.connection.ConnectionFactory;
 import com.excilys.formation.computerdatabase.persist.dao.CompanyDao;
 
 public class CompanyDaoImpl implements CompanyDao {
 
-    private Logger daoLogger = Logger.getLogger(this.getClass());
+    private Logger daoLogger = LoggerFactory.getLogger(this.getClass());
     private static CompanyDaoImpl instance = new CompanyDaoImpl();
 
     private CompanyDaoImpl() {
@@ -42,7 +41,7 @@ public class CompanyDaoImpl implements CompanyDao {
 		companies.add(c1);
 	    }
 	} catch (SQLException e) {
-	    daoLogger.error(e);
+	    daoLogger.error(e.toString());
 	    return null;
 	} finally {
 	    ConnectionFactory.getConnectionManager().closeConnection(connect, stm);
@@ -64,7 +63,7 @@ public class CompanyDaoImpl implements CompanyDao {
 		company = new Company(result.getString("name"), result.getInt("id"));
 	    }
 	} catch (SQLException e) {
-	    daoLogger.error(e);
+	    daoLogger.error(e.toString());
 	    return null;
 	} finally {
 	    ConnectionFactory.getConnectionManager().closeConnection(connect, stm);
@@ -109,7 +108,7 @@ public class CompanyDaoImpl implements CompanyDao {
 		companies.add(c1);
 	    }
 	} catch (SQLException e) {
-	    daoLogger.error(e);
+	    daoLogger.error(e.toString());
 	    return null;
 	} finally {
 	    ConnectionFactory.getConnectionManager().closeConnection(connect, stm);

@@ -20,12 +20,16 @@ public class Delete extends HttpServlet {
 	for (Integer i : deleteList){
 	    service.delete(service.find(i));
 	}
+	// redirect to dashboard, fill the list of computer with a pager define by the others parameters (page, nbByPage, search, order by)
 	Pager pager = DashBoard.createComputerPager(request);
 	request.setAttribute("pager", pager);
 	this.getServletContext().getRequestDispatcher(VUE).forward(request, response);
 
     }   
-    
+    /**
+     * Method to transform the Parameter String selection (format : "1,2,4,5,7") into an array.
+     * @param request of the delete method.
+     */
     private static List<Integer> mapDelete(HttpServletRequest request) {
 	String selection = request.getParameter("selection");
 	LinkedList<Integer> deleteList = new LinkedList<>();

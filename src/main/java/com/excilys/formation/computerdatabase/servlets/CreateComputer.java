@@ -46,7 +46,7 @@ public class CreateComputer extends HttpServlet {
      */
     protected static void CompaniesInHashMap(HttpServletRequest request){
 	CompanyServiceImpl companyService= (CompanyServiceImpl) CompanyServiceImpl.getCompanyService();
-	Map<Integer, String> map = companyService.getMap();
+	Map<Long, String> map = companyService.getMap();
 	request.setAttribute("map", map);	
     }
 }

@@ -2,6 +2,7 @@ package com.excilys.formation.computerdatabase.persist.dao;
 
 import java.util.List;
 import com.excilys.formation.computerdatabase.model.Computer;
+import com.excilys.formation.computerdatabase.model.Pager;
 
 public interface ComputerDao extends GenericDao<Computer> {
     String KEY = "computerDao";
@@ -18,6 +19,8 @@ public interface ComputerDao extends GenericDao<Computer> {
     Computer find(long id);
 
     List<Computer> findAll(long index, int number);
+    
+    public List<Computer> findWithSearch(Pager pager);
 
     int count();
 }

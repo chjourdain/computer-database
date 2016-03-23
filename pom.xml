@@ -13,13 +13,13 @@
 		<jUnitVersion>4.12</jUnitVersion>
 		<mysqlVersion>(5.1,)</mysqlVersion>
 		<jstlVersion>1.2</jstlVersion>
-		<log4jVersion>1.2.17</log4jVersion>
+		<slf4jlog4jVersion>1.7.19</slf4jlog4jVersion>
 		<servletVersion>3.0.1</servletVersion>
 		<seleniumVersion>2.52.0</seleniumVersion>
 		<bonecpVersion>0.8.0.RELEASE</bonecpVersion>
 	</properties>
 	<build>
-	<finalName>computer-database</finalName>
+		<finalName>computer-database</finalName>
 		<plugins>
 
 			<plugin>
@@ -135,11 +135,12 @@
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<version>${servletVersion}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>${log4jVersion}</version>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.1.6</version>
 		</dependency>
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
