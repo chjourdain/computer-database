@@ -17,7 +17,7 @@ import com.excilys.formation.computerdatabase.persist.dao.CompanyDao;
 import com.excilys.formation.computerdatabase.persist.dao.impl.CompanyDaoImpl;
 import com.excilys.formation.computerdatabase.persist.dao.impl.ComputerDaoImpl;
 
-public class TestCreateComputer {// extends JdbcBasedDBTestCase{
+public class TestCreateComputer {
     static ComputerDaoImpl computerDao;
     static CompanyDao companydao;
 
@@ -29,24 +29,29 @@ public class TestCreateComputer {// extends JdbcBasedDBTestCase{
 
     @Test
     public void testCreateStandart() {
+	ConnectionFactory.getConnectionManager().iniTransaction();
 	int a = computerDao.count();
 	Computer newOne = new Computer("newOne");
 	computerDao.create(newOne);
 	assertTrue(1 + a == computerDao.count());
+	ConnectionFactory.getConnectionManager().rollback();
     }
 
     @Test
     public void testCreateNoCompany() {
+	ConnectionFactory.getConnectionManager().iniTransaction();
 	int a = computerDao.count();
 	Company pCompany = null;
 	Computer newOne = new Computer("newOne", LocalDate.parse("2015-02-02"), LocalDate.parse("2015-02-02"),
 		pCompany);
 	computerDao.create(newOne);
 	assertTrue(1 + a == computerDao.count());
+	ConnectionFactory.getConnectionManager().rollback();
     }
 
     @Test
     public void testCreateVoid() {
+	ConnectionFactory.getConnectionManager().iniTransaction();
 	int a = computerDao.count();
 	Company pCompany = null;
 	Computer newOne = null;
@@ -55,10 +60,12 @@ public class TestCreateComputer {// extends JdbcBasedDBTestCase{
 	} catch (Exception e) {
 	}
 	assertTrue(a == computerDao.count());
+	ConnectionFactory.getConnectionManager().rollback();
     }
 
     @Test
     public void testCreateComplet() {
+	 ConnectionFactory.getConnectionManager().iniTransaction();;
 	int a = computerDao.count();
 	Company company = companydao.find(10);
 	LocalDate d = LocalDate.parse("2015-02-02");
@@ -69,10 +76,12 @@ public class TestCreateComputer {// extends JdbcBasedDBTestCase{
 	}
 	assertTrue(a + 1 == computerDao.count());
 	assertTrue(newOne.getId() != 0);
+	 ConnectionFactory.getConnectionManager().rollback();
     }
 
     @Test
     public void testCreateDateFausse() {
+	ConnectionFactory.getConnectionManager().iniTransaction();
 	Company company = companydao.find(10);
 	LocalDate d = LocalDate.parse("2040-02-02");
 	Computer newOne = null;
@@ -81,6 +90,7 @@ public class TestCreateComputer {// extends JdbcBasedDBTestCase{
 	} catch (Exception e) {
 	}
 	assertNull(newOne);
+	ConnectionFactory.getConnectionManager().rollback();
     }
 
     @AfterClass

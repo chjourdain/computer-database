@@ -4,7 +4,9 @@ import java.util.List;
 
 import com.excilys.formation.computerdatabase.model.Computer;
 import com.excilys.formation.computerdatabase.model.Pager;
+import com.excilys.formation.computerdatabase.persist.connection.ConnectionFactory;
 import com.excilys.formation.computerdatabase.persist.dao.impl.ComputerDaoImpl;
+import com.excilys.formation.computerdatabase.persist.dao.mapper.ComputerDtoMapper;
 import com.excilys.formation.computerdatabase.service.ComputerService;
 
 public class ComputerServiceImpl implements ComputerService {
@@ -22,6 +24,7 @@ public class ComputerServiceImpl implements ComputerService {
     }
 
     public int count() {
+	ConnectionFactory.getConnectionManager().initConnection();
 	return computerDao.count();
     }
 
@@ -29,6 +32,7 @@ public class ComputerServiceImpl implements ComputerService {
 	if (c == null) {
 	    return null;
 	}
+	ConnectionFactory.getConnectionManager().initConnection();
 	return computerDao.create(c);
     }
 
@@ -36,11 +40,13 @@ public class ComputerServiceImpl implements ComputerService {
 	if (c == null) {
 	    return null;
 	}
+	ConnectionFactory.getConnectionManager().initConnection();
 	return computerDao.update(c);
     }
 
     public void delete(Computer c) {
 	if (c != null) {
+	    ConnectionFactory.getConnectionManager().initConnection();
 	    computerDao.delete(c);
 	}
     }
@@ -50,12 +56,14 @@ public class ComputerServiceImpl implements ComputerService {
 	if (index < 0 || nbrElement <= 0) {
 	    return null;
 	}
+	ConnectionFactory.getConnectionManager().initConnection();
 	return computerDao.findAll(index, nbrElement);
     }
 
     @Override
     public Computer find(long id) {
 	if (id != 0) {
+	    ConnectionFactory.getConnectionManager().initConnection();
 	    return computerDao.find(id);
 	}
 	return null;
@@ -63,6 +71,16 @@ public class ComputerServiceImpl implements ComputerService {
 
     @Override
     public List<Computer> findAll(Pager pager) {
+	ConnectionFactory.getConnectionManager().initConnection();
 	return computerDao.findWithSearch(pager);
+    }
+
+    @Override
+    public void fillPage(Pager pager) {
+	pager.setList(ComputerDtoMapper.mapRows(this.findAll(pager)));
+	if (pager.getCurrentPage() > pager.getNbPages()) {
+	    pager.setCurrentPage(1);
+	}
+	
     }
 }

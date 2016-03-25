@@ -6,78 +6,44 @@ import com.excilys.formation.computerdatabase.model.dto.ComputerDTO;
 import com.excilys.formation.computerdatabase.persist.dao.mapper.ComputerDtoMapper;
 import com.excilys.formation.computerdatabase.service.GenericService;
 
-public class Pager {
+public class Pager<T> {
 
-    public List<ComputerDTO> list;
-    public int nbEntries = 0;
-    public int nbParPage;
+    public List<T> list;
+    public int totalCount = 0;
+    public int nbByPage;
     public int nbPages;
-    public int pageActuelle;
+    public int currentPage;
     public String search = null;
-    public String orderBy = null;
+    public String sort = null;
 
-    GenericService<Computer> service;
-
-    public Pager(int nbParPage, int page, GenericService<Computer> service) {
-	nbEntries = service.count();
-	this.nbParPage = nbParPage;
-	this.nbPages = (int) Math.ceil(nbEntries / nbParPage) + 1;
-	pageActuelle = page;
-	this.service = service;
-	// updateListe();
+    public Pager(int nbParPage, int page) {
+	this.nbByPage = nbParPage;
+	this.nbPages = (int) Math.ceil(totalCount / nbParPage) + 1;
+	currentPage = page;
     }
 
-    public Pager(int nbParPage, int page, GenericService<Computer> service, String search) {
+    public Pager(int nbParPage, int page, String search) {
 	this.search = search;
-	nbEntries = service.count();
-	this.nbParPage = nbParPage;
-	this.nbPages = (int) Math.ceil(nbEntries / nbParPage);
-	pageActuelle = page;
-	this.service = service;
-	// updateListe();
+	this.nbByPage = nbParPage;
+	currentPage = page;
     }
 
-    public void printListe() {
-	for (Object object : list) {
-	    System.out.println(object);
-	}
+    public int getTotalCount() {
+	return totalCount;
     }
 
-    public void next() {
-	if (pageActuelle < nbPages) {
-	    pageActuelle += 1;
-	    // updateListe();
-	}
+    public void setTotalCount(int nbEntries) {
+	this.totalCount = nbEntries;
+	this.nbPages = (int) Math.ceil(nbEntries / nbByPage);
     }
 
-    public void prev() {
-	if (pageActuelle > 1) {
-	    pageActuelle -= 1;
-	    // updateListe();
-	}
+    public int getNbByPage() {
+	return nbByPage;
     }
 
-    public void updateListe() {
-	list = ComputerDtoMapper.mapRows(service.findAll(this));
-    }
-
-    public int getNbEntries() {
-	return nbEntries;
-    }
-
-    public void setNbEntries(int nbEntries) {
-	this.nbEntries = nbEntries;
-	this.nbPages = (int) Math.ceil(nbEntries / nbParPage);
-    }
-
-    public int getNbParPage() {
-	return nbParPage;
-    }
-
-    public void setNbParPage(int nbParPage) {
-	this.nbParPage = nbParPage;
-	// updateListe();
-	this.nbPages = (int) Math.ceil(nbEntries / nbParPage) + 1;
+    public void setNbByPage(int nbParPage) {
+	this.nbByPage = nbParPage;
+	this.nbPages = (int) Math.ceil(totalCount / nbParPage) + 1;
     }
 
     public int getNbPages() {
@@ -88,17 +54,12 @@ public class Pager {
 	this.nbPages = nbPages;
     }
 
-    public int getPageActuelle() {
-	return pageActuelle;
+    public int getCurrentPage() {
+	return currentPage;
     }
 
-    public void setPageActuelle(int pageActuelle) {
-	this.pageActuelle = pageActuelle;
-	// updateListe();
-    }
-
-    public List<ComputerDTO> getListe() {
-	return list;
+    public void setCurrentPage(int pageActuelle) {
+	this.currentPage = pageActuelle;
     }
 
     public String getSearch() {
@@ -109,18 +70,22 @@ public class Pager {
 	this.search = search;
     }
 
-    public String getOrderBy() {
-	return orderBy;
+    public String getSort() {
+	return sort;
     }
 
-    public void setOrderBy(String orderBy) {
-	this.orderBy = orderBy;
+    public void setSort(String orderBy) {
+	this.sort = orderBy;
     }
 
-    @Override
-    public String toString() {
-	return "Pager [nbEntries=" + nbEntries + ", nbParPage=" + nbParPage + ", nbPages=" + nbPages + ", pageActuelle="
-		+ pageActuelle + ", search=" + search + ", orderBy=" + orderBy + "]";
+    public List<T> getList() {
+        return list;
     }
+
+    public void setList(List<T> list) {
+        this.list = list;
+    }
+
+    
 
 }

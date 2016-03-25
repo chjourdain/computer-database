@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.excilys.formation.computerdatabase.model.Company;
 import com.excilys.formation.computerdatabase.persist.connection.ConnectionFactory;
+import com.excilys.formation.computerdatabase.persist.connection.ThreadLocals;
 import com.excilys.formation.computerdatabase.persist.dao.CompanyDao;
 
 public class CompanyDaoImpl implements CompanyDao {
@@ -54,10 +55,10 @@ public class CompanyDaoImpl implements CompanyDao {
 	String query = "Select id, name from company where id=" + id;
 	ResultSet result;
 	Company company = null;
-	Connection connect = ConnectionFactory.getConnectionManager().getConn();
+	Connection con = ConnectionFactory.getConnectionManager().getConn();
 	Statement stm = null;
 	try {
-	    stm = connect.createStatement();
+	    stm = con.createStatement();
 	    result = stm.executeQuery(query);
 	    if (result.next()) {
 		company = new Company(result.getString("name"), result.getInt("id"));
@@ -66,18 +67,18 @@ public class CompanyDaoImpl implements CompanyDao {
 	    daoLogger.error(e.toString());
 	    return null;
 	} finally {
-	    ConnectionFactory.getConnectionManager().closeConnection(connect, stm);
+	    ConnectionFactory.getConnectionManager().closeConnection(con, stm);
 	}
 	return company;
     }
 
     public int count() {
-	Connection connect = ConnectionFactory.getConnectionManager().getConn();
+	Connection con = ThreadLocals.CONNECTION.get();
 	String query = "SELECT count(*) from company";
 	ResultSet result;
 	Statement stm = null;
 	try {
-	    stm = connect.createStatement();
+	    stm = con.createStatement();
 	    result = stm.executeQuery(query);
 	    if (result.first()) {
 		return result.getInt(1);
@@ -85,22 +86,28 @@ public class CompanyDaoImpl implements CompanyDao {
 		return 0;
 	    }
 	} catch (SQLException e) {
-	    e.printStackTrace();
+	    daoLogger.error(e.toString());
 	    return 0;
 	} finally {
-	    ConnectionFactory.getConnectionManager().closeConnection(connect, stm);
+	    try {
+		if (con.getAutoCommit() == true) {
+		    ConnectionFactory.getConnectionManager().closeConnection(con, stm);
+		}
+	    } catch (Exception e) {
+		daoLogger.error(e.toString());
+	    }
 	}
     }
 
     @Override
     public List<Company> findAll(long index, int nbrElement) {
-	Connection connect = ConnectionFactory.getConnectionManager().getConn();
+	Connection con = ThreadLocals.CONNECTION.get();
 	String query = "Select * from company" + " LIMIT " + index + "," + nbrElement;
 	ResultSet result;
 	ArrayList<Company> companies;
 	Statement stm = null;
 	try {
-	    stm = connect.createStatement();
+	    stm = con.createStatement();
 	    result = stm.executeQuery(query);
 	    companies = new ArrayList<>();
 	    while (result.next()) {
@@ -111,19 +118,26 @@ public class CompanyDaoImpl implements CompanyDao {
 	    daoLogger.error(e.toString());
 	    return null;
 	} finally {
-	    ConnectionFactory.getConnectionManager().closeConnection(connect, stm);
+	    try {
+		if (con.getAutoCommit() == true) {
+		    ConnectionFactory.getConnectionManager().closeConnection(con, stm);
+		}
+	    } catch (Exception e) {
+		daoLogger.error(e.toString());
+	    }
 	}
 	return companies;
     }
 
     public Company findByName(String id) {
-	Connection connect = ConnectionFactory.getConnectionManager().getConn();
+	Connection con = ThreadLocals.CONNECTION.get();
+	System.out.println("connection recupereé" + con);
 	String query = "Select id, name from company where name=" + id;
 	ResultSet result;
 	Company company = null;
 	Statement stm = null;
 	try {
-	    stm = connect.createStatement();
+	    stm = con.createStatement();
 	    result = stm.executeQuery(query);
 	    if (result.next()) {
 		company = new Company(result.getString("name"), result.getInt("id"));
@@ -132,8 +146,29 @@ public class CompanyDaoImpl implements CompanyDao {
 	    daoLogger.error(e.getMessage());
 	    return null;
 	} finally {
-	    ConnectionFactory.getConnectionManager().closeConnection(connect, stm);
+	    try {
+		if (con.getAutoCommit() == true) {
+		    ConnectionFactory.getConnectionManager().closeConnection(con, stm);
+		}
+	    } catch (Exception e) {
+		daoLogger.error(e.toString());
+	    }
 	}
 	return company;
     }
+
+    @Override
+    public boolean delete(Company c) {
+	Connection con = ThreadLocals.CONNECTION.get();
+	try {
+	    Statement stm = con.createStatement();
+	    stm.executeUpdate("DELETE from company where id=" + c.getId());
+	} catch (SQLException e) {
+	    daoLogger.error(e.toString());
+	    return false;
+	}
+	return true;
+
+    }
+
 }

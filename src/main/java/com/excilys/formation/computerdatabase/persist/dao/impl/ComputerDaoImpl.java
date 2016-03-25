@@ -7,16 +7,15 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.excilys.formation.computerdatabase.model.Computer;
 import com.excilys.formation.computerdatabase.model.Pager;
 import com.excilys.formation.computerdatabase.persist.connection.ConnectionFactory;
+import com.excilys.formation.computerdatabase.persist.connection.ThreadLocals;
 import com.excilys.formation.computerdatabase.persist.dao.ComputerDao;
 import com.excilys.formation.computerdatabase.persist.dao.exception.DAOException;
 import com.excilys.formation.computerdatabase.persist.dao.mapper.ComputerMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-
 
 public class ComputerDaoImpl implements ComputerDao {
 
@@ -51,7 +50,7 @@ public class ComputerDaoImpl implements ComputerDao {
 
     @Override
     public List<Computer> findAll(long pStart, int pSize) {
-	Connection connect = ConnectionFactory.getConnectionManager().getConn();
+	Connection connect = ThreadLocals.CONNECTION.get();
 	Statement statement = null;
 	try {
 	    statement = connect.createStatement();
@@ -69,7 +68,13 @@ public class ComputerDaoImpl implements ComputerDao {
 	    daoLogger.error(e.toString());
 	    throw new DAOException(e);
 	} finally {
-	    ConnectionFactory.getConnectionManager().closeConnection(connect, statement);
+	    try {
+		if (connect.getAutoCommit() == true) {
+		    ConnectionFactory.getConnectionManager().closeConnection(connect, statement);
+		}
+	    } catch (Exception e) {
+		daoLogger.error(e.toString());
+	    }
 	}
     }
 
@@ -78,7 +83,7 @@ public class ComputerDaoImpl implements ComputerDao {
 	Connection connect = null;
 	PreparedStatement createStatement = null;
 	try {
-	    connect = ConnectionFactory.getConnectionManager().getConn();
+	    connect = ThreadLocals.CONNECTION.get();
 	    createStatement = connect.prepareStatement(
 		    "INSERT INTO `computer` (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?);",
 		    Statement.RETURN_GENERATED_KEYS);
@@ -100,14 +105,20 @@ public class ComputerDaoImpl implements ComputerDao {
 	    daoLogger.error(e.getMessage());
 	    return null;
 	} finally {
-	    ConnectionFactory.getConnectionManager().closeConnection(connect, createStatement);
+	    try {
+		if (connect.getAutoCommit() == true) {
+		    ConnectionFactory.getConnectionManager().closeConnection(connect, createStatement);
+		}
+	    } catch (Exception e) {
+		daoLogger.error(e.toString());
+	    }
 	}
     }
 
     @Override
     public boolean delete(Computer obj) {
 	PreparedStatement deleteStatement = null;
-	Connection connect = ConnectionFactory.getConnectionManager().getConn();
+	Connection connect = ThreadLocals.CONNECTION.get();
 	if (obj == null || obj.getId() <= 0) {
 	    throw new IllegalArgumentException("Null or Not Persisted Object");
 	}
@@ -121,13 +132,19 @@ public class ComputerDaoImpl implements ComputerDao {
 	    daoLogger.error(e.toString());
 	    throw new DAOException(e);
 	} finally {
-	    ConnectionFactory.getConnectionManager().closeConnection(connect, deleteStatement);
+	    try {
+		if (connect.getAutoCommit() == true) {
+		    ConnectionFactory.getConnectionManager().closeConnection(connect, deleteStatement);
+		}
+	    } catch (Exception e) {
+		daoLogger.error(e.toString());
+	    }
 	}
     }
 
     @Override
     public Computer update(Computer obj) {
-	Connection connect = ConnectionFactory.getConnectionManager().getConn();
+	Connection connect = ThreadLocals.CONNECTION.get();
 	PreparedStatement updateStatement = null;
 	if (obj == null || obj.getId() <= 0) {
 	    throw new IllegalArgumentException("Pas d'objet ou objet non enregistré");
@@ -150,12 +167,18 @@ public class ComputerDaoImpl implements ComputerDao {
 	    daoLogger.error(e.toString());
 	    throw new DAOException(e);
 	} finally {
-	    ConnectionFactory.getConnectionManager().closeConnection(connect, updateStatement);
+	    try {
+		if (connect.getAutoCommit() == true) {
+		    ConnectionFactory.getConnectionManager().closeConnection(connect, updateStatement);
+		}
+	    } catch (Exception e) {
+		daoLogger.error(e.toString());
+	    }
 	}
     }
 
     public Computer find(long id) {
-	Connection connect = ConnectionFactory.getConnectionManager().getConn();
+	Connection connect = ThreadLocals.CONNECTION.get();
 	PreparedStatement findStatement = null;
 	try {
 	    findStatement = connect.prepareStatement("SELECT * FROM `computer` WHERE id = ?");
@@ -170,12 +193,18 @@ public class ComputerDaoImpl implements ComputerDao {
 	    daoLogger.error(e.toString());
 	    throw new DAOException(e);
 	} finally {
-	    ConnectionFactory.getConnectionManager().closeConnection(connect, findStatement);
+	    try {
+		if (connect.getAutoCommit() == true) {
+		    ConnectionFactory.getConnectionManager().closeConnection(connect, findStatement);
+		}
+	    } catch (Exception e) {
+		daoLogger.error(e.toString());
+	    }
 	}
     }
 
     public int count() {
-	Connection connect = ConnectionFactory.getConnectionManager().getConn();
+	Connection connect = ThreadLocals.CONNECTION.get();
 	String query = "SELECT count(*) from computer";
 	Statement stm = null;
 	ResultSet result = null;
@@ -190,41 +219,68 @@ public class ComputerDaoImpl implements ComputerDao {
 	} catch (SQLException e) {
 	    daoLogger.error(e.getMessage());
 	    return 0;
-	} finally {
-	    ConnectionFactory.getConnectionManager().closeConnection(connect, stm, result);
-	}
+	} 
     }
 
     public List<Computer> findWithSearch(Pager pager) {
-	Connection connect = ConnectionFactory.getConnectionManager().getConn();
+	Connection connect = ThreadLocals.CONNECTION.get();
 	PreparedStatement statement = null, statement2;
 	try {
 	    statement = connect.prepareStatement(queryOrdered(pager));
 	    if (pager.search != null) {
 		statement2 = connect.prepareStatement(
 			"SELECT count(*) FROM computer where name LIKE ? OR company_id IN (SELECT id FROM company where name LIKE ?)");
-		statement.setInt(3, pager.nbParPage);
-		statement.setInt(4, pager.nbParPage * (pager.pageActuelle - 1));
+		statement.setInt(3, pager.nbByPage);
+		statement.setInt(4, pager.nbByPage * (pager.currentPage - 1));
 		statement.setString(1, "%" + pager.getSearch() + "%");
 		statement.setString(2, "%" + pager.getSearch() + "%");
 		statement2.setString(1, "%" + pager.getSearch() + "%");
 		statement2.setString(2, "%" + pager.getSearch() + "%");
 	    } else {
 		statement2 = connect.prepareStatement("SELECT count(*) FROM computer");
-		statement.setInt(1, pager.nbParPage);
-		statement.setInt(2, pager.nbParPage * (pager.pageActuelle - 1));
+		statement.setInt(1, pager.nbByPage);
+		statement.setInt(2, pager.nbByPage * (pager.currentPage - 1));
 	    }
 	    ResultSet resultSet = statement.executeQuery();
 	    ResultSet resultSetCount = statement2.executeQuery();
 	    resultSetCount.first();
-	    pager.setNbEntries(resultSetCount.getInt(1));
+	    pager.setTotalCount(resultSetCount.getInt(1));
 	    return (new ComputerMapper()).mapRows(resultSet);
 	} catch (SQLException e) {
 	    daoLogger.error(e.toString());
 	    throw new DAOException(e);
 	} finally {
-	    ConnectionFactory.getConnectionManager().closeConnection(connect, statement);
+	    try {
+		if (connect.getAutoCommit()) {
+		    ConnectionFactory.getConnectionManager().closeConnection(connect, statement);
+		}
+	    } catch (Exception e) {
+		e.printStackTrace();
+		daoLogger.error(e.toString());
+	    }
 	}
+    }
+
+    public boolean deleteAll(long id) {
+	Connection con = new ThreadLocal<Connection>().get();
+	Statement stm = null;
+	try {
+	    stm = con.createStatement();
+	    stm.executeUpdate("DELETE from computer where company_id=" + id);
+	} catch (SQLException e) {
+	    daoLogger.error(e.toString());
+	    return false;
+	} finally {
+	    try {
+		if (con.getAutoCommit() == true) {
+		    ConnectionFactory.getConnectionManager().closeConnection(con, stm);
+		}
+	    } catch (Exception e) {
+		daoLogger.error(e.toString());
+	    }
+	}
+	return true;
+
     }
 
     private static String queryOrdered(Pager pager) {
@@ -232,19 +288,19 @@ public class ComputerDaoImpl implements ComputerDao {
 	if (pager.search != null && !pager.search.isEmpty()) {
 	    whereSentence = " where computer.name LIKE ? OR company_id IN (SELECT id FROM company where company.name LIKE ?)";
 	}
-	if ("computer".equals(pager.getOrderBy() )) {
+	if ("computer".equals(pager.getSort())) {
 	    return "SELECT * FROM computer LEFT JOIN company on computer.company_id=company.id " + whereSentence
 		    + " ORDER BY computer.name LIMIT ? OFFSET ?";
 	}
-	if ("intro".equals(pager.getOrderBy())) {
+	if ("intro".equals(pager.getSort())) {
 	    return "SELECT * FROM computer LEFT JOIN company on computer.company_id=company.id " + whereSentence
 		    + " ORDER BY computer.introduced LIMIT ? OFFSET ?";
 	}
-	if ("disco".equals(pager.getOrderBy())) {
+	if ("disco".equals(pager.getSort())) {
 	    return "SELECT * FROM computer LEFT JOIN company on computer.company_id=company.id " + whereSentence
 		    + " ORDER BY computer.discontinued LIMIT ? OFFSET ?";
 	}
-	if ("company".equals(pager.getOrderBy())) {
+	if ("company".equals(pager.getSort())) {
 	    return "SELECT * FROM computer LEFT JOIN company on computer.company_id=company.id " + whereSentence
 		    + " ORDER BY company.name LIMIT ? OFFSET ?";
 	}

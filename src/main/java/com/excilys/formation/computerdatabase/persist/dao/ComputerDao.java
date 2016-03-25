@@ -23,4 +23,6 @@ public interface ComputerDao extends GenericDao<Computer> {
     public List<Computer> findWithSearch(Pager pager);
 
     int count();
+
+    boolean deleteAll(long id);
 }

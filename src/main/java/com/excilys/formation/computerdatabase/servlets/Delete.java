@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.excilys.formation.computerdatabase.model.Pager;
+import com.excilys.formation.computerdatabase.persist.dao.mapper.PagerRequestMapper;
 import com.excilys.formation.computerdatabase.service.ComputerService;
 import com.excilys.formation.computerdatabase.service.impl.ComputerServiceImpl;
 
@@ -21,7 +22,8 @@ public class Delete extends HttpServlet {
 	    service.delete(service.find(i));
 	}
 	// redirect to dashboard, fill the list of computer with a pager define by the others parameters (page, nbByPage, search, order by)
-	Pager pager = DashBoard.createComputerPager(request);
+	Pager pager = PagerRequestMapper.get(request);
+	ComputerServiceImpl.getComputerService().fillPage(pager);
 	request.setAttribute("pager", pager);
 	this.getServletContext().getRequestDispatcher(VUE).forward(request, response);
 

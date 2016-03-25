@@ -28,7 +28,8 @@ public class ConnectionFactory {
     private static String url;
     private static String driver = "";
     private static ConnectionFactory instance = null;
-    private static final Logger LOGGER = LoggerFactory.getLogger(com.excilys.formation.computerdatabase.persist.connection.ConnectionFactory.class);
+    private static final Logger LOGGER = LoggerFactory
+	    .getLogger(com.excilys.formation.computerdatabase.persist.connection.ConnectionFactory.class);
     private BoneCP connectionPool = null;
 
     static {
@@ -50,14 +51,13 @@ public class ConnectionFactory {
 
     private ConnectionFactory() {
 	try {
-
 	    BoneCPConfig config = new BoneCPConfig();
 	    config.setJdbcUrl(url);
 	    config.setUsername(userName);
 	    config.setPassword(userPsswd);
 	    config.setMinConnectionsPerPartition(5);
-	    config.setMaxConnectionsPerPartition(10);
-	    config.setPartitionCount(2);
+	    config.setMaxConnectionsPerPartition(200);
+	    config.setPartitionCount(1);
 	    connectionPool = new BoneCP(config);
 	} catch (SQLException e) {
 	    LOGGER.error(e.toString());
@@ -119,6 +119,56 @@ public class ConnectionFactory {
 	} catch (SQLException e) {
 	    String message = new StringBuilder("Couldn't close jdbc connection: ").append(e.getMessage()).toString();
 	    throw new RuntimeException(message);
+	}
+    }
+
+    public void initConnection() {
+	Connection con = getConn();
+	try {
+	    con.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
+	} catch (SQLException e) {
+	}
+	ThreadLocals.CONNECTION.set(con);
+    }
+
+    public void iniTransaction() {
+	Connection con = getConn();
+
+	try {
+	    con.setAutoCommit(false);
+	    ThreadLocals.CONNECTION.set(con);
+	} catch (Exception e) {
+	    LOGGER.error(e.toString());
+	}
+    }
+
+    public void commit() {
+	Connection con =  ThreadLocals.CONNECTION.get();
+	try {
+	    con.commit();
+	} catch (Exception e) {
+	    LOGGER.error(e.toString());
+	}
+    }
+
+    public void rollback() {
+	Connection con = ThreadLocals.CONNECTION.get();
+	try {
+	    con.rollback();
+	} catch (Exception e) {
+	    LOGGER.error(e.toString());
+	} finally {
+	    closeTransaction();
+	}
+    }
+
+    public void closeTransaction() {
+	Connection con =  ThreadLocals.CONNECTION.get();
+	try {
+	    con.close();
+	    ThreadLocals.CONNECTION.remove();
+	} catch (Exception e) {
+	    LOGGER.error(e.toString());
 	}
     }
 }

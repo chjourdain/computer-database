@@ -73,51 +73,8 @@ public class CommandLineInterface {
     }
 
     public static void listComputer(Pager pager) {
-	if (pager == null) {
-	    GenericService<Computer> service = ComputerServiceImpl.getComputerService();
-	    pager = new Pager(20, 1, service);
-	}
-	pager.printListe();
-	System.out.println("Page suivante : n | Page précédente : p Quitter : q ");
-	Scanner scanner = new Scanner(System.in);
-	String choix = null;
 
-	choix = scanner.next().trim();
-	if ("n".equals(choix)) {
-	    pager.next();
-	    listComputer(pager);
-	} else if ("p".equals(choix)) {
-	    pager.prev();
-	    listComputer(pager);
-	} else if ("q".equals(choix)) {
-	} else {
-	    listComputer(pager);
-	}
     }
-
- /*   public static void listCompanies(Pager<Company> pager) {
-	if (pager == null) {
-	    GenericService<Company> service = CompanyServiceImpl.getCompanyService();
-
-	    pager = new Pager<>(20, 1, service);
-	}
-	pager.printListe();
-	System.out.println("Page suivante : n | Page précédente : p Quitter : q ");
-	Scanner scanner = new Scanner(System.in);
-	String choix = null;
-
-	choix = scanner.next().trim();
-	if ("n".equals(choix)) {
-	    pager.next();
-	    listCompanies(pager);
-	} else if ("p".equals(choix)) {
-	    pager.prev();
-	    listCompanies(pager);
-	} else if ("q".equals(choix)) {
-	} else {
-	    listCompanies(pager);
-	}
-    }*/
 
     public static void showComputer() {
 	System.out.println("---------------------------------------");

@@ -20,8 +20,9 @@ public class EditComputer extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	// get the computer id, send back the user to dashboard.jsp if not valid.
 	String id = request.getParameter("id");
-	if (id == null || id.equals("0")) {
+	if (id == null || id.equals("0") || id.isEmpty()) {
 	    this.getServletContext().getRequestDispatcher(VUE).forward(request, response);
+	    return;
 	}
 	// get the computer to send its data to the jsp.
 	ComputerService service = ComputerServiceImpl.getComputerService();
@@ -36,21 +37,16 @@ public class EditComputer extends HttpServlet {
 	ComputerService service = ComputerServiceImpl.getComputerService();
 	ComputerMapper cM = new ComputerMapper();
 	Computer c1 = cM.mapRow(request);
-	System.out.println(c1);
-	if (!(c1 == null | (!cM.erreur.isEmpty()))) {
-	    c1 = service.update(c1) ;
-	}
-	System.out.println(c1);
-	if (c1 == null) {
-	    //update fail, send the computer and error details.
+	if ((c1 == null | (!cM.erreur.isEmpty()))) {
+	    //request invalid.
 	   long i = Long.valueOf(request.getParameter("id").toString());
-	   ComputerDTO computer = ComputerDtoMapper.mapRow(service.find(Long.valueOf(i)));
-	   request.setAttribute("computer", computer);
+	   request.setAttribute("computer", ComputerDtoMapper.mapRow(service.find(Long.valueOf(i))));
 	   request.setAttribute("result", "failure in updating Computer");
 	   request.setAttribute("error", cM.getErreur());
 	this.getServletContext().getRequestDispatcher(VUE_EDIT).forward(request, response);
+	return;
 	}
-	//update succeed redirect to dashboard.
+	 c1 = service.update(c1) ;
 	response.sendRedirect("dashboard");
     }
 }

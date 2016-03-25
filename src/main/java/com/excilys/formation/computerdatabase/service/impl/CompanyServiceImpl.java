@@ -14,6 +14,7 @@ import com.excilys.formation.computerdatabase.model.Pager;
 import com.excilys.formation.computerdatabase.persist.connection.ConnectionFactory;
 import com.excilys.formation.computerdatabase.persist.dao.CompanyDao;
 import com.excilys.formation.computerdatabase.persist.dao.impl.CompanyDaoImpl;
+import com.excilys.formation.computerdatabase.persist.dao.impl.ComputerDaoImpl;
 import com.excilys.formation.computerdatabase.service.CompanyService;
 import com.excilys.formation.computerdatabase.service.GenericService;
 
@@ -28,6 +29,7 @@ public class CompanyServiceImpl implements CompanyService {
 	if (companyName == null || companyName.isEmpty()) {
 	    return null;
 	}
+	ConnectionFactory.getConnectionManager().initConnection();
 	return companyDao.findByName(companyName);
     }
 
@@ -36,11 +38,13 @@ public class CompanyServiceImpl implements CompanyService {
 	if (index < 0 || nbrElement <= 0) {
 	    return null;
 	}
+	ConnectionFactory.getConnectionManager().initConnection();
 	return companyDao.findAll(index, nbrElement);
     }
 
     @Override
     public int count() {
+	ConnectionFactory.getConnectionManager().initConnection();
 	return companyDao.count();
     }
 
@@ -49,9 +53,11 @@ public class CompanyServiceImpl implements CompanyService {
 	if (id == 0) {
 	    return null;
 	}
+	ConnectionFactory.getConnectionManager().initConnection();
 	return companyDao.find(id);
     }
 
+    
     /**
      * Method which return a hashmap with <company id, company name>
      * @return
@@ -59,6 +65,7 @@ public class CompanyServiceImpl implements CompanyService {
     public Map<Long, String> getMap() {
 	if (map == null) {
 	    map = new HashMap<>();
+	    ConnectionFactory.getConnectionManager().initConnection();
 	    List<Company> tempo = companyDao.findAll(0, 500);
 	    for (Object c : tempo) {
 		map.put((Long)  ((Company) c).getId(), ((Company) c).getName());
@@ -76,24 +83,13 @@ public class CompanyServiceImpl implements CompanyService {
 	throw new UnsupportedOperationException();
     }
 
+    
     @Override
     public void delete(Company c) {
-	Connection con = ConnectionFactory.getConnectionManager().getConn();
-	try {
-	    con.setAutoCommit(false);
-	    Statement stm = con.createStatement();
-	    stm.executeUpdate("DELETE from computer where company_id="+c.getId());
-	    
-	    stm.executeUpdate("DELETE from company where id="+c.getId());
-	    con.commit();
-	} catch (SQLException e) {
-	   try {
-	    con.rollback();
-	    con.close();
-	} catch (SQLException e1) {
-	   logger.error(e1.toString());
-	}
-	   logger.error(e.toString());
-	}
+	ConnectionFactory.getConnectionManager().iniTransaction();
+	ComputerDaoImpl.getComputerDao().deleteAll(c.getId());
+	CompanyDaoImpl.getCompanyDaoImpl().delete(c);
+	ConnectionFactory.getConnectionManager().commit();
+	
     }
 }

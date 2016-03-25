@@ -21,7 +21,7 @@
 	</header>
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${pager.nbEntries} Computers found</h1>
+			<h1 id="homeTitle">${pager.totalCount} Computers found</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -57,19 +57,19 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th><a  <f:link pager="${pager}" action="href" type="dashboard" orderBy="computer"></f:link> >Computer name</a></th>
-						<th><a  <f:link pager="${pager}" action="href" type="dashboard" orderBy="intro"></f:link> >Introduced date</a></th>
+						<th><a  <f:link pager="${pager}" action="href" type="dashboard" sort="computer"></f:link> >Computer name</a></th>
+						<th><a  <f:link pager="${pager}" action="href" type="dashboard" sort="intro"></f:link> >Introduced date</a></th>
 						<!-- Table header for Discontinued Date -->
-						<th><a  <f:link pager="${pager}" action="href" type="dashboard" orderBy="disco"></f:link> >Discontinued date</a></th>
+						<th><a  <f:link pager="${pager}" action="href" type="dashboard" sort="disco"></f:link> >Discontinued date</a></th>
 						<!-- Table header for Company -->
-						<th><a  <f:link pager="${pager}" action="href" type="dashboard" orderBy="company"></f:link> >Company</a> </th>
+						<th><a  <f:link pager="${pager}" action="href" type="dashboard" sort="company"></f:link> >Company</a> </th>
 
 					</tr>
 				</thead>
 				<!-- Browse attribute computers -->
 				<tbody id="results">
 
-					<c:forEach var="computer" items="${pager.liste}">
+					<c:forEach var="computer" items="${pager.list}">
 						<tr class="computer">
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="${computer.id}"></td>
@@ -98,9 +98,9 @@
 			</ul>
 
 			<div class="btn-group btn-group-sm pull-right" role="group">
-				<a <f:link pager="${pager}" type="dashboard" action="href" nbParPage="10"/> class="btn btn-default">10</a>
-				<a <f:link pager="${pager}" type="dashboard" action="href" nbParPage="50"/> class="btn btn-default">50</a>
-				<a <f:link pager="${pager}" type="dashboard" action="href" nbParPage="100"/>  class="btn btn-default">100</a>
+				<a <f:link pager="${pager}" type="dashboard" action="href" nbByPage="10"/> class="btn btn-default">10</a>
+				<a <f:link pager="${pager}" type="dashboard" action="href" nbByPage="50"/> class="btn btn-default">50</a>
+				<a <f:link pager="${pager}" type="dashboard" action="href" nbByPage="100"/>  class="btn btn-default">100</a>
 			</div>
 		</div>
 	</footer>
