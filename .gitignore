@@ -4,3 +4,5 @@ target/**
 .settings/**
 .classpath
 DockerFile
+service_start.sh
+dockermysql.properties
