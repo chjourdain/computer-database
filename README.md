@@ -28,7 +28,7 @@ with password: `qwerty1234`
 ##2. IDE  
 ###2.1. Eclipse  
 - Add your project to the current workspace: **File** -> **Import** -> **Existing projects into workspace**    
-- Create a new Tomcat 8.0 Server: Follow steps **[HERE](http://www.eclipse.org/webtools/jst/components/ws/M4/tutorials/InstallTomcat.html)**
+- Create a new Tomcat 8.0 Server: Fol low steps **[HERE](http://www.eclipse.org/webtools/jst/components/ws/M4/tutorials/InstallTomcat.html)**
 - In your project properties, select **Project facets**, convert your project to faceted form, and tick **Dynamic Web Module** (3.0) and **Java** (1.8)
 - Select **Runtime** tab (in the previous **project facets** menu)  and check the Tomcat 8.0 Server created above as your project runtime  
 
