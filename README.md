@@ -24,7 +24,7 @@ Schema created: **computer-database-db**
 Tables created: **company, computer**  
 User created: `admincdb`
 with password: `qwerty1234`
-
+ 
 ##2. IDE  
 ###2.1. Eclipse  
 - Add your project to the current workspace: **File** -> **Import** -> **Existing projects into workspace**    
