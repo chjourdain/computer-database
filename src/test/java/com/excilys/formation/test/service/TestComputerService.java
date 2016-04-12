@@ -22,10 +22,10 @@ public class TestComputerService {
 
     @Before
     public void initialize() {
-	cD = ComputerDaoImpl.INSTANCE;
+	//cD = ComputerDaoImpl.INSTANCE;
     }
 
-    @Test
+   /* @Test
     public void createFromService() {
 	ConnectionFactory.getConnectionManager().initConnection();
 	int a = cD.count();
@@ -73,6 +73,6 @@ public class TestComputerService {
 	    e.printStackTrace();
 	}
 
-    }
+    }*/
 
 }

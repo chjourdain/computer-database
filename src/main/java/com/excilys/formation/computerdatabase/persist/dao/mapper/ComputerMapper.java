@@ -11,13 +11,16 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.excilys.formation.computerdatabase.model.Company;
 import com.excilys.formation.computerdatabase.model.Computer;
 import com.excilys.formation.computerdatabase.persist.dao.CompanyDao;
 import com.excilys.formation.computerdatabase.persist.dao.impl.CompanyDaoImpl;
-import com.excilys.formation.computerdatabase.persist.dao.impl.ComputerDaoImpl;
 import com.excilys.formation.computerdatabase.service.impl.CompanyServiceImpl;
 
+@Component
 public class ComputerMapper implements RowMapper<Computer> {
     public static final String ATT_NAME = "computerName";
     public static final String ATT_COMPANY = "companyId";
@@ -26,7 +29,12 @@ public class ComputerMapper implements RowMapper<Computer> {
     public static final String ATT_ID = "id";
     public static final String regex = "^[0-9]{4}-[0-1][0-9]-[0-3][0-9]$|^$";
     public Map<String, String> erreur = new HashMap<>();
-
+    
+    @Autowired
+    CompanyServiceImpl companyService;
+    @Autowired
+    CompanyDaoImpl companyDao;
+    
     @Override
     public Computer mapRow(ResultSet rs) throws SQLException {
 	Computer c1 = new Computer(rs.getInt("computer.id"), rs.getString("computer.name"));
@@ -38,8 +46,9 @@ public class ComputerMapper implements RowMapper<Computer> {
 	    c1.setDiscontinued(rs.getDate(4).toLocalDate());
 	}
 	if (rs.getString("company_id") != null) {
-	    CompanyDao cCD = CompanyDaoImpl.getCompanyDaoImpl();
-	    c1.setCompany(cCD.find(Integer.parseInt(rs.getString("company_id"))));
+	//    CompanyDao cCD = CompanyDaoImpl.getCompanyDaoImpl();
+	 //   c1.setCompany(cCD.find(Integer.parseInt(rs.getString("company_id"))));
+	    c1.setCompany(companyService.find(Integer.parseInt(rs.getString("company_id"))));
 	}
 	return c1;
     }
@@ -66,7 +75,7 @@ public class ComputerMapper implements RowMapper<Computer> {
 	}
 	Company company = null;
 	if (companyId != null || Integer.valueOf(companyId) != 0) {
-	    company = (Company) CompanyServiceImpl.getCompanyService().find(Integer.valueOf(companyId));
+	    company = (Company) companyService.find(Integer.valueOf(companyId));
 	}
 	Computer computer = null;
 	if (erreur.isEmpty()) {
@@ -96,9 +105,10 @@ public class ComputerMapper implements RowMapper<Computer> {
 		c1.setDiscontinued(rs.getDate(4).toLocalDate());
 	    }
 	    if (rs.getString("company_id") != null) {
-		CompanyDao cCD = CompanyDaoImpl.getCompanyDaoImpl();
+		//CompanyDao cCD = CompanyDaoImpl.getCompanyDaoImpl();
 		{
-		    c1.setCompany(cCD.find(Integer.parseInt(rs.getString("company_id"))));
+		//    c1.setCompany(cCD.find(Integer.parseInt(rs.getString("company_id"))));
+		    c1.setCompany(companyDao.find(Integer.parseInt(rs.getString("company_id"))));
 		}
 	    }
 	    computers.add(c1);

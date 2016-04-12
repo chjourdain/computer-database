@@ -18,7 +18,7 @@ import com.excilys.formation.computerdatabase.persist.dao.impl.CompanyDaoImpl;
 import com.excilys.formation.computerdatabase.persist.dao.impl.ComputerDaoImpl;
 
 public class TestCreateComputer {
-    static ComputerDaoImpl computerDao;
+   /* static ComputerDaoImpl computerDao;
     static CompanyDao companydao;
 
     @Before
@@ -102,5 +102,5 @@ public class TestCreateComputer {
 	    e.printStackTrace();
 	}
 
-    }
+    }*/
 }

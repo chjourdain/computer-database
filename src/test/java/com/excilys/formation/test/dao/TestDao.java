@@ -18,7 +18,7 @@ import junit.framework.TestCase;
 
 public class TestDao extends TestCase {
 
-    public void testListComputeur() {
+   /* public void testListComputeur() {
 	ConnectionFactory.getConnectionManager().iniTransaction();
 	ComputerDaoImpl cD = ComputerDaoImpl.INSTANCE;
 	List<Computer> cl = cD.findAll(0, 10);
@@ -103,5 +103,5 @@ public class TestDao extends TestCase {
 	} catch (IllegalArgumentException e) {
 	}
 	ConnectionFactory.getConnectionManager().rollback();
-	}
+	}*/
 }

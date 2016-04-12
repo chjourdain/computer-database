@@ -2,6 +2,9 @@ package com.excilys.formation.computerdatabase.service.impl;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.excilys.formation.computerdatabase.model.Computer;
 import com.excilys.formation.computerdatabase.model.Pager;
 import com.excilys.formation.computerdatabase.persist.connection.ConnectionFactory;
@@ -9,19 +12,23 @@ import com.excilys.formation.computerdatabase.persist.dao.impl.ComputerDaoImpl;
 import com.excilys.formation.computerdatabase.persist.dao.mapper.ComputerDtoMapper;
 import com.excilys.formation.computerdatabase.service.ComputerService;
 
+@Service 
 public class ComputerServiceImpl implements ComputerService {
-    private static ComputerServiceImpl instance;
-    private ComputerDaoImpl computerDao = ComputerDaoImpl.INSTANCE;
-
+   // private static ComputerServiceImpl instance;
+   // private ComputerDaoImpl computerDao = ComputerDaoImpl.INSTANCE;
+    
+    @Autowired
+    ComputerDaoImpl computerDao;
+    
     private ComputerServiceImpl() {
     }
 
-    public static ComputerService getComputerService() {
+   /* public static ComputerService getComputerService() {
 	if (instance == null) {
 	    instance = new ComputerServiceImpl();
 	}
 	return instance;
-    }
+    }*/
 
     public int count() {
 	ConnectionFactory.getConnectionManager().initConnection();

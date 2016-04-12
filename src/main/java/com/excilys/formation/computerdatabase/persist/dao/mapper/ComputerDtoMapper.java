@@ -4,6 +4,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.excilys.formation.computerdatabase.model.Company;
 import com.excilys.formation.computerdatabase.model.Computer;
 import com.excilys.formation.computerdatabase.model.dto.ComputerDTO;
@@ -11,6 +14,8 @@ import com.excilys.formation.computerdatabase.persist.dao.CompanyDao;
 import com.excilys.formation.computerdatabase.persist.dao.impl.CompanyDaoImpl;
 
 public class ComputerDtoMapper implements RowMapper<ComputerDTO> {
+    @Autowired
+    CompanyDaoImpl companyDao;
 
     @Override
     public ComputerDTO mapRow(ResultSet rs) throws SQLException {
@@ -18,8 +23,7 @@ public class ComputerDtoMapper implements RowMapper<ComputerDTO> {
 	String companyName = null;
 	String companyId = null;
 	if ((companyId = rs.getString("company_id")) != null) {
-	    CompanyDao cCD = CompanyDaoImpl.getCompanyDaoImpl();
-	    Company company = cCD.find(Integer.parseInt(rs.getString("company_id")));
+	    Company company = companyDao.find(Integer.parseInt(rs.getString("company_id")));
 	    companyName = company.getName();
 	}
 	ComputerDTO c1 = new ComputerDTO(rs.getString("id"), rs.getString("name"), rs.getString("introduced"),
@@ -34,8 +38,7 @@ public class ComputerDtoMapper implements RowMapper<ComputerDTO> {
 	    String companyName = null;
 	    String companyId = null;
 	    if ((companyId = rs.getString("company_id")) != null) {
-		CompanyDao cCD = CompanyDaoImpl.getCompanyDaoImpl();
-		Company company = cCD.find(Integer.parseInt(rs.getString("company_id")));
+		Company company = companyDao.find(Integer.parseInt(rs.getString("company_id")));
 		companyName = company.getName();
 	    }
 	    ComputerDTO c1 = new ComputerDTO(rs.getString("id"), rs.getString("name"), rs.getString("introduced"),

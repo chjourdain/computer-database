@@ -8,23 +8,27 @@ import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import com.excilys.formation.computerdatabase.model.Company;
 import com.excilys.formation.computerdatabase.persist.connection.ConnectionFactory;
 import com.excilys.formation.computerdatabase.persist.connection.ThreadLocals;
 import com.excilys.formation.computerdatabase.persist.dao.CompanyDao;
 
+@Repository
 public class CompanyDaoImpl implements CompanyDao {
 
     private Logger daoLogger = LoggerFactory.getLogger(this.getClass());
-    private static CompanyDaoImpl instance = new CompanyDaoImpl();
+  //  private static CompanyDaoImpl instance = new CompanyDaoImpl();
 
     private CompanyDaoImpl() {
 	daoLogger.info("Initialisation du DAO Company");
+	System.out.println("jepassela");
     }
 
-    public static CompanyDao getCompanyDaoImpl() {
-	return instance;
-    }
+   // public static CompanyDao getCompanyDaoImpl() {
+	//return instance;
+    //}
 
     public ArrayList<Company> list() {
 	String query = "Select id, name from company";

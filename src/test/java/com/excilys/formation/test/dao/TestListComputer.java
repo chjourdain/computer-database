@@ -13,7 +13,7 @@ import com.excilys.formation.computerdatabase.persist.connection.ConnectionFacto
 import com.excilys.formation.computerdatabase.persist.dao.impl.ComputerDaoImpl;
 
 public class TestListComputer {
-    ComputerDaoImpl cD;
+   /* ComputerDaoImpl cD;
 
     @Before
     public void initialize() {
@@ -46,5 +46,5 @@ public class TestListComputer {
 	} catch (Exception e) {
 	}
 	ConnectionFactory.getConnectionManager().rollback();
-    }
+    }*/
 }

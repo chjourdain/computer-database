@@ -17,7 +17,7 @@ public class CommandLineInterface {
     private final static Scanner SC = new Scanner(System.in);
 
     public static void main(String[] args) {
-	int i = 0;
+	/*int i = 0;
 	while (i != 7) {
 	    showMenu();
 	    try {
@@ -86,8 +86,8 @@ public class CommandLineInterface {
 	if (id != -1) {
 
 	    try {
-		Computer c = ComputerServiceImpl.getComputerService().find(id);
-		System.out.println(c.toString());
+	//	Computer c = ComputerServiceImpl.getComputerService().find(id);
+	//	System.out.println(c.toString());
 	    } catch (NullPointerException e2) {
 		System.out.println("Aucun ordinateur avec cet ID");
 	    }
@@ -150,10 +150,10 @@ public class CommandLineInterface {
 	    Company company = (new CompanyServiceImpl()).findByName(companyName);
 	    c = new Computer(name, introduced, discontinued, company);
 
-	    ComputerServiceImpl.getComputerService().create(c);
+	//    ComputerServiceImpl.getComputerService().create(c);
 	} else {
 	    c = new Computer(name);
-	    ComputerServiceImpl.getComputerService().create(c);
+	//    ComputerServiceImpl.getComputerService().create(c);
 	}
 
     }
@@ -169,20 +169,20 @@ public class CommandLineInterface {
 	SC.nextLine();
 	if (id != -1) {
 	    try {
-		c = ComputerServiceImpl.getComputerService().find(id);
-		System.out.println(c.toString());
+	//	c = ComputerServiceImpl.getComputerService().find(id);
+	//	System.out.println(c.toString());
 		System.out.println("Entrez dans l'ordre nom,introduced,discontinued,company_name ");
 		System.out.println("vide pour inchangé");
 
 		String name = SC.nextLine();
 		if (name != "") {
-		    c.setName(name);
+	//	    c.setName(name);
 		}
 		boolean b = true;
 		do {
 		    String sIntroduced = SC.nextLine();
 		    try {
-			c.setIntroduced(LocalDate.parse(sIntroduced));
+	//		c.setIntroduced(LocalDate.parse(sIntroduced));
 			b = false;
 		    } catch (DateTimeParseException e) {
 			System.out.println("FORMAT INCORRECT,reessayer (0000-00-00)");
@@ -196,7 +196,7 @@ public class CommandLineInterface {
 			b = false;
 		    } else {
 			try {
-			    c.setDiscontinued((LocalDate.parse(sDiscontinued)));
+	//		    c.setDiscontinued((LocalDate.parse(sDiscontinued)));
 			    b = false;
 			} catch (DateTimeParseException e) {
 			    System.out.println("FORMAT INCORRECT,reessayer (0000-00-00)");
@@ -208,9 +208,9 @@ public class CommandLineInterface {
 		if (companyName != "") {
 		    Company company = (new CompanyServiceImpl()).findByName(companyName);
 
-		    c.setCompany(company);
+//		    c.setCompany(company);
 		}
-		ComputerServiceImpl.getComputerService().update(c);
+	//	ComputerServiceImpl.getComputerService().update(c);
 	    } catch (NullPointerException e2) {
 		System.out.print("Aucune modification faite");
 	    } // TODO Auto-generated method stub
@@ -228,8 +228,8 @@ public class CommandLineInterface {
 	int id = SC.nextInt();
 	if (id != -1) {
 
-	    c = ComputerServiceImpl.getComputerService().find(id);
-	    ComputerServiceImpl.getComputerService().delete(c);
+	//    c = ComputerServiceImpl.getComputerService().find(id);
+	//    ComputerServiceImpl.getComputerService().delete(c);
 	}
     }
 
@@ -269,4 +269,4 @@ public class CommandLineInterface {
     // }
     // return page;
     // }
-}
+*/}}

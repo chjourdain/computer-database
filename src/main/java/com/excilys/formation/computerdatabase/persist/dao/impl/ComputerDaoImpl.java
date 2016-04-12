@@ -9,6 +9,9 @@ import java.sql.Types;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
 import com.excilys.formation.computerdatabase.model.Computer;
 import com.excilys.formation.computerdatabase.model.Pager;
 import com.excilys.formation.computerdatabase.persist.connection.ConnectionFactory;
@@ -17,17 +20,20 @@ import com.excilys.formation.computerdatabase.persist.dao.ComputerDao;
 import com.excilys.formation.computerdatabase.persist.dao.exception.DAOException;
 import com.excilys.formation.computerdatabase.persist.dao.mapper.ComputerMapper;
 
+@Repository
 public class ComputerDaoImpl implements ComputerDao {
 
     private Logger daoLogger = LoggerFactory.getLogger(this.getClass());
-    public static final ComputerDaoImpl INSTANCE = new ComputerDaoImpl();
+    @Autowired
+    ComputerMapper cM;
+  //  public static final ComputerDaoImpl INSTANCE = new ComputerDaoImpl();
 
     private ComputerDaoImpl() {
     }
 
-    public static ComputerDao getComputerDao() {
+  /*  public static ComputerDao getComputerDao() {
 	return INSTANCE;
-    }
+    }*/
 
     private void prepareStatement(Computer computer, PreparedStatement pPreparedStatement) throws SQLException {
 	pPreparedStatement.setString(1, computer.getName());
@@ -63,7 +69,7 @@ public class ComputerDaoImpl implements ComputerDao {
 	    ResultSet resultSet = statement
 		    .executeQuery("SELECT * FROM computer LEFT JOIN company on computer.company_id=company_id"
 			    + " LIMIT " + pSize + " OFFSET " + pStart);
-	    return (new ComputerMapper()).mapRows(resultSet);
+	    return cM.mapRows(resultSet);
 	} catch (SQLException e) {
 	    daoLogger.error(e.toString());
 	    throw new DAOException(e);
@@ -188,7 +194,7 @@ public class ComputerDaoImpl implements ComputerDao {
 		return null;
 	    }
 	    resultSet.next();
-	    return (new ComputerMapper()).mapRow(resultSet);
+	    return cM.mapRow(resultSet);
 	} catch (SQLException e) {
 	    daoLogger.error(e.toString());
 	    throw new DAOException(e);
@@ -245,7 +251,7 @@ public class ComputerDaoImpl implements ComputerDao {
 	    ResultSet resultSetCount = statement2.executeQuery();
 	    resultSetCount.first();
 	    pager.setTotalCount(resultSetCount.getInt(1));
-	    return (new ComputerMapper()).mapRows(resultSet);
+	    return cM.mapRows(resultSet);
 	} catch (SQLException e) {
 	    daoLogger.error(e.toString());
 	    throw new DAOException(e);
