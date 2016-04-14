@@ -2,10 +2,6 @@ package com.excilys.formation.computerdatabase.model;
 
 import java.util.List;
 
-import com.excilys.formation.computerdatabase.model.dto.ComputerDTO;
-import com.excilys.formation.computerdatabase.persist.dao.mapper.ComputerDtoMapper;
-import com.excilys.formation.computerdatabase.service.GenericService;
-
 public class Pager<T> {
 
     public List<T> list;

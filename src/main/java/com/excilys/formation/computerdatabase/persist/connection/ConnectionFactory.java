@@ -22,14 +22,14 @@ import com.jolbox.bonecp.BoneCPConfig;
  *
  */
 public class ConnectionFactory {
-    private static final String CONFIG_FILENAME = "config_bd.properties";
+    /*private static final String CONFIG_FILENAME = "config_bd.properties";
     private static String userName;
     private static String userPsswd;
     private static String url;
     private static String driver = "";
-    private static ConnectionFactory instance = null;
+    private static ConnectionFactory instance = null;*/
     private static final Logger LOGGER = LoggerFactory
-	    .getLogger(com.excilys.formation.computerdatabase.persist.connection.ConnectionFactory.class);
+	    .getLogger(com.excilys.formation.computerdatabase.persist.connection.ConnectionFactory.class);/*
     private BoneCP connectionPool = null;
 
     static {
@@ -72,14 +72,14 @@ public class ConnectionFactory {
 	return instance;
     }
 
-    /**
+    *//**
      * method which load the properties of the connection
      * 
      * @param filename
      * @return properties which must contain user & password url and driver use
      *         to connect
      * @throws IOException
-     */
+     *//*
     public static Properties loadProp(String filename) throws IOException {
 	Properties properties = new Properties();
 	InputStream input = ConnectionFactory.class.getClassLoader().getResourceAsStream(filename);
@@ -100,12 +100,12 @@ public class ConnectionFactory {
 	    throw new RuntimeException();
 	}
     }
-
-    public void closeConnection(Connection conn, Statement stmt) {
+*/
+    public static void closeConnection(Connection conn, Statement stmt) {
 	closeConnection(conn, stmt, null);
     }
 
-    public void closeConnection(Connection conn, Statement stmt, ResultSet rs) {
+    public static void closeConnection(Connection conn, Statement stmt, ResultSet rs) {
 	try {
 	    if (conn != null) {
 		conn.close();
@@ -121,13 +121,13 @@ public class ConnectionFactory {
 	    throw new RuntimeException(message);
 	}
     }
-
+/*
     public void initConnection() {
 	Connection con = getConn();
 	try {
 	    con.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
 	} catch (SQLException e) {
-	}
+	}//
 	ThreadLocals.CONNECTION.set(con);
     }
 
@@ -161,8 +161,8 @@ public class ConnectionFactory {
 	    closeTransaction();
 	}
     }
-
-    public void closeTransaction() {
+*/
+    public static void closeTransaction() {
 	Connection con =  ThreadLocals.CONNECTION.get();
 	try {
 	    con.close();

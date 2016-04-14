@@ -25,8 +25,6 @@ public class CreateComputer extends HttpServlet {
     ComputerServiceImpl service;
     @Autowired
     CompanyServiceImpl companyService;
-    @Autowired
-    ComputerMapper cM;
     
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -41,7 +39,7 @@ public class CreateComputer extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	
-	Computer c1 = cM.mapRow(request);
+	Computer c1 = ComputerMapper.toComputer(request);
 	String result = null;
 	if (c1 != null) {
 	    if (service.create(c1) == null) {
@@ -52,7 +50,7 @@ public class CreateComputer extends HttpServlet {
 	    ;
 	}
 	CompaniesInHashMap(request);
-	request.setAttribute("error", cM.getErreur());
+//	request.setAttribute("error", cM.getErreur());
 	request.setAttribute("result", result);
 	request.getServletContext().getRequestDispatcher(VUE).forward(request, response);
     }

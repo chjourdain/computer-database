@@ -7,10 +7,15 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.List;
+
+import javax.sql.DataSource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.formation.computerdatabase.model.Computer;
 import com.excilys.formation.computerdatabase.model.Pager;
@@ -25,15 +30,10 @@ public class ComputerDaoImpl implements ComputerDao {
 
     private Logger daoLogger = LoggerFactory.getLogger(this.getClass());
     @Autowired
-    ComputerMapper cM;
-  //  public static final ComputerDaoImpl INSTANCE = new ComputerDaoImpl();
+    DataSource dataSource;
 
     private ComputerDaoImpl() {
     }
-
-  /*  public static ComputerDao getComputerDao() {
-	return INSTANCE;
-    }*/
 
     private void prepareStatement(Computer computer, PreparedStatement pPreparedStatement) throws SQLException {
 	pPreparedStatement.setString(1, computer.getName());
@@ -47,7 +47,7 @@ public class ComputerDaoImpl implements ComputerDao {
 	} else {
 	    pPreparedStatement.setString(3, null);
 	}
-	if (computer.getCompany() != null) {
+	if (computer.getCompany() != null && computer.getCompany().getId() !=0) {
 	    pPreparedStatement.setLong(4, computer.getCompany().getId());
 	} else {
 	    pPreparedStatement.setNull(4, Types.BIGINT);
@@ -56,9 +56,10 @@ public class ComputerDaoImpl implements ComputerDao {
 
     @Override
     public List<Computer> findAll(long pStart, int pSize) {
-	Connection connect = ThreadLocals.CONNECTION.get();
+	Connection connect = null;
 	Statement statement = null;
 	try {
+	    connect = dataSource.getConnection();
 	    statement = connect.createStatement();
 	    if (pSize > 0) {
 		statement.setMaxRows(pSize);
@@ -69,14 +70,14 @@ public class ComputerDaoImpl implements ComputerDao {
 	    ResultSet resultSet = statement
 		    .executeQuery("SELECT * FROM computer LEFT JOIN company on computer.company_id=company_id"
 			    + " LIMIT " + pSize + " OFFSET " + pStart);
-	    return cM.mapRows(resultSet);
+	    return ComputerMapper.toComputers(resultSet);
 	} catch (SQLException e) {
 	    daoLogger.error(e.toString());
 	    throw new DAOException(e);
 	} finally {
 	    try {
 		if (connect.getAutoCommit() == true) {
-		    ConnectionFactory.getConnectionManager().closeConnection(connect, statement);
+		    ConnectionFactory.closeConnection(connect, statement);
 		}
 	    } catch (Exception e) {
 		daoLogger.error(e.toString());
@@ -89,7 +90,7 @@ public class ComputerDaoImpl implements ComputerDao {
 	Connection connect = null;
 	PreparedStatement createStatement = null;
 	try {
-	    connect = ThreadLocals.CONNECTION.get();
+	    connect = dataSource.getConnection();
 	    createStatement = connect.prepareStatement(
 		    "INSERT INTO `computer` (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?);",
 		    Statement.RETURN_GENERATED_KEYS);
@@ -113,7 +114,7 @@ public class ComputerDaoImpl implements ComputerDao {
 	} finally {
 	    try {
 		if (connect.getAutoCommit() == true) {
-		    ConnectionFactory.getConnectionManager().closeConnection(connect, createStatement);
+		    ConnectionFactory.closeConnection(connect, createStatement);
 		}
 	    } catch (Exception e) {
 		daoLogger.error(e.toString());
@@ -123,12 +124,13 @@ public class ComputerDaoImpl implements ComputerDao {
 
     @Override
     public boolean delete(Computer obj) {
-	PreparedStatement deleteStatement = null;
-	Connection connect = ThreadLocals.CONNECTION.get();
+	PreparedStatement deleteStatement = null;//
+	Connection connect = null;
 	if (obj == null || obj.getId() <= 0) {
 	    throw new IllegalArgumentException("Null or Not Persisted Object");
 	}
 	try {
+	    connect = dataSource.getConnection();
 	    deleteStatement = connect.prepareStatement("DELETE FROM computer WHERE id = ?");
 	    deleteStatement.setLong(1, obj.getId());
 	    int nbLines = deleteStatement.executeUpdate();
@@ -140,7 +142,7 @@ public class ComputerDaoImpl implements ComputerDao {
 	} finally {
 	    try {
 		if (connect.getAutoCommit() == true) {
-		    ConnectionFactory.getConnectionManager().closeConnection(connect, deleteStatement);
+		    ConnectionFactory.closeConnection(connect, deleteStatement);
 		}
 	    } catch (Exception e) {
 		daoLogger.error(e.toString());
@@ -150,12 +152,13 @@ public class ComputerDaoImpl implements ComputerDao {
 
     @Override
     public Computer update(Computer obj) {
-	Connection connect = ThreadLocals.CONNECTION.get();
+	Connection connect = null;
 	PreparedStatement updateStatement = null;
 	if (obj == null || obj.getId() <= 0) {
 	    throw new IllegalArgumentException("Pas d'objet ou objet non enregistré");
 	}
 	try {
+	    connect = dataSource.getConnection();
 	    updateStatement = connect.prepareStatement(
 		    "UPDATE `computer` SET name=?, introduced=?, discontinued=?, company_id=? WHERE id = ?;");
 	    prepareStatement(obj, updateStatement);
@@ -171,37 +174,39 @@ public class ComputerDaoImpl implements ComputerDao {
 	    return null;
 	} catch (SQLException e) {
 	    daoLogger.error(e.toString());
+	    e.printStackTrace();
 	    throw new DAOException(e);
 	} finally {
 	    try {
 		if (connect.getAutoCommit() == true) {
-		    ConnectionFactory.getConnectionManager().closeConnection(connect, updateStatement);
+		    ConnectionFactory.closeConnection(connect, updateStatement);
 		}
 	    } catch (Exception e) {
 		daoLogger.error(e.toString());
 	    }
 	}
     }
-
+ 
     public Computer find(long id) {
-	Connection connect = ThreadLocals.CONNECTION.get();
+	Connection connect = null;
 	PreparedStatement findStatement = null;
 	try {
-	    findStatement = connect.prepareStatement("SELECT * FROM `computer` WHERE id = ?");
+	    connect = dataSource.getConnection();
+	    findStatement = connect.prepareStatement("SELECT * FROM computer LEFT JOIN company ON company.id=computer.company_id WHERE computer.id = ?");
 	    findStatement.setLong(1, id);
 	    ResultSet resultSet = findStatement.executeQuery();
 	    if (!resultSet.isBeforeFirst()) {
 		return null;
 	    }
 	    resultSet.next();
-	    return cM.mapRow(resultSet);
+	    return ComputerMapper.toComputer(resultSet);
 	} catch (SQLException e) {
 	    daoLogger.error(e.toString());
 	    throw new DAOException(e);
 	} finally {
 	    try {
 		if (connect.getAutoCommit() == true) {
-		    ConnectionFactory.getConnectionManager().closeConnection(connect, findStatement);
+		    ConnectionFactory.closeConnection(connect, findStatement);
 		}
 	    } catch (Exception e) {
 		daoLogger.error(e.toString());
@@ -210,11 +215,12 @@ public class ComputerDaoImpl implements ComputerDao {
     }
 
     public int count() {
-	Connection connect = ThreadLocals.CONNECTION.get();
+	Connection connect = null;
 	String query = "SELECT count(*) from computer";
 	Statement stm = null;
 	ResultSet result = null;
 	try {
+	    connect = dataSource.getConnection();
 	    stm = connect.createStatement();
 	    result = stm.executeQuery(query);
 	    if (result.first()) {
@@ -229,9 +235,10 @@ public class ComputerDaoImpl implements ComputerDao {
     }
 
     public List<Computer> findWithSearch(Pager pager) {
-	Connection connect = ThreadLocals.CONNECTION.get();
+	Connection connect = null;
 	PreparedStatement statement = null, statement2;
 	try {
+	    connect = dataSource.getConnection();
 	    statement = connect.prepareStatement(queryOrdered(pager));
 	    if (pager.search != null) {
 		statement2 = connect.prepareStatement(
@@ -251,14 +258,14 @@ public class ComputerDaoImpl implements ComputerDao {
 	    ResultSet resultSetCount = statement2.executeQuery();
 	    resultSetCount.first();
 	    pager.setTotalCount(resultSetCount.getInt(1));
-	    return cM.mapRows(resultSet);
+	    return ComputerMapper.toComputers(resultSet);
 	} catch (SQLException e) {
 	    daoLogger.error(e.toString());
 	    throw new DAOException(e);
-	} finally {
+	} finally {  //  private static CompanyDaoImpl instance = new CompanyDaoImpl();
 	    try {
 		if (connect.getAutoCommit()) {
-		    ConnectionFactory.getConnectionManager().closeConnection(connect, statement);
+		    ConnectionFactory.closeConnection(connect, statement);
 		}
 	    } catch (Exception e) {
 		e.printStackTrace();
@@ -267,10 +274,12 @@ public class ComputerDaoImpl implements ComputerDao {
 	}
     }
 
+    @Transactional()
     public boolean deleteAll(long id) {
-	Connection con = new ThreadLocal<Connection>().get();
+	Connection con = null;
 	Statement stm = null;
 	try {
+	    con = dataSource.getConnection();
 	    stm = con.createStatement();
 	    stm.executeUpdate("DELETE from computer where company_id=" + id);
 	} catch (SQLException e) {
@@ -279,7 +288,7 @@ public class ComputerDaoImpl implements ComputerDao {
 	} finally {
 	    try {
 		if (con.getAutoCommit() == true) {
-		    ConnectionFactory.getConnectionManager().closeConnection(con, stm);
+		    ConnectionFactory.closeConnection(con, stm);
 		}
 	    } catch (Exception e) {
 		daoLogger.error(e.toString());
@@ -310,6 +319,6 @@ public class ComputerDaoImpl implements ComputerDao {
 	    return "SELECT * FROM computer LEFT JOIN company on computer.company_id=company.id " + whereSentence
 		    + " ORDER BY company.name LIMIT ? OFFSET ?";
 	}
-	return "SELECT * FROM computer " + whereSentence + " LIMIT ? OFFSET ?";
+	return "SELECT * FROM computer LEFT JOIN company on computer.company_id=company.id " + whereSentence + " LIMIT ? OFFSET ?";
     }
 }

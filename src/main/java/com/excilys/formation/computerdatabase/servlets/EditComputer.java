@@ -15,7 +15,6 @@ import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.formation.computerdatabase.model.Computer;
 import com.excilys.formation.computerdatabase.model.dto.ComputerDTO;
-import com.excilys.formation.computerdatabase.persist.dao.mapper.ComputerDtoMapper;
 import com.excilys.formation.computerdatabase.persist.dao.mapper.ComputerMapper;
 import com.excilys.formation.computerdatabase.service.impl.CompanyServiceImpl;
 import com.excilys.formation.computerdatabase.service.impl.ComputerServiceImpl;
@@ -30,8 +29,6 @@ public class EditComputer extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private static final String VUE = "/WEB-INF/views/dashboard.jsp";
     private static final String VUE_EDIT = "/WEB-INF/views/editComputer.jsp";
-    @Autowired
-    ComputerMapper cM;
     
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -48,8 +45,10 @@ public class EditComputer extends HttpServlet {
 	    return;
 	}
 	// get the computer to send its data to the jsp.
+	System.out.println(id);
 	System.out.println(    service2.toString());
-	ComputerDTO computer = ComputerDtoMapper.mapRow(service2.find(Long.valueOf(id)));
+	System.out.println(service2.find(Long.valueOf(id)));
+	ComputerDTO computer = ComputerMapper.toDTO(service2.find(Long.valueOf(id)));
 	request.setAttribute("computer", computer);
 	// pass the list of companies in a hashmap as attribute.
 	CompaniesInHashMap(request);
@@ -58,13 +57,13 @@ public class EditComputer extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	
-	Computer c1 = cM.mapRow(request);
-	if ((c1 == null | (!cM.erreur.isEmpty()))) {
+	Computer c1 = ComputerMapper.toComputer(request);
+	if ((c1 == null )) {
 	    // request invalid.
 	    long i = Long.valueOf(request.getParameter("id").toString());
-	    request.setAttribute("computer", ComputerDtoMapper.mapRow(service2.find(Long.valueOf(i))));
+	    request.setAttribute("computer", ComputerMapper.toDTO(service2.find(Long.valueOf(i))));
 	    request.setAttribute("result", "failure in updating Computer");
-	    request.setAttribute("error", cM.getErreur());
+	//    request.setAttribute("error", cM.getErreur());
 	    request.getServletContext().getRequestDispatcher(VUE_EDIT).forward(request, response);
 	    return;
 	}

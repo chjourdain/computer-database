@@ -3,6 +3,7 @@ package com.excilys.formation.computerdatabase.persist.dao.mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,56 +12,181 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.excilys.formation.computerdatabase.model.Company;
 import com.excilys.formation.computerdatabase.model.Computer;
-import com.excilys.formation.computerdatabase.persist.dao.CompanyDao;
-import com.excilys.formation.computerdatabase.persist.dao.impl.CompanyDaoImpl;
-import com.excilys.formation.computerdatabase.service.impl.CompanyServiceImpl;
+import com.excilys.formation.computerdatabase.model.dto.ComputerDTO;
 
-@Component
-public class ComputerMapper implements RowMapper<Computer> {
+public class ComputerMapper {
+
     public static final String ATT_NAME = "computerName";
     public static final String ATT_COMPANY = "companyId";
     public static final String ATT_INTRODUCED = "introduced";
     public static final String ATT_DISCONTINUED = "discontinued";
     public static final String ATT_ID = "id";
     public static final String regex = "^[0-9]{4}-[0-1][0-9]-[0-3][0-9]$|^$";
-    public Map<String, String> erreur = new HashMap<>();
-    
-    @Autowired
-    CompanyServiceImpl companyService;
-    @Autowired
-    CompanyDaoImpl companyDao;
-    
-    @Override
-    public Computer mapRow(ResultSet rs) throws SQLException {
-	Computer c1 = new Computer(rs.getInt("computer.id"), rs.getString("computer.name"));
 
-	if (rs.getTimestamp(3) != null) {
-	    c1.setIntroduced(rs.getDate(3).toLocalDate());
+    public static Computer toComputer(ResultSet rs) throws SQLException {
+	Computer computer = new Computer();
+	computer.setId(rs.getInt("computer.id"));
+	computer.setName(rs.getString("computer.name"));
+	if (rs.getTimestamp("introduced") != null) {
+	    computer.setIntroduced(rs.getTimestamp("introduced").toLocalDateTime().toLocalDate());
 	}
-	if (rs.getTimestamp(4) != null) {
-	    c1.setDiscontinued(rs.getDate(4).toLocalDate());
+	if (rs.getTimestamp("discontinued") != null) {
+	    computer.setDiscontinued(rs.getTimestamp("discontinued").toLocalDateTime().toLocalDate());
 	}
-	if (rs.getString("company_id") != null) {
-	//    CompanyDao cCD = CompanyDaoImpl.getCompanyDaoImpl();
-	 //   c1.setCompany(cCD.find(Integer.parseInt(rs.getString("company_id"))));
-	    c1.setCompany(companyService.find(Integer.parseInt(rs.getString("company_id"))));
+	Company company = new Company();
+	if (rs.getLong("company.id") != 0) {
+	    company.setId(rs.getLong("company.id"));
+	    company.setName(rs.getString("company.name"));
 	}
-	return c1;
+	computer.setCompany(company);
+	return computer;
     }
 
-    public Computer mapRow(HttpServletRequest request) {
+    public static List<Computer> toComputers(ResultSet rs) throws SQLException {
 
+	List<Computer> list = new ArrayList<>();
+	Computer computer;
+	while (rs.next()) {
+	    computer = new Computer();
+	    computer.setId(rs.getInt("computer.id"));
+	    computer.setName(rs.getString("computer.name"));
+	    if (rs.getTimestamp("introduced") != null) {
+		computer.setIntroduced(rs.getTimestamp("introduced").toLocalDateTime().toLocalDate());
+	    }
+	    if (rs.getTimestamp("discontinued") != null) {
+		computer.setDiscontinued(rs.getTimestamp("discontinued").toLocalDateTime().toLocalDate());
+	    }
+	    Company company = new Company();
+	    company.setId(rs.getLong("company.id"));
+	    company.setName(rs.getString("company.name"));
+	    computer.setCompany(company);
+	    list.add(computer);
+	}
+	return list;
+    }
+
+    static Computer toComputer(ComputerDTO dto) {
+
+	Computer computer = new Computer();
+
+	if (dto.getId() != 0) {
+	    computer.setId(dto.getId());
+	}
+	computer.setName(dto.getName());
+
+	if ("".equals(dto.getIntroduced())) {
+	    computer.setIntroduced(null);
+	} else {
+	    dto.setIntroduced(dto.getIntroduced().replace('/', '-'));
+	    computer.setIntroduced(LocalDate.parse(dto.getIntroduced(), DateTimeFormatter.ISO_LOCAL_DATE));
+	}
+
+	if ("".equals(dto.getDiscontinued())) {
+	    computer.setDiscontinued(null);
+	} else {
+	    dto.setDiscontinued(dto.getDiscontinued().replace('/', '-'));
+	    computer.setDiscontinued(LocalDate.parse(dto.getDiscontinued(), DateTimeFormatter.ISO_LOCAL_DATE));
+	}
+
+	if (dto.getCompanyId() != 0) {
+	    computer.setCompany(new Company(dto.getCompanyName(), dto.getCompanyId()));
+	} else {
+	    computer.setCompany(null);
+	}
+	return computer;
+    }
+
+    static List<Computer> toComputer(List<ComputerDTO> dtoList) {
+	List<Computer> computerList = new ArrayList<>();
+
+	if (dtoList != null) {
+	    for (ComputerDTO dto : dtoList) {
+		computerList.add(toComputer(dto));
+	    }
+	}
+	return computerList;
+    }
+
+    public static ComputerDTO toDTO(Computer computer) {
+
+	ComputerDTO dto = new ComputerDTO();
+	dto.setId(computer.getId());
+	dto.setName(computer.getName());
+	if (computer.getIntroduced() == null) {
+	    dto.setIntroduced("");
+	} else {
+	    dto.setIntroduced(computer.getIntroduced().toString());
+	}
+
+	if (computer.getDiscontinued() == null) {
+	    dto.setDiscontinued("");
+	} else {
+	    dto.setDiscontinued(computer.getDiscontinued().toString());
+	}
+
+	if (computer.getCompany() == null) {
+	    dto.setCompanyId(0L);
+	    dto.setCompanyName("");
+	} else {
+	    dto.setCompanyId(computer.getCompany().getId());
+
+	    if (computer.getCompany().getName() == null || "".equals(computer.getCompany().getName())) {
+		dto.setCompanyName("");
+	    } else {
+		dto.setCompanyName(computer.getCompany().getName());
+	    }
+	}
+	return dto;
+    }
+
+    public static List<ComputerDTO> toDTOs(List<Computer> listcompu) {
+	ComputerDTO dto;
+	List<ComputerDTO> list = new ArrayList<>();
+	for (Computer computer : listcompu) {
+	    dto = new ComputerDTO();
+
+	    dto.setId(computer.getId());
+
+	    dto.setName(computer.getName());
+	    if (computer.getIntroduced() == null) {
+		dto.setIntroduced("");
+	    } else {
+		dto.setIntroduced(computer.getIntroduced().toString());
+	    }
+
+	    if (computer.getDiscontinued() == null) {
+		dto.setDiscontinued("");
+	    } else {
+		dto.setDiscontinued(computer.getDiscontinued().toString());
+	    }
+
+	    if (computer.getCompany() == null) {
+		dto.setCompanyId(0L);
+		dto.setCompanyName("");
+	    } else {
+		dto.setCompanyId(computer.getCompany().getId());
+
+		if (computer.getCompany().getName() == null || "".equals(computer.getCompany().getName())) {
+		    dto.setCompanyName("");
+		} else {
+		    dto.setCompanyName(computer.getCompany().getName());
+		}
+	    }
+	    list.add(dto);
+	}
+	return list;
+    }
+
+    public static Computer toComputer(HttpServletRequest request) {
+	Map<String, String> erreur = new HashMap<>();
 	String name = request.getParameter(ATT_NAME);
 	String introduced = request.getParameter(ATT_INTRODUCED);
 	String discontinued = request.getParameter(ATT_DISCONTINUED);
 	String companyId = request.getParameter(ATT_COMPANY);
 	String id = request.getParameter(ATT_ID);
-	long id2=0;
+	long id2 = 0;
 	if (id != null) {
 	    id2 = Long.valueOf(id);
 	}
@@ -74,8 +200,9 @@ public class ComputerMapper implements RowMapper<Computer> {
 	    erreur.put("discontinued", "Erreur de format, renseigner YYYY-MM-JJ");
 	}
 	Company company = null;
-	if (companyId != null || Integer.valueOf(companyId) != 0) {
-	    company = (Company) companyService.find(Integer.valueOf(companyId));
+	if (companyId != null && !companyId.isEmpty() && Integer.valueOf(companyId) != 0) {
+	    company = new Company();
+	    company.setId(Long.valueOf(companyId));
 	}
 	Computer computer = null;
 	if (erreur.isEmpty()) {
@@ -87,36 +214,17 @@ public class ComputerMapper implements RowMapper<Computer> {
 	    if (discontinued != null && discontinued != "") {
 		disco = LocalDate.parse(discontinued);
 	    }
-	    computer = new Computer(id2,name, intro, disco, company);
+	    computer = new Computer(id2, name, intro, disco, company);
 	}
 	return computer;
     }
 
-    @Override
-    public List<Computer> mapRows(ResultSet rs) throws SQLException {
-	List<Computer> computers = new ArrayList<>();
-	while (rs.next()) {
-	    Computer c1 = new Computer(rs.getInt("computer.id"), rs.getString("computer.name"));
-
-	    if (rs.getTimestamp(3) != null) {
-		c1.setIntroduced(rs.getDate(3).toLocalDate());
-	    }
-	    if (rs.getTimestamp(4) != null) {
-		c1.setDiscontinued(rs.getDate(4).toLocalDate());
-	    }
-	    if (rs.getString("company_id") != null) {
-		//CompanyDao cCD = CompanyDaoImpl.getCompanyDaoImpl();
-		{
-		//    c1.setCompany(cCD.find(Integer.parseInt(rs.getString("company_id"))));
-		    c1.setCompany(companyDao.find(Integer.parseInt(rs.getString("company_id"))));
-		}
-	    }
-	    computers.add(c1);
+    static List<ComputerDTO> toDTO(List<Computer> computerList) {
+	List<ComputerDTO> computerDTOList = new ArrayList<>();
+	for (Computer computer : computerList) {
+	    computerDTOList.add(toDTO(computer));
 	}
-	return computers;
+	return computerDTOList;
     }
-    
-    public Map<String, String> getErreur() {
-	return erreur;
-    }
+
 }

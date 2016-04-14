@@ -7,44 +7,41 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.excilys.formation.computerdatabase.model.Computer;
 import com.excilys.formation.computerdatabase.persist.connection.ConnectionFactory;
 import com.excilys.formation.computerdatabase.persist.dao.impl.ComputerDaoImpl;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = { "file:src/main/resources/applicationContext.xml" })
 public class TestListComputer {
-   /* ComputerDaoImpl cD;
-
-    @Before
-    public void initialize() {
-	cD = ComputerDaoImpl.INSTANCE;
-    }
+    @Autowired
+    ComputerDaoImpl cD;
 
     @Test
     public void lister2() {
-	ConnectionFactory.getConnectionManager().iniTransaction();
 	List<Computer> test = cD.findAll(0, 2);
 	assertTrue(test.size() == 2);
 	assertTrue(test.get(0).equals(cD.find(2)));
-	ConnectionFactory.getConnectionManager().rollback();
     }
 
     @Test
     public void listerNegatif() {
-	ConnectionFactory.getConnectionManager().iniTransaction();
 	List<Computer> test = cD.findAll(0, -2);
 	assertTrue(test.size() == 0);
-	ConnectionFactory.getConnectionManager().rollback();
     }
 
     @Test
     public void listerNegatifdeux() {
-	ConnectionFactory.getConnectionManager().iniTransaction();
 	try {
 	    List<Computer> test = cD.findAll(-4, 5);
 	    fail();
 	} catch (Exception e) {
 	}
-	ConnectionFactory.getConnectionManager().rollback();
-    }*/
+
+    }
 }

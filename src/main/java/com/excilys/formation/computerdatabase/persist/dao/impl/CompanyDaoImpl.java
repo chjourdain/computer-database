@@ -6,29 +6,27 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import com.excilys.formation.computerdatabase.model.Company;
 import com.excilys.formation.computerdatabase.persist.connection.ConnectionFactory;
-import com.excilys.formation.computerdatabase.persist.connection.ThreadLocals;
 import com.excilys.formation.computerdatabase.persist.dao.CompanyDao;
 
 @Repository
 public class CompanyDaoImpl implements CompanyDao {
 
-    private Logger daoLogger = LoggerFactory.getLogger(this.getClass());
-  //  private static CompanyDaoImpl instance = new CompanyDaoImpl();
+    @Autowired
+    private DataSource dataSource;
+    private Logger daoLogger = LoggerFactory.getLogger(CompanyDaoImpl.class.getName());
 
     private CompanyDaoImpl() {
 	daoLogger.info("Initialisation du DAO Company");
-	System.out.println("jepassela");
     }
-
-   // public static CompanyDao getCompanyDaoImpl() {
-	//return instance;
-    //}
 
     public ArrayList<Company> list() {
 	String query = "Select id, name from company";
@@ -37,7 +35,7 @@ public class CompanyDaoImpl implements CompanyDao {
 	Statement stm = null;
 	Connection connect = null;
 	try {
-	    connect = ConnectionFactory.getConnectionManager().getConn();
+	    connect = dataSource.getConnection();
 	    stm = connect.createStatement();
 	    result = stm.executeQuery(query);
 	    companies = new ArrayList<>();
@@ -49,7 +47,7 @@ public class CompanyDaoImpl implements CompanyDao {
 	    daoLogger.error(e.toString());
 	    return null;
 	} finally {
-	    ConnectionFactory.getConnectionManager().closeConnection(connect, stm);
+	    ConnectionFactory.closeConnection(connect, stm);
 	}
 	return companies;
     }
@@ -59,9 +57,10 @@ public class CompanyDaoImpl implements CompanyDao {
 	String query = "Select id, name from company where id=" + id;
 	ResultSet result;
 	Company company = null;
-	Connection con = ConnectionFactory.getConnectionManager().getConn();
+	Connection con = null;
 	Statement stm = null;
 	try {
+	    con = dataSource.getConnection();
 	    stm = con.createStatement();
 	    result = stm.executeQuery(query);
 	    if (result.next()) {
@@ -71,17 +70,18 @@ public class CompanyDaoImpl implements CompanyDao {
 	    daoLogger.error(e.toString());
 	    return null;
 	} finally {
-	    ConnectionFactory.getConnectionManager().closeConnection(con, stm);
+	    ConnectionFactory.closeConnection(con, stm);
 	}
 	return company;
     }
 
     public int count() {
-	Connection con = ThreadLocals.CONNECTION.get();
+	Connection con = null;
 	String query = "SELECT count(*) from company";
 	ResultSet result;
 	Statement stm = null;
 	try {
+	    con = dataSource.getConnection();
 	    stm = con.createStatement();
 	    result = stm.executeQuery(query);
 	    if (result.first()) {
@@ -95,7 +95,7 @@ public class CompanyDaoImpl implements CompanyDao {
 	} finally {
 	    try {
 		if (con.getAutoCommit() == true) {
-		    ConnectionFactory.getConnectionManager().closeConnection(con, stm);
+		    ConnectionFactory.closeConnection(con, stm);
 		}
 	    } catch (Exception e) {
 		daoLogger.error(e.toString());
@@ -105,18 +105,20 @@ public class CompanyDaoImpl implements CompanyDao {
 
     @Override
     public List<Company> findAll(long index, int nbrElement) {
-	Connection con = ThreadLocals.CONNECTION.get();
+	Connection con = null;
 	String query = "Select * from company" + " LIMIT " + index + "," + nbrElement;
 	ResultSet result;
 	ArrayList<Company> companies;
 	Statement stm = null;
 	try {
+	    con = dataSource.getConnection();
 	    stm = con.createStatement();
 	    result = stm.executeQuery(query);
 	    companies = new ArrayList<>();
 	    while (result.next()) {
 		Company c1 = new Company(result.getString("name"), result.getInt("id"));
 		companies.add(c1);
+		LoggerFactory.getLogger(this.getClass());
 	    }
 	} catch (SQLException e) {
 	    daoLogger.error(e.toString());
@@ -124,7 +126,7 @@ public class CompanyDaoImpl implements CompanyDao {
 	} finally {
 	    try {
 		if (con.getAutoCommit() == true) {
-		    ConnectionFactory.getConnectionManager().closeConnection(con, stm);
+		    ConnectionFactory.closeConnection(con, stm);
 		}
 	    } catch (Exception e) {
 		daoLogger.error(e.toString());
@@ -134,13 +136,14 @@ public class CompanyDaoImpl implements CompanyDao {
     }
 
     public Company findByName(String id) {
-	Connection con = ThreadLocals.CONNECTION.get();
+	Connection con = null;
 	System.out.println("connection recupereé" + con);
 	String query = "Select id, name from company where name=" + id;
 	ResultSet result;
 	Company company = null;
 	Statement stm = null;
 	try {
+	    con = dataSource.getConnection();
 	    stm = con.createStatement();
 	    result = stm.executeQuery(query);
 	    if (result.next()) {
@@ -152,7 +155,7 @@ public class CompanyDaoImpl implements CompanyDao {
 	} finally {
 	    try {
 		if (con.getAutoCommit() == true) {
-		    ConnectionFactory.getConnectionManager().closeConnection(con, stm);
+		    ConnectionFactory.closeConnection(con, stm);
 		}
 	    } catch (Exception e) {
 		daoLogger.error(e.toString());
@@ -162,9 +165,11 @@ public class CompanyDaoImpl implements CompanyDao {
     }
 
     @Override
+    @Transactional()
     public boolean delete(Company c) {
-	Connection con = ThreadLocals.CONNECTION.get();
+	Connection con = null;
 	try {
+	    con = dataSource.getConnection();
 	    Statement stm = con.createStatement();
 	    stm.executeUpdate("DELETE from company where id=" + c.getId());
 	} catch (SQLException e) {
@@ -172,7 +177,5 @@ public class CompanyDaoImpl implements CompanyDao {
 	    return false;
 	}
 	return true;
-
     }
-
 }

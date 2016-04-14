@@ -9,6 +9,10 @@ import java.time.LocalDate;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.excilys.formation.computerdatabase.model.Company;
 import com.excilys.formation.computerdatabase.model.Computer;
@@ -16,63 +20,54 @@ import com.excilys.formation.computerdatabase.persist.connection.ConnectionFacto
 import com.excilys.formation.computerdatabase.persist.dao.impl.ComputerDaoImpl;
 import com.excilys.formation.computerdatabase.service.impl.ComputerServiceImpl;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = { "file:src/main/resources/applicationContext.xml" })
 public class TestComputerService {
 
-    static ComputerDaoImpl cD;
+    @Autowired
+    ComputerDaoImpl cD;
 
-    @Before
-    public void initialize() {
-	//cD = ComputerDaoImpl.INSTANCE;
-    }
+    @Autowired
+    ComputerServiceImpl service;
 
-   /* @Test
+    @Test
     public void createFromService() {
-	ConnectionFactory.getConnectionManager().initConnection();
 	int a = cD.count();
 	Computer newOne = new Computer("newOne");
-	ComputerServiceImpl.getComputerService().create(newOne);
-	ConnectionFactory.getConnectionManager().initConnection();
+	service.create(newOne);
 	assertTrue(1 + a == cD.count());
 
     }
 
     @Test
     public void testCreateNoCompany() {
-	ConnectionFactory.getConnectionManager().initConnection();
 	int a = cD.count();
 	Company pCompany = null;
 	Computer newOne = new Computer("newOne", LocalDate.parse("2015-02-02"), LocalDate.parse("2015-02-02"),
 		pCompany);
-	ComputerServiceImpl.getComputerService().create(newOne);
-	ConnectionFactory.getConnectionManager().initConnection();
+	service.create(newOne);
 	assertTrue(1 + a == cD.count());
     }
 
     @Test
     public void testCreateVoid() {
-	ConnectionFactory.getConnectionManager().initConnection();
 	int a = cD.count();
-
 	Computer newOne = null;
 	try {
-	    ComputerServiceImpl.getComputerService().create(newOne);
+	    service.create(newOne);
 	} catch (Exception e) {
 	}
-	ConnectionFactory.getConnectionManager().initConnection();
 	assertTrue(a == cD.count());
     }
-
-    @AfterClass
-    public static void cleanbdd() {
-
-	try {
-	    Statement st = ConnectionFactory.getConnectionManager().getConn().createStatement();
-	    st.executeUpdate("DELETE from computer where name='newOne' ");
-	} catch (SQLException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
-
-    }*/
-
+    /*
+     * @AfterClass public static void cleanbdd() {
+     * 
+     * try { Statement st =
+     * ConnectionFactory.getConnectionManager().getConn().createStatement();
+     * st.executeUpdate("DELETE from computer where name='newOne' "); } catch
+     * (SQLException e) { // TODO Auto-generated catch block
+     * e.printStackTrace(); }
+     * 
+     * }
+     */
 }

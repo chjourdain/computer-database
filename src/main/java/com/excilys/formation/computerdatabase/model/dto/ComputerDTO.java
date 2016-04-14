@@ -8,13 +8,14 @@ package com.excilys.formation.computerdatabase.model.dto;
  */
 public class ComputerDTO {
 
-    public String id;
+    public long id = 0;
     public String name;
     public String introduced;
     public String companyName;
     public String discontinued;
+    public long companyId;
 
-    public ComputerDTO(String id, String name, String introduced, String companyName, String companyId,
+    public ComputerDTO(long id, String name, String introduced, String companyName, String companyId,
 	    String discontinued) {
 	this.id = id;
 	this.name = name;
@@ -34,7 +35,7 @@ public class ComputerDTO {
 	this.discontinued = computerDTOBuilder.discontinued;
     }
 
-    public String getId() {
+    public long getId() {
 	return id;
     }
 
@@ -54,7 +55,7 @@ public class ComputerDTO {
 	return discontinued;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
 	this.id = id;
     }
 
@@ -75,7 +76,7 @@ public class ComputerDTO {
     }
 
     public static class ComputerDTOBuilder {
-	private String id;
+	private Long id;
 	private String name;
 	private String introduced;
 	private String companyName;
@@ -106,7 +107,7 @@ public class ComputerDTO {
 	    return this;
 	}
 
-	public ComputerDTOBuilder id(String id) {
+	public ComputerDTOBuilder id(Long id) {
 	    this.id = id; 
 	    return this;
 	}
@@ -114,4 +115,13 @@ public class ComputerDTO {
 	    return new ComputerDTO(this);
 	}
     }
+
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
+    }
+
 }

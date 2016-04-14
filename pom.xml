@@ -11,7 +11,7 @@
 		<javasourceversion>1.8</javasourceversion>
 		<javabuildversion>1.8</javabuildversion>
 		<jUnitVersion>4.12</jUnitVersion>
-		<mysqlVersion>5.1.38</mysqlVersion>
+		<mysqlVersion>5.1.37</mysqlVersion>
 		<jstlVersion>1.2</jstlVersion>
 		<logback.version>1.1.3</logback.version>
 		<slf4jAPI.version>1.7.16</slf4jAPI.version>
@@ -117,7 +117,6 @@
 	</reporting>
 
 	<dependencies>
-
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
@@ -158,7 +157,6 @@
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 			<version>${logback.version}</version>
-			<scope>runtime</scope>
 		</dependency>
 
 		<dependency>
@@ -191,6 +189,27 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-tx</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
 	</dependencies>

@@ -7,6 +7,14 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.DataSource;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
 import com.excilys.formation.computerdatabase.model.Company;
 import com.excilys.formation.computerdatabase.model.Computer;
 import com.excilys.formation.computerdatabase.persist.connection.ConnectionFactory;
@@ -16,32 +24,34 @@ import com.excilys.formation.computerdatabase.persist.dao.impl.ComputerDaoImpl;
 
 import junit.framework.TestCase;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = { "file:src/main/resources/applicationContext.xml" })
 public class TestDao extends TestCase {
 
-   /* public void testListComputeur() {
-	ConnectionFactory.getConnectionManager().iniTransaction();
-	ComputerDaoImpl cD = ComputerDaoImpl.INSTANCE;
+    @Autowired
+    ComputerDaoImpl cD;
+    @Autowired
+    CompanyDao companydao;
+    @Autowired
+    DataSource dataSource;
+
+    @Test
+    public void testListComputeur() {
 	List<Computer> cl = cD.findAll(0, 10);
 	assertTrue(cl.size() > 0);
 	assertTrue(cl.get(0).getName() != null);
-	ConnectionFactory.getConnectionManager().rollback();
     }
-
+    @Test
     public void testFindComputer() {
-	ConnectionFactory.getConnectionManager().iniTransaction();
-	ComputerDaoImpl cD = ComputerDaoImpl.INSTANCE;
 	Computer c = cD.find(2);
 	assertTrue(c.getName() != null);
-	ConnectionFactory.getConnectionManager().rollback();
     }
-
+    @Test
     public void testUpdate() {
-	ConnectionFactory.getConnectionManager().iniTransaction();
-	ComputerDaoImpl cD = ComputerDaoImpl.INSTANCE;
 	int aModifier = 0;
 
 	try {
-	    Statement stat = ConnectionFactory.getConnectionManager().getConn().createStatement();
+	    Statement stat = dataSource.getConnection().createStatement();
 	    ResultSet rs = stat.executeQuery("select MAX(id) from computer");
 	    rs.first();
 	    aModifier = rs.getInt("max(id)");
@@ -55,16 +65,13 @@ public class TestDao extends TestCase {
 	assertEquals(c.getName(), "echange");
 	assertEquals(c.getId(), c2.getId());
 	assertEquals(c.getCompany(), c2.getCompany());
-	ConnectionFactory.getConnectionManager().rollback();
     }
-
+    @Test
     public void testUpdateValid() {
-	ConnectionFactory.getConnectionManager().iniTransaction();
-	ComputerDaoImpl cD = ComputerDaoImpl.INSTANCE;
 	int aModifier = 0;
 
 	try {
-	    Statement stat = ConnectionFactory.getConnectionManager().getConn().createStatement();
+	    Statement stat = dataSource.getConnection().createStatement();
 	    ResultSet rs = stat.executeQuery("select MAX(id) from computer");
 	    rs.first();
 	    aModifier = rs.getInt("max(id)");
@@ -76,25 +83,19 @@ public class TestDao extends TestCase {
 	Computer c3 = cD.update(c2);
 	assertTrue(c3 != null);
 	assertEquals(c3, c2);
-	ConnectionFactory.getConnectionManager().rollback();
     }
-
+    @Test
     public void testUpdateNull() {
-	ConnectionFactory.getConnectionManager().iniTransaction();
-	ComputerDaoImpl cD = ComputerDaoImpl.INSTANCE;
 	Computer c2 = null, c3 = null;
 	try {
 	    c3 = cD.update(c2);
 	    fail();
 	} catch (Exception e) {
 	    assertNull(c3);
-	    ConnectionFactory.getConnectionManager().rollback();
 	}
     }
-
+    @Test
     public void testDeleteNull() {
-	ConnectionFactory.getConnectionManager().iniTransaction();
-	ComputerDaoImpl cD = ComputerDaoImpl.INSTANCE;
 	int size1 = cD.count();
 	Computer c2 = null;
 	try {
@@ -102,6 +103,5 @@ public class TestDao extends TestCase {
 	    fail();
 	} catch (IllegalArgumentException e) {
 	}
-	ConnectionFactory.getConnectionManager().rollback();
-	}*/
+    }
 }

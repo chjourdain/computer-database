@@ -9,9 +9,12 @@ public class Company {
      * @param name of the company.
      * @param id of the company in the database.
      */
-    public Company(String name, int id) {
+    public Company(String name, long id) {
 	this.name = name;
 	this.id = id;
+    }
+
+    public Company() {
     }
 
     public long getId() {
