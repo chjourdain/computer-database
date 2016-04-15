@@ -5,7 +5,6 @@ import static org.junit.Assert.fail;
 
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.excilys.formation.computerdatabase.model.Computer;
-import com.excilys.formation.computerdatabase.persist.connection.ConnectionFactory;
 import com.excilys.formation.computerdatabase.persist.dao.impl.ComputerDaoImpl;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -31,8 +29,9 @@ public class TestListComputer {
 
     @Test
     public void listerNegatif() {
-	List<Computer> test = cD.findAll(0, -2);
-	assertTrue(test.size() == 0);
+	try {List<Computer> test = cD.findAll(0, -2);
+	fail();
+	}catch (Exception e ){}
     }
 
     @Test

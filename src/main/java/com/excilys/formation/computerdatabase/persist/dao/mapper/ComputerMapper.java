@@ -12,11 +12,13 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.jdbc.core.RowMapper;
+
 import com.excilys.formation.computerdatabase.model.Company;
 import com.excilys.formation.computerdatabase.model.Computer;
 import com.excilys.formation.computerdatabase.model.dto.ComputerDTO;
 
-public class ComputerMapper {
+public class ComputerMapper implements RowMapper<Computer>{
 
     public static final String ATT_NAME = "computerName";
     public static final String ATT_COMPANY = "companyId";
@@ -225,6 +227,26 @@ public class ComputerMapper {
 	    computerDTOList.add(toDTO(computer));
 	}
 	return computerDTOList;
+    }
+
+    @Override
+    public Computer mapRow(ResultSet rs, int arg1) throws SQLException {
+	Computer computer = new Computer();
+	computer.setId(rs.getInt("computer.id"));
+	computer.setName(rs.getString("computer.name"));
+	if (rs.getTimestamp("introduced") != null) {
+	    computer.setIntroduced(rs.getTimestamp("introduced").toLocalDateTime().toLocalDate());
+	}
+	if (rs.getTimestamp("discontinued") != null) {
+	    computer.setDiscontinued(rs.getTimestamp("discontinued").toLocalDateTime().toLocalDate());
+	}
+	Company company = new Company();
+	if (rs.getLong("company.id") != 0) {
+	    company.setId(rs.getLong("company.id"));
+	    company.setName(rs.getString("company.name"));
+	}
+	computer.setCompany(company);
+	return computer;
     }
 
 }
