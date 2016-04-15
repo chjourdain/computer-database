@@ -249,4 +249,44 @@ public class ComputerMapper implements RowMapper<Computer>{
 	return computer;
     }
 
+    public static Computer toComputer(Map<String, String> param) {
+	Map<String, String> erreur = new HashMap<>();
+	String name = param.get(ATT_NAME);
+	String introduced = param.get(ATT_INTRODUCED);
+	String discontinued = param.get(ATT_DISCONTINUED);
+	String companyId = param.get(ATT_COMPANY);
+	String id = param.get(ATT_ID);
+	long id2 = 0;
+	if (id != null) {
+	    id2 = Long.valueOf(id);
+	}
+	if (name == null) {
+	    return null;
+	}
+	if (!Pattern.matches(regex, introduced) && (introduced != "")) {
+	    erreur.put("introduced", "Erreur de format, renseigner YYYY-MM-JJ");
+	}
+	if (!Pattern.matches(regex, discontinued) && discontinued != "") {
+	    erreur.put("discontinued", "Erreur de format, renseigner YYYY-MM-JJ");
+	}
+	Company company = null;
+	if (companyId != null && !companyId.isEmpty() && Integer.valueOf(companyId) != 0) {
+	    company = new Company();
+	    company.setId(Long.valueOf(companyId));
+	}
+	Computer computer = null;
+	if (erreur.isEmpty()) {
+	    LocalDate intro = null;
+	    LocalDate disco = null;
+	    if (introduced != null && introduced != "") {
+		intro = LocalDate.parse(introduced);
+	    }
+	    if (discontinued != null && discontinued != "") {
+		disco = LocalDate.parse(discontinued);
+	    }
+	    computer = new Computer(id2, name, intro, disco, company);
+	}
+	return computer;
+    }
+
 }

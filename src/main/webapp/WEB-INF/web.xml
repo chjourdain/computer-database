@@ -3,7 +3,27 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:web="http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" version="3.1"
 	xmlns="http://xmlns.jcp.org/xml/ns/javaee">
-<context-param>
+
+
+	<display-name>Spring Web MVC Application</display-name>
+
+	<servlet>
+		<servlet-name>mvc-dispatcher</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/spring-mvc-config.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>mvc-dispatcher</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+
+
+	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>classpath:./applicationContext.xml</param-value>
 	</context-param>
@@ -13,37 +33,6 @@
 			org.springframework.web.context.ContextLoaderListener
 		</listener-class>
 	</listener>
-<!--     <servlet>
-        <servlet-name>CreateComputer</servlet-name>
-        <servlet-class>com.excilys.formation.computerdatabase.servlets.CreateComputer</servlet-class>
-    </servlet> 
-    <servlet>
-        <servlet-name>DashBoard</servlet-name>
-        <servlet-class>com.excilys.formation.computerdatabase.servlets.DashBoard</servlet-class>
-    </servlet>
-     <servlet>
-        <servlet-name>Delete</servlet-name>
-        <servlet-class>com.excilys.formation.computerdatabase.servlets.Delete</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>EditComputer</servlet-name>
-        <servlet-class>com.excilys.formation.computerdatabase.servlets.EditComputer</servlet-class>
-    </servlet>
-    
-    <servlet-mapping>
-        <servlet-name>CreateComputer</servlet-name>
-        <url-pattern>/create</url-pattern>
-    </servlet-mapping>
-     <servlet-mapping>
-        <servlet-name>DashBoard</servlet-name>
-        <url-pattern>/dashboard</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>Delete</servlet-name>
-        <url-pattern>/delete</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>EditComputer</servlet-name>
-        <url-pattern>/edit</url-pattern>
-    </servlet-mapping> -->
+
+
 </web-app>

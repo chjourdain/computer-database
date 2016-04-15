@@ -18,7 +18,7 @@ public class TestEdit {
   @Before
   public void setUp() throws Exception {
     driver = new FirefoxDriver();
-    baseUrl = "http://localhost:8080/computer-database";
+    baseUrl = "http://localhost:8080/computer-database/computer";
     driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
   }
 

@@ -24,7 +24,7 @@ public class TestDashTocreate {
     @Before
     public void setUp() throws Exception {
 	driver = new FirefoxDriver();
-	 baseUrl = "http://localhost:8080/computer-database";
+	 baseUrl = "http://localhost:8080/computer-database/computer";
 	//baseUrl = "http://localhost:8080/computer-database-1.0-SNAPSHOT";
 	driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
     }
@@ -33,7 +33,7 @@ public class TestDashTocreate {
     public void testDashcreate() throws Exception {
 	driver.get(baseUrl + "/dashboard");
 	driver.findElement(By.id("addComputer")).click();
-	assertTrue(driver.getCurrentUrl().equals((baseUrl + "/create")));
+	assertTrue(driver.getCurrentUrl().equals((baseUrl + "/add")));
     }
 
     @Test

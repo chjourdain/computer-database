@@ -6,12 +6,13 @@
 <head>
 <title>Computer Database</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<c:set var="resourcesUrl" value="${pageContext.request.contextPath}/resources" />
 <meta charset="utf-8">
 <!-- Bootstrap -->
-<link href="static/css/bootstrap.min.css" rel="stylesheet"
+<link href="${resourcesUrl}/css/bootstrap.min.css" rel="stylesheet"
 	media="screen">
-<link href="static/css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="static/css/main.css" rel="stylesheet" media="screen">
+<link href="${resourcesUrl}/css/font-awesome.css" rel="stylesheet" media="screen">
+<link href="${resourcesUrl}/css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
@@ -33,7 +34,7 @@
 					</form>
 				</div>
 				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href="create">Add
+					<a class="btn btn-success" id="addComputer" href="add">Add
 						Computer</a> <a class="btn btn-default" id="editComputer" href="#"
 						onclick="$.fn.toggleEditMode();">Edit</a>
 				</div>
@@ -104,8 +105,8 @@
 			</div>
 		</div>
 	</footer>
-	<script src="static/js/jquery.min.js"></script>
-	<script src="static/js/bootstrap.min.js"></script>
-	<script src="static/js/dashboard.js"></script>
+	<script src="${resourcesUrl}/js/jquery.min.js"></script>
+	<script src="${resourcesUrl}/js/bootstrap.min.js"></script>
+	<script src="${resourcesUrl}/js/dashboard.js"></script>
 </body>
 </html>
