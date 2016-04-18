@@ -69,7 +69,7 @@ public class ComputerMapper implements RowMapper<Computer>{
 	return list;
     }
 
-    static Computer toComputer(ComputerDTO dto) {
+    public static Computer toComputer(ComputerDTO dto) {
 
 	Computer computer = new Computer();
 

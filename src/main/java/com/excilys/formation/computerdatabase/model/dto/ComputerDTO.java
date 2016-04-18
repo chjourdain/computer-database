@@ -1,5 +1,11 @@
 package com.excilys.formation.computerdatabase.model.dto;
 
+import javax.validation.constraints.Size;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.excilys.formation.computerdatabase.model.validator.annotations.DateValid;
+
 /**
  * DTO of the POJO computer, used to transfer data to jsp pages
  * 
@@ -9,9 +15,12 @@ package com.excilys.formation.computerdatabase.model.dto;
 public class ComputerDTO {
 
     public long id = 0;
+    @Size(min=3,message = "Name must have at least 3 characters")
     public String name;
+    @DateValid
     public String introduced;
     public String companyName;
+    @DateValid
     public String discontinued;
     public long companyId;
 

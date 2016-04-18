@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.excilys</groupId>
 	<artifactId>computer-database</artifactId>
-	<version>1.2-SNAPSHOT</version>
+	<version>1.3-SNAPSHOT</version>
 	<name>computer-database</name>
 	<packaging>war</packaging>
 
@@ -19,12 +19,12 @@
 		<servletVersion>3.0.1</servletVersion>
 		<seleniumVersion>2.52.0</seleniumVersion>
 		<bonecpVersion>0.8.0.RELEASE</bonecpVersion>
-		<spring.version>4.2.4.RELEASE</spring.version>
+		<spring.version>4.2.5.RELEASE</spring.version>
+		<commonsValidatorVersion>1.4.0</commonsValidatorVersion>
 	</properties>
 	<build>
 		<finalName>computer-database</finalName>
 		<plugins>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -139,6 +139,18 @@
 			<version>${servletVersion}</version>
 			<scope>provided</scope>
 		</dependency>
+
+		<!-- Validator -->
+		<dependency>
+			<groupId>commons-validator</groupId>
+			<artifactId>commons-validator</artifactId>
+			<version>${commonsValidatorVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>4.2.0.Final</version>
+		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -217,6 +229,5 @@
 			<artifactId>spring-webmvc</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-		
 	</dependencies>
 </project>

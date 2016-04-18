@@ -20,4 +20,6 @@
 		<property name="username" value="admincdb" />
 		<property name="password" value="qwerty1234" />
 	</bean>
+	<!--    <bean id="computerDtoValidator" class=" com.excilys.formation.computerdatabase.model.validator.ComputerDtoValidator" />-->
+
 </beans>
