@@ -12,11 +12,13 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.jdbc.core.RowMapper;
+
 import com.excilys.formation.computerdatabase.model.Company;
 import com.excilys.formation.computerdatabase.model.Computer;
 import com.excilys.formation.computerdatabase.model.dto.ComputerDTO;
 
-public class ComputerMapper {
+public class ComputerMapper implements RowMapper<Computer>{
 
     public static final String ATT_NAME = "computerName";
     public static final String ATT_COMPANY = "companyId";
@@ -225,6 +227,66 @@ public class ComputerMapper {
 	    computerDTOList.add(toDTO(computer));
 	}
 	return computerDTOList;
+    }
+
+    @Override
+    public Computer mapRow(ResultSet rs, int arg1) throws SQLException {
+	Computer computer = new Computer();
+	computer.setId(rs.getInt("computer.id"));
+	computer.setName(rs.getString("computer.name"));
+	if (rs.getTimestamp("introduced") != null) {
+	    computer.setIntroduced(rs.getTimestamp("introduced").toLocalDateTime().toLocalDate());
+	}
+	if (rs.getTimestamp("discontinued") != null) {
+	    computer.setDiscontinued(rs.getTimestamp("discontinued").toLocalDateTime().toLocalDate());
+	}
+	Company company = new Company();
+	if (rs.getLong("company.id") != 0) {
+	    company.setId(rs.getLong("company.id"));
+	    company.setName(rs.getString("company.name"));
+	}
+	computer.setCompany(company);
+	return computer;
+    }
+
+    public static Computer toComputer(Map<String, String> param) {
+	Map<String, String> erreur = new HashMap<>();
+	String name = param.get(ATT_NAME);
+	String introduced = param.get(ATT_INTRODUCED);
+	String discontinued = param.get(ATT_DISCONTINUED);
+	String companyId = param.get(ATT_COMPANY);
+	String id = param.get(ATT_ID);
+	long id2 = 0;
+	if (id != null) {
+	    id2 = Long.valueOf(id);
+	}
+	if (name == null) {
+	    return null;
+	}
+	if (!Pattern.matches(regex, introduced) && (introduced != "")) {
+	    erreur.put("introduced", "Erreur de format, renseigner YYYY-MM-JJ");
+	}
+	if (!Pattern.matches(regex, discontinued) && discontinued != "") {
+	    erreur.put("discontinued", "Erreur de format, renseigner YYYY-MM-JJ");
+	}
+	Company company = null;
+	if (companyId != null && !companyId.isEmpty() && Integer.valueOf(companyId) != 0) {
+	    company = new Company();
+	    company.setId(Long.valueOf(companyId));
+	}
+	Computer computer = null;
+	if (erreur.isEmpty()) {
+	    LocalDate intro = null;
+	    LocalDate disco = null;
+	    if (introduced != null && introduced != "") {
+		intro = LocalDate.parse(introduced);
+	    }
+	    if (discontinued != null && discontinued != "") {
+		disco = LocalDate.parse(discontinued);
+	    }
+	    computer = new Computer(id2, name, intro, disco, company);
+	}
+	return computer;
     }
 
 }

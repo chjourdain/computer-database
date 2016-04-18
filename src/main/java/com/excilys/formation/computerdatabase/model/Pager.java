@@ -5,7 +5,7 @@ import java.util.List;
 public class Pager<T> {
 
     public List<T> list;
-    public int totalCount = 0;
+    public long totalCount = 0;
     public int nbByPage;
     public int nbPages;
     public int currentPage;
@@ -24,11 +24,11 @@ public class Pager<T> {
 	currentPage = page;
     }
 
-    public int getTotalCount() {
+    public long getTotalCount() {
 	return totalCount;
     }
 
-    public void setTotalCount(int nbEntries) {
+    public void setTotalCount(long nbEntries) {
 	this.totalCount = nbEntries;
 	this.nbPages = (int) Math.ceil(nbEntries / nbByPage);
     }
