@@ -82,46 +82,45 @@ public class ComputerDTO {
 	private String companyName;
 	private String discontinued;
 
-	
 	public ComputerDTOBuilder() {
 	}
-	
+
 	public ComputerDTOBuilder name(String name) {
 	    this.name = name;
 	    return this;
 	}
-	
-	
+
 	public ComputerDTOBuilder introduced(String intro) {
 	    introduced = intro;
 	    return this;
 	}
 
 	public ComputerDTOBuilder discontinued(String disco) {
-	   discontinued = disco;
+	    discontinued = disco;
 	    return this;
 	}
 
 	public ComputerDTOBuilder companyName(String company) {
-	   companyName = company;
+	    companyName = company;
 	    return this;
 	}
 
 	public ComputerDTOBuilder id(Long id) {
-	    this.id = id; 
+	    this.id = id;
 	    return this;
 	}
+
 	public ComputerDTO build() {
 	    return new ComputerDTO(this);
 	}
     }
 
     public Long getCompanyId() {
-        return companyId;
+	return companyId;
     }
 
     public void setCompanyId(Long companyId) {
-        this.companyId = companyId;
+	this.companyId = companyId;
     }
 
 }

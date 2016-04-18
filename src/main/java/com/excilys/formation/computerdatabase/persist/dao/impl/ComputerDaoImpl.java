@@ -7,20 +7,15 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.List;
-
 import javax.sql.DataSource;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.excilys.formation.computerdatabase.model.Computer;
 import com.excilys.formation.computerdatabase.model.Pager;
 import com.excilys.formation.computerdatabase.persist.connection.ConnectionFactory;
-import com.excilys.formation.computerdatabase.persist.connection.ThreadLocals;
 import com.excilys.formation.computerdatabase.persist.dao.ComputerDao;
 import com.excilys.formation.computerdatabase.persist.dao.exception.DAOException;
 import com.excilys.formation.computerdatabase.persist.dao.mapper.ComputerMapper;
