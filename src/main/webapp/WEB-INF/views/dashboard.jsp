@@ -19,12 +19,11 @@
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
 			<a class="navbar-brand" href="dashboard">  <spring:message code="title"/></a>
+<span style="float: right;"><a   href="?lang=en"><img src="${resourcesUrl}/icone/en.png"></a> | <a href="?lang=fr"><img src="${resourcesUrl}/icone/fr.png"></a></span>
 		</div>
 	</header>
 	<section id="main">
 	<span class="lang-sm lang-lbl" lang="en"></span>
-	Language : <a href="?lang=en">EN</a>|<a href="?lang=fr">FR</a>
-	Current Locale : ${pageContext.response.locale}
 		<div class="container">
 			<h1 id="homeTitle">${pager.totalCount} <spring:message code="computer.found"/></h1>
 			<div id="actions" class="form-horizontal">

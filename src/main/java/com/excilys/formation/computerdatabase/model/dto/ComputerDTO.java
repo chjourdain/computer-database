@@ -15,7 +15,7 @@ import com.excilys.formation.computerdatabase.model.validator.annotations.DateVa
 public class ComputerDTO {
 
     public long id = 0;
-    @Size(min=3,message = "Name must have at least 3 characters")
+    @Size(min=3,message = "{sizename}")
     public String name;
     @DateValid
     public String introduced;

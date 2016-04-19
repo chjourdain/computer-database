@@ -52,11 +52,11 @@ public class ComputerController {
     public ModelAndView addComputer(@Valid @ModelAttribute("computerDTO") ComputerDTO dto,
 	    BindingResult bindingResult) {
 	ModelAndView model = new ModelAndView("addComputer");
-	String result = "Computer not created";
+	String result = "error.notadded";
 	if (!bindingResult.hasErrors()) {
 	    Computer c1 = ComputerMapper.toComputer(dto);
 	    service.create(c1);
-	    result = "Computer added";
+	    result = "success.added";
 	}
 	model.addObject("map", companyService.getMap());
 	model.addObject("result", result);
@@ -103,7 +103,7 @@ public class ComputerController {
 	    long i = Long.valueOf(dto.getId());
 	    ComputerDTO computer = ComputerMapper.toDTO(service.find(i));
 	    model = new ModelAndView("editComputer");
-	    model.addObject("result", "failure in updating Computer");
+	    model.addObject("result", "error.notupdated");
 	    model.addObject("computer", computer);
 	    // pass the list of companies in a hashmap as attribute.
 	    model.addObject("map", companyService.getMap());

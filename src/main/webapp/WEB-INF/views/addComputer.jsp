@@ -29,7 +29,7 @@
 
 	<section id="main">
 		<h4 align="center" style="color:${service.color};">
-			<c:out value="${result}" />
+		<c:if test="${!empty result}">	<spring:message code="${result}"/></c:if>
 		</h4>
 		<div class="container">
 			<div class="row">
