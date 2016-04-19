@@ -20,26 +20,26 @@
 		<div class="container">
 			<a class="navbar-brand" href="dashboard">  <spring:message code="title"/></a>
 		</div>
-		<span class="lang-sm lang-lbl" lang="en"></span>
 	</header>
 	<section id="main">
+	<span class="lang-sm lang-lbl" lang="en"></span>
+	Language : <a href="?lang=en">EN</a>|<a href="?lang=fr">FR</a>
 	Current Locale : ${pageContext.response.locale}
 		<div class="container">
-			<h1 id="homeTitle">${pager.totalCount} Computers found</h1>
+			<h1 id="homeTitle">${pager.totalCount} <spring:message code="computer.found"/></h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
 
 						<input type="search" id="searchbox" name="search"
-							class="form-control" placeholder="Search name" /> <input
-							type="submit" id="searchsubmit" value="Filter by name"
+							class="form-control" placeholder="<spring:message code="placeholder.search"/>" /> <input
+							type="submit" id="searchsubmit" value="<spring:message code="button.filter"/>"
 							class="btn btn-primary" />
 					</form>
 				</div>
 				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href="add">Add
-						Computer</a> <a class="btn btn-default" id="editComputer" href="#"
-						onclick="$.fn.toggleEditMode();">Edit</a>
+					<a class="btn btn-success" id="addComputer" href="add"><spring:message code="button.add"/></a> <a class="btn btn-default" id="editComputer" href="#"
+						onclick="$.fn.toggleEditMode();"><spring:message code="button.edit"/></a>
 				</div>
 			</div>
 		</div>
@@ -61,12 +61,12 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th><a  <f:link pager="${pager}" action="href" type="dashboard" sort="computer"></f:link> >Computer name</a></th>
-						<th><a  <f:link pager="${pager}" action="href" type="dashboard" sort="intro"></f:link> >Introduced date</a></th>
+						<th><a  <f:link pager="${pager}" action="href" type="dashboard" sort="computer"></f:link> ><spring:message code="computer.name"/></a></th>
+						<th><a  <f:link pager="${pager}" action="href" type="dashboard" sort="intro"></f:link> ><spring:message code="computer.introduced"/></a></th>
 						<!-- Table header for Discontinued Date -->
-						<th><a  <f:link pager="${pager}" action="href" type="dashboard" sort="disco"></f:link> >Discontinued date</a></th>
+						<th><a  <f:link pager="${pager}" action="href" type="dashboard" sort="disco"></f:link> ><spring:message code="computer.discontinued"/></a></th>
 						<!-- Table header for Company -->
-						<th><a  <f:link pager="${pager}" action="href" type="dashboard" sort="company"></f:link> >Company</a> </th>
+						<th><a  <f:link pager="${pager}" action="href" type="dashboard" sort="company"></f:link> ><spring:message code="computer.company"/></a> </th>
 
 					</tr>
 				</thead>

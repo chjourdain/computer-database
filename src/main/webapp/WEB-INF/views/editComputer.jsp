@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags/form"
 	prefix="springForm"%>
-
+	<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="f" tagdir="/WEB-INF/tags/"%>
 <!DOCTYPE html>
 <c:set var="resourcesUrl"
@@ -35,7 +35,7 @@
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<div class="label label-default pull-right">id:
 						${computer.id}</div>
-					<h1>Edit Computer</h1>
+					<h1><spring:message code="computer.edit"/></h1>
 
 					<springForm:form action="edit" modelAttribute="computerDTO"
 						method="POST">
@@ -43,14 +43,14 @@
 							value="${computer.id}" />
 						<fieldset>
 							<div class="form-group">
-								<label for="computerName">Computer name</label>
+								<label for="computerName"><spring:message code="computer.name"/></label>
 								<springForm:input path="name" name="computerName" type="text"
 									class="form-control" id="computerName" data-validation="length"
 									data-validation-length="min3" value="${computer.name}" />
 								<springForm:errors path="name" cssClass="help-block form-error" />
 							</div>
 							<div class="form-group">
-								<label for="introduced">Introduced date</label>
+								<label for="introduced"><spring:message code="computer.introduced"/></label>
 								<springForm:input type="date" class="form-control"
 									path="introduced" id="introduced" name="introduced"
 									data-validation="custom"
@@ -60,7 +60,7 @@
 									cssClass="help-block form-error" />
 							</div>
 							<div class="form-group">
-								<label for="discontinued">Discontinued date</label>
+								<label for="discontinued"><spring:message code="computer.add"/></label>
 								<springForm:input path="discontinued" type="date"
 									class="form-control" id="discontinued" name="discontinued"
 									data-validation="custom"
@@ -71,7 +71,7 @@
 									cssClass="help-block form-error" />
 							</div>
 							<div class="form-group">
-								<label for="companyId">Company</label>
+								<label for="companyId"><spring:message code="computer.company"/></label>
 								<springForm:select path="companyId" class="form-control"
 									id="companyId" name="companyId">
 									<option value="0">--</option>
@@ -85,8 +85,8 @@
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
-							<input type="submit" value="Edit" class="btn btn-primary">
-							or <a href="dashboard" class="btn btn-default">Cancel</a>
+							<input type="submit" value="<spring:message code="button.edit"/>" class="btn btn-primary">
+							or <a href="dashboard" class="btn btn-default"><spring:message code="button.cancel"/></a>
 						</div>
 					</springForm:form>
 					<script type="text/javascript"

@@ -110,8 +110,6 @@ public class ComputerController {
 	    return model;
 	} else {
 	    Computer c1 = ComputerMapper.toComputer(dto);
-	    System.out.println(c1);
-	    System.out.println(service.update(c1));
 	    model = new ModelAndView("redirect:dashboard");
 	    return model;
 	}
