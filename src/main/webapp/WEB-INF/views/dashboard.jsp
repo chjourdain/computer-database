@@ -1,6 +1,7 @@
 <%@ page pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="f" tagdir="/WEB-INF/tags/"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,10 +18,12 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard"> Application - Computer Database </a>
+			<a class="navbar-brand" href="dashboard">  <spring:message code="title"/></a>
 		</div>
+		<span class="lang-sm lang-lbl" lang="en"></span>
 	</header>
 	<section id="main">
+	Current Locale : ${pageContext.response.locale}
 		<div class="container">
 			<h1 id="homeTitle">${pager.totalCount} Computers found</h1>
 			<div id="actions" class="form-horizontal">

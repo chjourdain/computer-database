@@ -16,7 +16,7 @@ import com.excilys.formation.computerdatabase.model.validator.DateConstraintVali
 @Target({ ElementType.METHOD, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DateValid {
-    String message() default "Invalid Date Format, please enter a 'DD-MM-YYYY' format";
+    String message() default "Invalid Date Format, please enter a 'YYYY-MM-DD' format";
 
     Class<?>[] groups() default {};
 

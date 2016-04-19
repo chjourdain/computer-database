@@ -20,8 +20,24 @@
 		</property>
 	</bean>
 	<mvc:resources mapping="/resources/**" location="/resources/" />
+	<!-- Multi langage support -->
+	<bean id="messageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basenames" value="classpath:messages/messages" />
+		<!-- <property name="defaultEncoding" value="ISO-8859-1" /> -->
+	</bean>
+	<bean id="localeResolver"
+		class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+		<property name="defaultLocale" value="en"></property>
+	</bean>
+	<mvc:interceptors>
+		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+			<property name="paramName" value="lang" />
+		</bean>
+	</mvc:interceptors>
 	<bean id="myBeansValidator"
 		class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
 
 	<mvc:annotation-driven validator="myBeansValidator" />
+
 </beans>

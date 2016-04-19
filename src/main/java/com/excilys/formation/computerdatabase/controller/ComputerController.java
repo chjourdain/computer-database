@@ -3,7 +3,9 @@ package com.excilys.formation.computerdatabase.controller;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
 import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.excilys.formation.computerdatabase.model.Computer;
 import com.excilys.formation.computerdatabase.model.Pager;
 import com.excilys.formation.computerdatabase.model.dto.ComputerDTO;
@@ -28,19 +31,6 @@ public class ComputerController {
     @Autowired
     CompanyServiceImpl companyService;
 
-    /*
-     * @Autowired
-     * 
-     * @Qualifier("computerDtoValidator") private Validator
-     * computerDtoValidator;
-     * 
-     * @InitBinder private void initBinder(WebDataBinder binder) {
-     * binder.setValidator(computerDtoValidator); }
-     */
-
-    @ModelAttribute("computerDTO")
-    public ComputerDTO initBinding(){return new ComputerDTO() ;}
-
     @RequestMapping(value = "/dashboard", method = RequestMethod.GET)
     public ModelAndView get(@RequestParam Map<String, String> param) {
 
@@ -53,8 +43,7 @@ public class ComputerController {
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public ModelAndView add() {
-	ModelAndView model = new ModelAndView("addComputer");// ,"computerDTO",new
-							     // ComputerDTO());
+	ModelAndView model = new ModelAndView("addComputer", "computerDTO", new ComputerDTO());
 	model.addObject("map", companyService.getMap());
 	return model;
     }
@@ -99,7 +88,7 @@ public class ComputerController {
 	}
 	// get the computer to send its data to the jsp.
 	ComputerDTO computer = ComputerMapper.toDTO(service.find(Long.valueOf(id)));
-	ModelAndView model = new ModelAndView("editComputer");
+	ModelAndView model = new ModelAndView("editComputer", "computerDTO", new ComputerDTO());
 	model.addObject("computer", computer);
 	// pass the list of companies in a hashmap as attribute.
 	model.addObject("map", companyService.getMap());
@@ -107,22 +96,25 @@ public class ComputerController {
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    public ModelAndView editComputer(@RequestParam Map<String, String> param) {
-	Computer c1 = ComputerMapper.toComputer(param);
+    public ModelAndView editComputer(@Valid @ModelAttribute("computerDTO") ComputerDTO dto,
+	    BindingResult bindingResult) {
 	ModelAndView model;
-	if ((c1 == null)) {
-	    // request invalid.
-	    long i = Long.valueOf(param.get("id").toString());
+	if (bindingResult.hasErrors()) {
+	    long i = Long.valueOf(dto.getId());
+	    ComputerDTO computer = ComputerMapper.toDTO(service.find(i));
 	    model = new ModelAndView("editComputer");
-
-	    model.addObject("computer", ComputerMapper.toDTO(service.find(Long.valueOf(i))));
 	    model.addObject("result", "failure in updating Computer");
-	    // model.addObject("error", cM.getErreur());
+	    model.addObject("computer", computer);
+	    // pass the list of companies in a hashmap as attribute.
+	    model.addObject("map", companyService.getMap());
+	    return model;
+	} else {
+	    Computer c1 = ComputerMapper.toComputer(dto);
+	    System.out.println(c1);
+	    System.out.println(service.update(c1));
+	    model = new ModelAndView("redirect:dashboard");
 	    return model;
 	}
-	c1 = service.update(c1);
-	model = new ModelAndView("redirect:dashboard");
-	return model;
     }
 
     private static List<Integer> mapDelete(Map<String, String> param) {

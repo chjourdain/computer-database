@@ -21,6 +21,7 @@
 		<bonecpVersion>0.8.0.RELEASE</bonecpVersion>
 		<spring.version>4.2.5.RELEASE</spring.version>
 		<commonsValidatorVersion>1.4.0</commonsValidatorVersion>
+		<jspAPI.version>2.1</jspAPI.version>
 	</properties>
 	<build>
 		<finalName>computer-database</finalName>
@@ -137,6 +138,12 @@
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<version>${servletVersion}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>jsp-api</artifactId>
+			<version>${jspAPI.version}</version>
 			<scope>provided</scope>
 		</dependency>
 

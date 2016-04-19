@@ -15,10 +15,7 @@ public class DateConstraintValidator implements ConstraintValidator<DateValid, S
 
     @Override
     public boolean isValid(String date, ConstraintValidatorContext arg1) {
-
-	String dateRegexFr = "^|(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-[0-9]{4}$";
-	// String dateRegexEn =
-	// "^|(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])-[0-9]{4}$";
+	String dateRegexFr = "^[0-9]{4}-[0-1][0-9]-[0-3][0-9]$|^$";
 
 	if (date == null || date.isEmpty()) {
 	    return true;
