@@ -109,6 +109,11 @@
 	</footer>
 	<script src="${resourcesUrl}/js/jquery.min.js"></script>
 	<script src="${resourcesUrl}/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+		var translated = new Array();
+		translated['button.edit'] = "<spring:message code='button.edit' javaScriptEscape='true' />";
+		translated['button.view'] = "<spring:message code='button.view' javaScriptEscape='true' />";
+	</script>
 	<script src="${resourcesUrl}/js/dashboard.js"></script>
 </body>
 </html>

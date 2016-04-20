@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags/form"
 	prefix="springForm"%>
-	<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <!DOCTYPE html>
 <html>
@@ -18,6 +18,10 @@
 	media="screen">
 <link href="${resourcesUrl}/css/main.css" rel="stylesheet"
 	media="screen">
+
+<script src="${resourcesUrl}/js/jquery.min.js"></script>
+<script src="${resourcesUrl}/js/jquery.validate.min.js"></script>
+<script src="${resourcesUrl}/js/form.validator.js"></script>
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
@@ -29,42 +33,55 @@
 
 	<section id="main">
 		<h4 align="center" style="color:${service.color};">
-		<c:if test="${!empty result}">	<spring:message code="${result}"/></c:if>
+			<c:if test="${!empty result}">
+				<spring:message code="${result}" />
+			</c:if>
 		</h4>
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
-					<h1><spring:message code="computer.add"/></h1>
-					<springForm:form id="formcreate" modelAttribute="computerDTO" action="add" method="POST">
+					<h1>
+						<spring:message code="computer.add" />
+					</h1>
+					<springForm:form id="form" modelAttribute="computerDTO"
+						action="add" method="POST">
 						<fieldset>
 							<div class="form-group">
-								<label for="computerName"><spring:message code="computer.name"/></label>
-								<springForm:input path="name" type="text" class="form-control" 
-									id="computerName" name="computerName"
-									placeholder="Computer name" data-validation="length"
-									data-validation-length="min3" />
+								<label for="computerName"><spring:message
+										code="computer.name" /></label>
+								<springForm:input type="text" class="form-control"
+									id="computerName" name="name"
+									path="name" />
 								<springForm:errors path="name" cssClass="help-block form-error" />
+
+
 							</div>
 							<div class="form-group">
-								<label for="introduced"><spring:message code="computer.introduced"/></label>
-								<springForm:input path="introduced" type="date"
-									class="form-control" id="introduced" data-validation="custom"
-									data-validation-regexp="^[0-9]{4}-[0-1][0-9]-[0-3][0-9]$|^$"
-									name="introduced" placeholder="Introduced date" />
-									<springForm:errors path="introduced" cssClass="help-block form-error" />
+								<label for="introduced"><spring:message
+										code="computer.introduced" /></label>
+								<springForm:input path="introduced" type="text"
+									class="form-control" id="introduced" name="introduced" />
+								<springForm:errors path="introduced"
+									cssClass="help-block form-error" />
+
 							</div>
 							<div class="form-group">
-								<label for="discontinued"><spring:message code="computer.discontinued"/></label>
-								<springForm:input path="discontinued" type="date"
-									class="form-control" id="discontinued" data-validation="custom"
-									data-validation-regexp="^[0-9]{4}-[0-1][0-9]-[0-3][0-9]$|^$"
-									name="discontinued" placeholder="Discontinued date" />
-									<springForm:errors path="discontinued" cssClass="help-block form-error" />
+								<label for="discontinued"><spring:message
+										code="computer.discontinued" /></label>
+								<springForm:input path="discontinued" type="text"
+									class="form-control" id="discontinued" name="discontinued" />
+								<springForm:errors path="discontinued"
+									cssClass="help-block form-error" />
+
+
 							</div>
+
+
 							<div class="form-group">
-								<label for="companyId"><spring:message code="computer.company"/></label> <springForm:select
-								path="companyId"
-									class="form-control" id="companyId" name="companyId">
+								<label for="companyId"><spring:message
+										code="computer.company" /></label>
+								<springForm:select path="companyId" class="form-control"
+									id="companyId" name="companyId">
 									<springForm:option value="0">--</springForm:option>
 									<c:forEach items="${map}" var="entry">
 										<springForm:option value="${entry.key}">${entry.value}</springForm:option>
@@ -73,17 +90,20 @@
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
-							<input id="submit" type="submit" value="<spring:message code="button.add"/>"
+							<input id="submit" type="submit"
+								value="<spring:message code="button.add"/>"
 								class="btn btn-primary"> or <a href="dashboard"
-								class="btn btn-default"><spring:message code="button.cancel"/></a>
+								class="btn btn-default"><spring:message code="button.cancel" /></a>
 						</div>
 					</springForm:form>
-					<script type="text/javascript"
-						src="${resourcesUrl}/js/jquery.min.js"></script>
-					<script type="text/javascript"
-						src="${resourcesUrl}/js/jquery-form-validator.js"></script>
-					<script>
-						$.validate();
+
+					<script type="text/javascript">
+						var translated = new Array();
+						translated['required'] = "<spring:message code='required' javaScriptEscape='true' />";
+						translated['notblank'] = "<spring:message code='notblank' javaScriptEscape='true' />";
+						translated['isdate'] = "<spring:message code='isdate' javaScriptEscape='true' />";
+						translated['before70'] = "<spring:message code='before70' javaScriptEscape='true' />";
+						translated['greaterthan'] = "<spring:message code='greaterthan' javaScriptEscape='true' />";
 					</script>
 				</div>
 			</div>
