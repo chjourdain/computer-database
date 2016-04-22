@@ -6,19 +6,13 @@ $(document).ready(function() {
         return new Date(value) >= new Date($(param).val());
     });
 
-    jQuery.validator.addMethod("notBefore70", function(value, element, param) {
-        if (value == null) return true;
-        if (value == "") return true;
-        return new Date(value) > new Date("1970-01-01");
-    });
-
     jQuery.validator.addMethod("isDate", function(value, element, param) {
         if (value == null) return true;
         if (value == "") return true;
         if (value == "0000-00-00") return false;
-
-        var regEx = /^\d{4}-\d{2}-\d{2}$/;
-        return value.match(regEx) != null;
+        var regExFr = "^^(0[1-9]{1}|[1-2]{1}[0-9]{1}|3[0-1]{1})-(1[0-2]{1}|0[1-9]{1})-(19[7-9]{1}[0-9]{1}|20[0-2]{1}[0-9]{1}|203[0-7]{1})$|^$";
+        var regExEn ="^^(1[0-2]{1}|0[1-9]{1})-(0[1-9]{1}|[1-2]{1}[0-9]{1}|3[0-1]{1})-(19[7-9]{1}[0-9]{1}|20[0-2]{1}[0-9]{1}|203[0-7]{1})$|^$";
+        return (value.match(regExEn) != null || value.match(regExFr) != null);
     });
     
     jQuery.validator.addMethod("allSpace", function(value, element, param) {
@@ -35,13 +29,11 @@ $(document).ready(function() {
             introduced: {
                 required: false,
                 isDate: true,
-                notBefore70: true
             },
             discontinued: {
                 required: false,
                 isDate: true,
-                greaterThan: "#introduced",
-                notBefore70: true
+                greaterThan: "#introduced"
             }
         },
         messages: {
@@ -51,7 +43,6 @@ $(document).ready(function() {
             },
             introduced: {
                 isDate: translated['isdate'],
-                notBefore70: translated['before70']
             },
             discontinued: {
                 isDate: translated['isdate'],

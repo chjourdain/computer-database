@@ -11,6 +11,7 @@ public class Pager<T> {
     public int currentPage;
     public String search = null;
     public String sort = null;
+    public String lang = "en";
 
     public Pager(int nbParPage, int page) {
 	this.nbByPage = nbParPage;
@@ -81,7 +82,11 @@ public class Pager<T> {
     public void setList(List<T> list) {
         this.list = list;
     }
+    public String getLang() {
+        return lang;
+    }
 
-    
-
+    public void setLang(String lang) {
+        this.lang = lang;
+    }
 }

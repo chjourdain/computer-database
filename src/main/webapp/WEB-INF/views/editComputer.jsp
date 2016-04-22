@@ -59,7 +59,7 @@
 							<div class="form-group">
 								<label for="introduced"><spring:message
 										code="computer.introduced" /></label>
-								<springForm:input type="date" class="form-control"
+								<springForm:input type="text" class="form-control"
 									path="introduced" id="introduced" name="introduced"
 									value="${computer.introduced}" />
 								<springForm:errors path="introduced"
@@ -68,7 +68,7 @@
 							<div class="form-group">
 								<label for="discontinued"><spring:message
 										code="computer.add" /></label>
-								<springForm:input path="discontinued" type="date"
+								<springForm:input path="discontinued" type="text"
 									class="form-control" id="discontinued" name="discontinued"
 									value="${computer.discontinued }" />
 								<span class="help-block form-error">${error['discontinued']}</span>

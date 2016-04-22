@@ -18,7 +18,7 @@ import com.excilys.formation.computerdatabase.model.Company;
 import com.excilys.formation.computerdatabase.model.Computer;
 import com.excilys.formation.computerdatabase.model.dto.ComputerDTO;
 
-public class ComputerMapper implements RowMapper<Computer>{
+public class ComputerMapper implements RowMapper<Computer> {
 
     public static final String ATT_NAME = "computerName";
     public static final String ATT_COMPANY = "companyId";
@@ -78,14 +78,14 @@ public class ComputerMapper implements RowMapper<Computer>{
 	}
 	computer.setName(dto.getName());
 
-	if ("".equals(dto.getIntroduced())) {
+	if (dto.getIntroduced ()== null || "".equals(dto.getIntroduced())) {
 	    computer.setIntroduced(null);
 	} else {
 	    dto.setIntroduced(dto.getIntroduced().replace('/', '-'));
 	    computer.setIntroduced(LocalDate.parse(dto.getIntroduced(), DateTimeFormatter.ISO_LOCAL_DATE));
 	}
 
-	if ("".equals(dto.getDiscontinued())) {
+	if (dto.getDiscontinued()== null || "".equals(dto.getDiscontinued())) {
 	    computer.setDiscontinued(null);
 	} else {
 	    dto.setDiscontinued(dto.getDiscontinued().replace('/', '-'));
@@ -250,7 +250,6 @@ public class ComputerMapper implements RowMapper<Computer>{
     }
 
     public static Computer toComputer(Map<String, String> param) {
-	Map<String, String> erreur = new HashMap<>();
 	String name = param.get(ATT_NAME);
 	String introduced = param.get(ATT_INTRODUCED);
 	String discontinued = param.get(ATT_DISCONTINUED);
@@ -263,19 +262,13 @@ public class ComputerMapper implements RowMapper<Computer>{
 	if (name == null) {
 	    return null;
 	}
-	if (!Pattern.matches(regex, introduced) && (introduced != "")) {
-	    erreur.put("introduced", "Erreur de format, renseigner YYYY-MM-JJ");
-	}
-	if (!Pattern.matches(regex, discontinued) && discontinued != "") {
-	    erreur.put("discontinued", "Erreur de format, renseigner YYYY-MM-JJ");
-	}
 	Company company = null;
 	if (companyId != null && !companyId.isEmpty() && Integer.valueOf(companyId) != 0) {
 	    company = new Company();
 	    company.setId(Long.valueOf(companyId));
 	}
 	Computer computer = null;
-	if (erreur.isEmpty()) {
+	if (!Pattern.matches(regex, discontinued) && discontinued != "" && !Pattern.matches(regex, introduced) && (introduced != "")) {
 	    LocalDate intro = null;
 	    LocalDate disco = null;
 	    if (introduced != null && introduced != "") {
@@ -289,4 +282,42 @@ public class ComputerMapper implements RowMapper<Computer>{
 	return computer;
     }
 
+    public static ComputerDTO toEnDto(ComputerDTO dto) {
+	dto.setIntroduced(DateMapper.toEnFormat(dto.getIntroduced()));
+	dto.setDiscontinued(DateMapper.toEnFormat(dto.getDiscontinued()));
+	return dto;
+    }
+
+    public static ComputerDTO toFrDto(ComputerDTO dto) {
+	dto.setIntroduced(DateMapper.toFrFormat(dto.getIntroduced()));
+	dto.setDiscontinued(DateMapper.toFrFormat(dto.getDiscontinued()));
+	return dto;
+    }
+
+    public static ComputerDTO frToInDto(ComputerDTO dto) {
+	dto.setIntroduced(DateMapper.frToInternFormat(dto.getIntroduced()));
+	dto.setDiscontinued(DateMapper.frToInternFormat(dto.getDiscontinued()));
+	return dto;
+    }
+
+    public static ComputerDTO enToInDto(ComputerDTO dto) {
+	dto.setIntroduced(DateMapper.enToInternFormat(dto.getIntroduced()));
+	dto.setDiscontinued(DateMapper.enToInternFormat(dto.getDiscontinued()));
+	return dto;
+    }
+
+    public static ComputerDTO ToInternational(ComputerDTO dto, String lang) {
+	if ("fr".equals(lang)) {
+	    return frToInDto(dto);
+	} else {
+	    return enToInDto(dto);
+	}
+    }
+    public static ComputerDTO ToLocale(ComputerDTO dto, String lang) {
+	if ("fr".equals(lang)) {
+	    return toFrDto(dto);
+	} else {
+	    return toEnDto(dto);
+	}
+    }
 }

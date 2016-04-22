@@ -1,10 +1,8 @@
 package com.excilys.formation.computerdatabase.model.validator;
 
-import java.time.LocalDate;
-
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-
+import org.apache.commons.validator.GenericValidator;
 import com.excilys.formation.computerdatabase.model.validator.annotations.DateValid;
 
 public class DateConstraintValidator implements ConstraintValidator<DateValid, String> {
@@ -15,20 +13,10 @@ public class DateConstraintValidator implements ConstraintValidator<DateValid, S
 
     @Override
     public boolean isValid(String date, ConstraintValidatorContext arg1) {
-	String dateRegexFr = "^[0-9]{4}-[0-1][0-9]-[0-3][0-9]$|^$";
-
-	if (date == null || date.isEmpty()) {
+	if (date == null || date.isEmpty() || GenericValidator.isDate(date, "MM-dd-yyyy", true)
+		|| GenericValidator.isDate(date, "dd-MM-yyyy", true)) {
 	    return true;
 	}
-	if (date.matches(dateRegexFr)) {
-	    try {
-		LocalDate.parse(date);
-	    } catch (Exception e) {
-		return false;
-	    }
-	    return true;
-	} else {
-	    return false;
-	}
+	return false;
     }
 }

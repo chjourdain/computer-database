@@ -35,11 +35,10 @@ public class PagerRequestMapper {
 	return pager;
     }
 
-    public static Pager get(Map<String, String> param) {
+    public static Pager get(Map<String, String> param, String lang) {
 	Pager pager;
 	int page = 1;
 	String search = null;
-
 	if (param.get("search") != null && ! param.get("search").isEmpty()) {
 	    search = param.get("search");
 	}
@@ -59,6 +58,7 @@ public class PagerRequestMapper {
 	if (param.get("order") != null && !param.get("order").isEmpty()) {
 	    pager.setSort(param.get("order"));
 	}
+	pager.setLang(lang);
 	return pager;
     }
 }

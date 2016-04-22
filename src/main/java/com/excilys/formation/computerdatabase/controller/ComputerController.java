@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -33,9 +34,8 @@ public class ComputerController {
 
     @RequestMapping(value = "/dashboard", method = RequestMethod.GET)
     public ModelAndView get(@RequestParam Map<String, String> param) {
-
 	ModelAndView model = new ModelAndView("dashboard");
-	Pager pager = PagerRequestMapper.get(param);
+	Pager pager = PagerRequestMapper.get(param,LocaleContextHolder.getLocale().toString());
 	service.fillPage(pager);
 	model.addObject("pager", pager);
 	return model;
@@ -54,6 +54,7 @@ public class ComputerController {
 	ModelAndView model = new ModelAndView("addComputer");
 	String result = "error.notadded";
 	if (!bindingResult.hasErrors()) {
+	    dto = ComputerMapper.ToInternational(dto,LocaleContextHolder.getLocale().toString());
 	    Computer c1 = ComputerMapper.toComputer(dto);
 	    service.create(c1);
 	    result = "success.added";
@@ -71,7 +72,7 @@ public class ComputerController {
 	}
 	// redirect to dashboard, fill the list of computer with a pager define
 	// by the others parameters (page, nbByPage, search, order by)
-	Pager pager = PagerRequestMapper.get(param);
+	Pager pager = PagerRequestMapper.get(param,LocaleContextHolder.getLocale().toString());
 	service.fillPage(pager);
 	ModelAndView model = new ModelAndView("redirect:dashboard");
 	model.addObject("pager", pager);
@@ -88,6 +89,7 @@ public class ComputerController {
 	}
 	// get the computer to send its data to the jsp.
 	ComputerDTO computer = ComputerMapper.toDTO(service.find(Long.valueOf(id)));
+	computer = ComputerMapper.ToLocale(computer, LocaleContextHolder.getLocale().toString()); 
 	ModelAndView model = new ModelAndView("editComputer", "computerDTO", new ComputerDTO());
 	model.addObject("computer", computer);
 	// pass the list of companies in a hashmap as attribute.
@@ -102,6 +104,7 @@ public class ComputerController {
 	if (bindingResult.hasErrors()) {
 	    long i = Long.valueOf(dto.getId());
 	    ComputerDTO computer = ComputerMapper.toDTO(service.find(i));
+	    computer = ComputerMapper.ToLocale(computer, LocaleContextHolder.getLocale().toString()); 
 	    model = new ModelAndView("editComputer");
 	    model.addObject("result", "error.notupdated");
 	    model.addObject("computer", computer);
@@ -109,7 +112,9 @@ public class ComputerController {
 	    model.addObject("map", companyService.getMap());
 	    return model;
 	} else {
+	    dto = ComputerMapper.ToInternational(dto,LocaleContextHolder.getLocale().toString());
 	    Computer c1 = ComputerMapper.toComputer(dto);
+	    service.update(c1);
 	    model = new ModelAndView("redirect:dashboard");
 	    return model;
 	}

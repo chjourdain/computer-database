@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.excilys.formation.computerdatabase.model.Computer;
 import com.excilys.formation.computerdatabase.model.Pager;
+import com.excilys.formation.computerdatabase.model.dto.ComputerDTO;
 import com.excilys.formation.computerdatabase.persist.dao.impl.ComputerDaoImpl;
 import com.excilys.formation.computerdatabase.persist.dao.mapper.ComputerMapper;
 import com.excilys.formation.computerdatabase.service.ComputerService;
@@ -67,10 +68,13 @@ public class ComputerServiceImpl implements ComputerService {
 
     @Override
     public void fillPage(Pager pager) {
-	pager.setList(ComputerMapper.toDTOs(this.findAll(pager)));
+	List<ComputerDTO> list = ComputerMapper.toDTOs(this.findAll(pager));
+	for (ComputerDTO dto : list) {
+	    ComputerMapper.ToLocale(dto, pager.getLang());
+	}
+	pager.setList(list);
 	if (pager.getCurrentPage() > pager.getNbPages()) {
 	    pager.setCurrentPage(1);
 	}
-
     }
 }
