@@ -5,6 +5,9 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="f" tagdir="/WEB-INF/tags/"%>
 <!DOCTYPE html>
+<c:set var="dateplaceholder">
+	<spring:message code="placeholder.computer.date" />
+</c:set>
 <c:set var="resourcesUrl"
 	value="${pageContext.request.contextPath}/resources" />
 <html>
@@ -60,6 +63,7 @@
 								<label for="introduced"><spring:message
 										code="computer.introduced" /></label>
 								<springForm:input type="text" class="form-control"
+									placeholder="${ dateplaceholder}"
 									path="introduced" id="introduced" name="introduced"
 									value="${computer.introduced}" />
 								<springForm:errors path="introduced"
@@ -69,7 +73,9 @@
 								<label for="discontinued"><spring:message
 										code="computer.add" /></label>
 								<springForm:input path="discontinued" type="text"
-									class="form-control" id="discontinued" name="discontinued"
+									placeholder="${ dateplaceholder}
+									class="
+									form-control" id="discontinued" name="discontinued"
 									value="${computer.discontinued }" />
 								<span class="help-block form-error">${error['discontinued']}</span>
 								<springForm:errors path="discontinued"

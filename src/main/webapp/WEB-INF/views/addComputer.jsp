@@ -11,6 +11,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <c:set var="resourcesUrl"
 	value="${pageContext.request.contextPath}/resources" />
+<c:set var="dateplaceholder">
+	<spring:message code="placeholder.computer.date" />
+</c:set>
 <!-- Bootstrap -->
 <link href="${resourcesUrl}/css/bootstrap.min.css" rel="stylesheet"
 	media="screen">
@@ -50,8 +53,7 @@
 								<label for="computerName"><spring:message
 										code="computer.name" /></label>
 								<springForm:input type="text" class="form-control"
-									id="computerName" name="name"
-									path="name" />
+									id="computerName" name="name" path="name" />
 								<springForm:errors path="name" cssClass="help-block form-error" />
 
 
@@ -60,7 +62,8 @@
 								<label for="introduced"><spring:message
 										code="computer.introduced" /></label>
 								<springForm:input path="introduced" type="text"
-									class="form-control" id="introduced" name="introduced" />
+									class="form-control" id="introduced" name="introduced"
+									placeholder="${ dateplaceholder}" />
 								<springForm:errors path="introduced"
 									cssClass="help-block form-error" />
 
@@ -69,6 +72,7 @@
 								<label for="discontinued"><spring:message
 										code="computer.discontinued" /></label>
 								<springForm:input path="discontinued" type="text"
+									placeholder="${ dateplaceholder}"
 									class="form-control" id="discontinued" name="discontinued" />
 								<springForm:errors path="discontinued"
 									cssClass="help-block form-error" />

@@ -31,7 +31,6 @@ public class DateMapper {
     }
     public static String enToInternFormat(String date) {
         if (date != null && !date.isEmpty()) {
-            System.out.println(date);
             LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("MM-dd-yyyy"));
             return localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         }
