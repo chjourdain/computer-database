@@ -113,6 +113,7 @@
 		var translated = new Array();
 		translated['button.edit'] = "<spring:message code='button.edit' javaScriptEscape='true' />";
 		translated['button.view'] = "<spring:message code='button.view' javaScriptEscape='true' />";
+		translated['delete.pop.up'] = "<spring:message code='delete.pop.up' javaScriptEscape='true' />";
 	</script>
 	<script src="${resourcesUrl}/js/dashboard.js"></script>
 </body>
