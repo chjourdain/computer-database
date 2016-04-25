@@ -7,13 +7,11 @@ import java.sql.Types;
 import java.util.List;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import com.excilys.formation.computerdatabase.model.Computer;
 import com.excilys.formation.computerdatabase.model.Pager;
 import com.excilys.formation.computerdatabase.persist.dao.ComputerDao;
@@ -132,7 +130,6 @@ public class ComputerDaoImpl implements ComputerDao {
 	}
     }
 
-    @Transactional()
     public boolean deleteAll(long id) {
 	jdbcTemplate = new JdbcTemplate(dataSource);
 	jdbcTemplate.update("DELETE from computer where company_id=" + id);

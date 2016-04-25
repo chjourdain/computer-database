@@ -11,12 +11,13 @@
 	<context:component-scan base-package="com.excilys.computer_database.service" />
 
 	
+
 	<context:component-scan
 		base-package="com.excilys.formation.computerdatabase.persist.dao.mapper" />
 	<context:component-scan
-		base-package="com.excilys.formation.computerdatabase.service.impl" />
+		base-package="com.excilys.formation.computerdatabase.service" />
 	<context:component-scan
-		base-package="com.excilys.formation.computerdatabase.persist.dao.impl" />
+		base-package="com.excilys.formation.computerdatabase.persist.dao" />
 
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
@@ -26,8 +27,5 @@
 		<property name="username" value="admincdb" />
 		<property name="password" value="qwerty1234" />
 	</bean>
-	<tx:annotation-driven transaction-manager="txManager"/>
-    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="dataSource"/>
-    </bean>
+
 </beans>

@@ -2,29 +2,30 @@ package com.excilys.formation.test.dao;
 
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import java.sql.SQLException;
-import java.sql.Statement;
+
 import java.time.LocalDate;
+
 import javax.sql.DataSource;
-import org.junit.AfterClass;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
 import com.excilys.formation.computerdatabase.model.Company;
 import com.excilys.formation.computerdatabase.model.Computer;
-import com.excilys.formation.computerdatabase.persist.dao.CompanyDao;
+import com.excilys.formation.computerdatabase.persist.dao.impl.CompanyDaoImpl;
 import com.excilys.formation.computerdatabase.persist.dao.impl.ComputerDaoImpl;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "file:src/main/resources/applicationContext.xml" })
+@ContextConfiguration(locations = { "file:src/test/resources/applicationContextTest.xml" })
 public class TestCreateComputer {
 
     @Autowired
     ComputerDaoImpl computerDao;
     @Autowired
-    CompanyDao companydao;
+    CompanyDaoImpl companydao;
     @Autowired
     DataSource dataSource;
 
