@@ -1,23 +1,25 @@
 package com.excilys.formation.computerdatabase.service.impl;
 
 import java.util.HashMap;
-import java.util.List;
+import java.util.Iterator;
 import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.excilys.formation.computerdatabase.model.Company;
-import com.excilys.formation.computerdatabase.model.Computer;
-import com.excilys.formation.computerdatabase.model.Pager;
-import com.excilys.formation.computerdatabase.persist.dao.impl.CompanyDaoImpl;
-import com.excilys.formation.computerdatabase.persist.dao.impl.ComputerDaoImpl;
+import com.excilys.formation.computerdatabase.persist.dao.CompanyDao;
+import com.excilys.formation.computerdatabase.persist.dao.ComputerDao;
 import com.excilys.formation.computerdatabase.service.CompanyService;
 
 @Service
 public class CompanyServiceImpl implements CompanyService {
     @Autowired
-    CompanyDaoImpl companyDao;
+    CompanyDao companyDao;
     @Autowired
-    ComputerDaoImpl computerDao;
+    ComputerDao computerDao;
     private static Map<Long, String> map;
 
     public Company findByName(String companyName) {
@@ -28,15 +30,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public List<Company> findAll(Long index, int nbrElement) {
-	if (index < 0 || nbrElement <= 0) {
-	    return null;
-	}
-	return companyDao.findAll(index, nbrElement);
-    }
-
-    @Override
-    public int count() {
+    public long count() {
 	return companyDao.count();
     }
 
@@ -45,7 +39,7 @@ public class CompanyServiceImpl implements CompanyService {
 	if (id == 0) {
 	    return null;
 	}
-	return companyDao.find(id);
+	return companyDao.findOne(id);
     }
 
     /**
@@ -56,23 +50,19 @@ public class CompanyServiceImpl implements CompanyService {
     public Map<Long, String> getMap() {
 	if (map == null) {
 	    map = new HashMap<>();
-	    List<Company> tempo = companyDao.findAll(0, 500);
-	    for (Company c : tempo) {
-		map.put((Long) ((Company) c).getId(), ((Company) c).getName());
+	    Iterator<Company> iter = companyDao.findAll().iterator();
+	    while (iter.hasNext()) {
+		Company company = iter.next();
+		map.put((Long) company.getId(), company.getName());
 	    }
 	}
 	return map;
     }
 
     @Override
-    public List<Computer> findAll(Pager pager) {
-	throw new UnsupportedOperationException();
-    }
-
-    @Override
-   // @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void delete(Company c) {
-	computerDao.deleteAll(c.getId());
+	computerDao.deleteByCompany_id(c.getId());
 	companyDao.delete(c);
     }
 }

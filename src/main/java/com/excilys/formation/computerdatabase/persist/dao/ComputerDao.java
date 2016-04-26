@@ -1,28 +1,18 @@
 package com.excilys.formation.computerdatabase.persist.dao;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
+
 import com.excilys.formation.computerdatabase.model.Computer;
-import com.excilys.formation.computerdatabase.model.Pager;
 
-public interface ComputerDao extends GenericDao<Computer> {
-    String KEY = "computerDao";
+public interface ComputerDao extends PagingAndSortingRepository<Computer, Long> {
 
-    @Override
-    Computer create(Computer obj);
+  public void deleteByCompany_id(Long company_id);
 
-    @Override
-    boolean delete(Computer obj);
-
-    @Override
-    Computer update(Computer obj);
-
-    Computer find(long id);
-
-    List<Computer> findAll(long index, int number);
-    
-    public List<Computer> findWithSearch(Pager pager);
-
-    int count();
-
-    boolean deleteAll(long id);
+  @Query("SELECT c FROM computer c WHERE "
+	      + "c.name LIKE :search OR c.company.name LIKE :search ")
+  public Page<Computer> findByNameCompanySearch (@Param("search") String search, Pageable page);
 }

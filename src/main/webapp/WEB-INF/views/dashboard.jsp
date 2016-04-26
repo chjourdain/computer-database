@@ -25,7 +25,7 @@
 	<section id="main">
 	<span class="lang-sm lang-lbl" lang="en"></span>
 		<div class="container">
-			<h1 id="homeTitle">${pager.totalCount} <spring:message code="computer.found"/></h1>
+			<h1 id="homeTitle">${pager.totalElements} <spring:message code="computer.found"/></h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -72,7 +72,7 @@
 				<!-- Browse attribute computers -->
 				<tbody id="results">
 
-					<c:forEach var="computer" items="${pager.list}">
+					<c:forEach var="computer" items="${pager.content}">
 						<tr class="computer">
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="${computer.id}"></td>
@@ -95,7 +95,7 @@
 						aria-hidden="true">&laquo;</span>
 				</a></li>
 				<f:printmenupage pager="${ pager}" />
-				<li><a <f:link pager="${pager}" type="dashboard" action="href" page="${pager.nbPages+1}"/>     
+				<li><a <f:link pager="${pager}" type="dashboard" action="href" page="${pager.totalPages+1}"/>     
 					aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 				</a></li>
 			</ul>

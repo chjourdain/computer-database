@@ -1,27 +1,23 @@
 package com.excilys.formation.computerdatabase.service.impl;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import com.excilys.formation.computerdatabase.model.Computer;
-import com.excilys.formation.computerdatabase.model.Pager;
-import com.excilys.formation.computerdatabase.model.dto.ComputerDTO;
-import com.excilys.formation.computerdatabase.persist.dao.impl.ComputerDaoImpl;
-import com.excilys.formation.computerdatabase.persist.dao.mapper.ComputerMapper;
+import com.excilys.formation.computerdatabase.persist.dao.ComputerDao;
 import com.excilys.formation.computerdatabase.service.ComputerService;
 
 @Service
 public class ComputerServiceImpl implements ComputerService {
 
     @Autowired
-    ComputerDaoImpl computerDao;
+    ComputerDao computerDao;
 
     private ComputerServiceImpl() {
     }
 
-    public int count() {
+    public long count() {
 	return computerDao.count();
     }
 
@@ -29,14 +25,14 @@ public class ComputerServiceImpl implements ComputerService {
 	if (c == null) {
 	    return null;
 	}
-	return computerDao.create(c);
+	return computerDao.save(c);
     }
 
     public Computer update(Computer c) {
 	if (c == null) {
 	    return null;
 	}
-	return computerDao.update(c);
+	return computerDao.save(c);
     }
 
     public void delete(Computer c) {
@@ -46,35 +42,18 @@ public class ComputerServiceImpl implements ComputerService {
     }
 
     @Override
-    public List<Computer> findAll(Long index, int nbrElement) {
-	if (index < 0 || nbrElement <= 0) {
-	    return null;
-	}
-	return computerDao.findAll(index, nbrElement);
-    }
-
-    @Override
     public Computer find(long id) {
 	if (id != 0) {
-	    return computerDao.find(id);
+	    return computerDao.findOne(id);
 	}
 	return null;
     }
 
     @Override
-    public List<Computer> findAll(Pager pager) {
-	return computerDao.findWithSearch(pager);
-    }
-
-    @Override
-    public void fillPage(Pager pager) {
-	List<ComputerDTO> list = ComputerMapper.toDTOs(this.findAll(pager));
-	for (ComputerDTO dto : list) {
-	    ComputerMapper.ToLocale(dto, pager.getLang());
+    public Page<Computer> findAll(Pageable pager, String search) {
+	if (search !=null && !search.isEmpty()) {
+	   return computerDao.findByNameCompanySearch("%"+search+"%",pager);
 	}
-	pager.setList(list);
-	if (pager.getCurrentPage() > pager.getNbPages()) {
-	    pager.setCurrentPage(1);
-	}
+	return computerDao.findAll(pager);
     }
 }

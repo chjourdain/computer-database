@@ -8,6 +8,8 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -17,10 +19,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.formation.computerdatabase.model.Computer;
-import com.excilys.formation.computerdatabase.model.Pager;
 import com.excilys.formation.computerdatabase.model.dto.ComputerDTO;
-import com.excilys.formation.computerdatabase.persist.dao.mapper.ComputerMapper;
-import com.excilys.formation.computerdatabase.persist.dao.mapper.PagerRequestMapper;
+import com.excilys.formation.computerdatabase.model.mapper.ComputerMapper;
+import com.excilys.formation.computerdatabase.model.mapper.PagerRequestMapper;
 import com.excilys.formation.computerdatabase.service.impl.CompanyServiceImpl;
 import com.excilys.formation.computerdatabase.service.impl.ComputerServiceImpl;
 
@@ -35,8 +36,11 @@ public class ComputerController {
     @RequestMapping(value = "/dashboard", method = RequestMethod.GET)
     public ModelAndView get(@RequestParam Map<String, String> param) {
 	ModelAndView model = new ModelAndView("dashboard");
-	Pager pager = PagerRequestMapper.get(param,LocaleContextHolder.getLocale().toString());
-	service.fillPage(pager);
+	PageRequest page = PagerRequestMapper.get(param);
+	Page<ComputerDTO> pager = ComputerMapper.toDTO(service.findAll(page, param.get("search")),page);
+	List<ComputerDTO> list = pager.getContent();
+	for (ComputerDTO c : list) System.out.println(c);
+	model.addObject("search", param.get("search"));
 	model.addObject("pager", pager);
 	return model;
     }
@@ -72,8 +76,8 @@ public class ComputerController {
 	}
 	// redirect to dashboard, fill the list of computer with a pager define
 	// by the others parameters (page, nbByPage, search, order by)
-	Pager pager = PagerRequestMapper.get(param,LocaleContextHolder.getLocale().toString());
-	service.fillPage(pager);
+	PageRequest page = PagerRequestMapper.get(param);
+	Page<ComputerDTO> pager = ComputerMapper.toDTO(service.findAll(page, param.get("search")),page);
 	ModelAndView model = new ModelAndView("redirect:dashboard");
 	model.addObject("pager", pager);
 	return model;

@@ -2,12 +2,32 @@ package com.excilys.formation.computerdatabase.model;
 
 import java.time.LocalDate;
 
-public class Computer {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
+@Entity(name = "computer")
+public class Computer {
+    @Id
+    @GeneratedValue
     private long id;
+    
     private String name;
+    
+    @Column(name = "introduced", nullable = true)
     private LocalDate introduced;
+    
+    @ManyToOne
+    @JoinColumn(name = "company_id")
     private Company company;
+    
+    @Column(name = "discontinued", nullable = true)
     private LocalDate discontinued;
 
     public void setName(String name) {
@@ -16,7 +36,9 @@ public class Computer {
 
     /**
      * Minimal Constructor.
-     * @param name of the computer, required. 
+     * 
+     * @param name
+     *            of the computer, required.
      */
     public Computer(String name) {
 	this.name = name;
@@ -24,8 +46,11 @@ public class Computer {
 
     /**
      * Constructor use only by DAO.
-     * @param id of the computer in the database.
-     * @param name of the computer.
+     * 
+     * @param id
+     *            of the computer in the database.
+     * @param name
+     *            of the computer.
      */
     public Computer(int id, String name) {
 	this.id = id;
@@ -34,8 +59,9 @@ public class Computer {
 
     /**
      * Full Constructor use mostly by service to create a computer.
+     * 
      * @param name
-     * @param introduced 
+     * @param introduced
      * @param discontinued
      * @param company
      */
@@ -48,8 +74,9 @@ public class Computer {
 
     /**
      * Full Constructor use by DAO.
+     * 
      * @param name
-     * @param introduced 
+     * @param introduced
      * @param discontinued
      * @param company
      */
@@ -164,30 +191,35 @@ public class Computer {
 	return "Computer [id=" + id + ", name=" + name + ", introduced=" + introduced + ", company=" + company
 		+ ", discontinued=" + discontinued + "]";
     }
-    
-    public class ComputerBuilder{
+
+    public class ComputerBuilder {
 	private Computer computer = new Computer();
-	
+
 	public ComputerBuilder(String name) {
-	    computer.setName(name); 
+	    computer.setName(name);
 	}
-	public ComputerBuilder introduced(LocalDate intro){
+
+	public ComputerBuilder introduced(LocalDate intro) {
 	    computer.setIntroduced(intro);
 	    return this;
 	}
-	public ComputerBuilder discontinued(LocalDate disco){
+
+	public ComputerBuilder discontinued(LocalDate disco) {
 	    computer.setDiscontinued(disco);
 	    return this;
 	}
-	public ComputerBuilder company(Company company){
+
+	public ComputerBuilder company(Company company) {
 	    computer.setCompany(company);
 	    return this;
 	}
-	public ComputerBuilder id(long id){
+
+	public ComputerBuilder id(long id) {
 	    computer.setId(id);
 	    return this;
 	}
-	public Computer build(){
+
+	public Computer build() {
 	    return computer;
 	}
     }

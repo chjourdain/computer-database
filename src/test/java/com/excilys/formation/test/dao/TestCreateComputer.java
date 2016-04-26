@@ -15,45 +15,50 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.excilys.formation.computerdatabase.model.Company;
 import com.excilys.formation.computerdatabase.model.Computer;
-import com.excilys.formation.computerdatabase.persist.dao.impl.CompanyDaoImpl;
-import com.excilys.formation.computerdatabase.persist.dao.impl.ComputerDaoImpl;
+import com.excilys.formation.computerdatabase.persist.dao.CompanyDao;
+import com.excilys.formation.computerdatabase.persist.dao.ComputerDao;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "file:src/test/resources/applicationContextTest.xml" })
+@ContextConfiguration(locations = { "file:src/main/resources/applicationContext.xml" })
 public class TestCreateComputer {
 
     @Autowired
-    ComputerDaoImpl computerDao;
+    ComputerDao computerDao;
     @Autowired
-    CompanyDaoImpl companydao;
+    CompanyDao companydao;
     @Autowired
     DataSource dataSource;
 
     @Test
     public void testCreateStandart() {
-	int a = computerDao.count();
+	long a = computerDao.count();
 	Computer newOne = new Computer("newOne");
-	computerDao.create(newOne);
+	computerDao.save(newOne);
 	assertTrue(1 + a == computerDao.count());
     }
 
     @Test
     public void testCreateNoCompany() {
-	int a = computerDao.count();
-	Company pCompany = null;
+	long a = computerDao.count();
+	Company Company = null;
 	Computer newOne = new Computer("newOne", LocalDate.parse("2015-02-02"), LocalDate.parse("2015-02-02"),
-		pCompany);
-	computerDao.create(newOne);
+		Company);
+	computerDao.save(newOne);
 	assertTrue(1 + a == computerDao.count());
     }
 
     @Test
     public void testCreateVoid() {
-	int a = computerDao.count();
-	Company pCompany = null;
+	long a = computerDao.count();
 	Computer newOne = null;
-	try {
-	    computerDao.create(newOne);
+	try {  //  Computer(Computer obj);
+
+	    //  boolean delete(Computer obj);
+
+	    //  Computer update(Computer obj);
+
+//	      Computer find(long id);
+	    computerDao.save(newOne);
 	} catch (Exception e) {
 	}
 	assertTrue(a == computerDao.count());
@@ -61,12 +66,12 @@ public class TestCreateComputer {
 
     @Test
     public void testCreateComplet() {
-	int a = computerDao.count();
-	Company company = companydao.find(10);
+	long a = computerDao.count();
+	Company company = companydao.findOne(10L);
 	LocalDate d = LocalDate.parse("2015-02-02");
 	Computer newOne = new Computer("newOne", d, d, company);
 	try {
-	    newOne = computerDao.create(newOne);
+	    newOne = computerDao.save(newOne);
 	} catch (Exception e) {
 	}
 	assertTrue(a + 1 == computerDao.count());
@@ -75,24 +80,29 @@ public class TestCreateComputer {
 
     @Test
     public void testCreateDateFausse() {
-	Company company = companydao.find(10);
+	Company company = companydao.findOne(10L);
 	LocalDate d = LocalDate.parse("2040-02-02");
 	Computer newOne = null;
 	try {
-	    newOne = computerDao.create(new Computer("newOne", d, d, company));
+	    newOne = computerDao.save(new Computer("newOne", d, d, company));
 	} catch (Exception e) {
 	}
 	assertNull(newOne);
     }
+    
+    @Test
+    public void find() {
+	Computer c = computerDao.findOne(575L);
+	System.out.println("n\n\n\n\n"+c);
+	assertTrue(c != null);
+    }
 
-  /*  @AfterClass
-    public static void cleanbdd() {
-	try {
-	    Statement st = dataSource.getConnection().createStatement();
-	    st.executeUpdate("DELETE from computer where name='newOne' ");
-	} catch (SQLException e) {
-	    e.printStackTrace();
-	}
-
-    }*/
+    /*
+     * @AfterClass public static void cleanbdd() { try { Statement st =
+     * dataSource.getConnection().saveStatement(); st.executeUpdate(
+     * "DELETE from computer where name='newOne' "); } catch (SQLException e) {
+     * e.prlongStackTrace(); }
+     * 
+     * }
+     */
 }

@@ -4,9 +4,8 @@ import java.util.Scanner;
 
 import com.excilys.formation.computerdatabase.model.Company;
 import com.excilys.formation.computerdatabase.model.Computer;
-import com.excilys.formation.computerdatabase.model.Pager;
 import com.excilys.formation.computerdatabase.model.dto.ComputerDTO;
-import com.excilys.formation.computerdatabase.persist.dao.mapper.ComputerMapper;
+import com.excilys.formation.computerdatabase.model.mapper.ComputerMapper;
 import com.excilys.formation.computerdatabase.service.impl.CompanyServiceImpl;
 import com.excilys.formation.computerdatabase.service.impl.ComputerServiceImpl;
 
@@ -32,34 +31,34 @@ public class CLIUtils {
     }
 
     protected void listComputer(ComputerServiceImpl computerService) {
-	Pager<Computer> pager = new Pager<Computer>(10, 1);
-	System.out.println(pager.toString());
-	computerService.fillPage(pager);
-	int choice = printPage(pager);
-	while (choice == 1 || choice == 2) {
-	    changePage(pager, choice, computerService);
-	    choice = printPage(pager);
-	}
+	//Pager<Computer> pager = new Pager<Computer>(10, 1);
+//	System.out.println(pager.toString());
+//	computerService.fillPage(pager);
+	//int choice = printPage(pager);
+//	while (choice == 1 || choice == 2) {
+//	    changePage(pager, choice, computerService);
+//	    choice = printPage(pager);
+//	}
     }
 
-    protected <Computer> int printPage(Pager<Computer> pager) {
-	for (Computer element : pager.getList()) {
-	    System.out.println(element.toString());
-	}
+    protected <Computer> int printPage(){//Pager<Computer> pager) {
+//	for (Computer element : pager.getList()) {
+	//    System.out.println(element.toString());
+//	}
 	System.out.println("\n1. Next Page");
 	System.out.println("2. Previous Page");
 	System.out.println("3. Return menu");
 	return askInt("");
     }
 
-    protected void changePage(Pager pager, int choice, ComputerServiceImpl computerService) {
-	if (choice == 1) {
-	    pager.setCurrentPage(pager.getCurrentPage() + 1);
-	}
-	if (choice == 2) {
-	    pager.setCurrentPage(pager.getCurrentPage() - 1);
-	}
-	computerService.fillPage(pager);
+    protected void changePage(){//Pager pager, int choice, ComputerServiceImpl computerService) {
+//	if (choice == 1) {
+//	    pager.setCurrentPage(pager.getCurrentPage() + 1);
+//	}
+//	if (choice == 2) {
+//	    pager.setCurrentPage(pager.getCurrentPage() - 1);
+//	}
+	//computerService.fillPage(pager);
     }
 
     protected void deleteCompanie(CompanyServiceImpl service) {

@@ -1,4 +1,4 @@
-package com.excilys.formation.computerdatabase.persist.dao.mapper;
+package com.excilys.formation.computerdatabase.model.mapper;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

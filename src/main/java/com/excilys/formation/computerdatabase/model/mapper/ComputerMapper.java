@@ -1,4 +1,4 @@
-package com.excilys.formation.computerdatabase.persist.dao.mapper;
+package com.excilys.formation.computerdatabase.model.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,6 +12,9 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.excilys.formation.computerdatabase.model.Company;
@@ -78,14 +81,14 @@ public class ComputerMapper implements RowMapper<Computer> {
 	}
 	computer.setName(dto.getName());
 
-	if (dto.getIntroduced ()== null || "".equals(dto.getIntroduced())) {
+	if (dto.getIntroduced() == null || "".equals(dto.getIntroduced())) {
 	    computer.setIntroduced(null);
 	} else {
 	    dto.setIntroduced(dto.getIntroduced().replace('/', '-'));
 	    computer.setIntroduced(LocalDate.parse(dto.getIntroduced(), DateTimeFormatter.ISO_LOCAL_DATE));
 	}
 
-	if (dto.getDiscontinued()== null || "".equals(dto.getDiscontinued())) {
+	if (dto.getDiscontinued() == null || "".equals(dto.getDiscontinued())) {
 	    computer.setDiscontinued(null);
 	} else {
 	    dto.setDiscontinued(dto.getDiscontinued().replace('/', '-'));
@@ -268,7 +271,8 @@ public class ComputerMapper implements RowMapper<Computer> {
 	    company.setId(Long.valueOf(companyId));
 	}
 	Computer computer = null;
-	if (!Pattern.matches(regex, discontinued) && discontinued != "" && !Pattern.matches(regex, introduced) && (introduced != "")) {
+	if (!Pattern.matches(regex, discontinued) && discontinued != "" && !Pattern.matches(regex, introduced)
+		&& (introduced != "")) {
 	    LocalDate intro = null;
 	    LocalDate disco = null;
 	    if (introduced != null && introduced != "") {
@@ -313,11 +317,18 @@ public class ComputerMapper implements RowMapper<Computer> {
 	    return enToInDto(dto);
 	}
     }
+
     public static ComputerDTO ToLocale(ComputerDTO dto, String lang) {
 	if ("fr".equals(lang)) {
 	    return toFrDto(dto);
 	} else {
 	    return toEnDto(dto);
 	}
+    }
+
+    public static Page<ComputerDTO> toDTO(Page<Computer> findAll, PageRequest pr) {
+	List<Computer> list = findAll.getContent();
+	PageImpl<ComputerDTO> pager = new PageImpl(toDTO(list), pr, findAll.getTotalElements());
+	return pager;
     }
 }
