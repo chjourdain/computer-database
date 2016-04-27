@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,6 +49,7 @@ public class CompanyServiceImpl implements CompanyService {
      * 
      * @return
      */
+    @Cacheable("companyCache")
     public Map<Long, String> getMap() {
 	if (map == null) {
 	    map = new HashMap<>();
@@ -60,6 +63,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
+    @CacheEvict("companyCache")
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void delete(Company c) {
 	computerDao.deleteByCompany_id(c.getId());
