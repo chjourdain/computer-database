@@ -38,8 +38,6 @@ public class ComputerController {
 	ModelAndView model = new ModelAndView("dashboard");
 	PageRequest page = PagerRequestMapper.get(param);
 	Page<ComputerDTO> pager = ComputerMapper.toDTO(service.findAll(page, param.get("search")),page);
-	List<ComputerDTO> list = pager.getContent();
-	for (ComputerDTO c : list) System.out.println(c);
 	model.addObject("search", param.get("search"));
 	model.addObject("pager", pager);
 	return model;
@@ -93,7 +91,6 @@ public class ComputerController {
 	}
 	// get the computer to send its data to the jsp.
 	ComputerDTO computer = ComputerMapper.toDTO(service.find(Long.valueOf(id)));
-	computer = ComputerMapper.ToLocale(computer, LocaleContextHolder.getLocale().toString()); 
 	ModelAndView model = new ModelAndView("editComputer", "computerDTO", new ComputerDTO());
 	model.addObject("computer", computer);
 	// pass the list of companies in a hashmap as attribute.
@@ -108,7 +105,6 @@ public class ComputerController {
 	if (bindingResult.hasErrors()) {
 	    long i = Long.valueOf(dto.getId());
 	    ComputerDTO computer = ComputerMapper.toDTO(service.find(i));
-	    computer = ComputerMapper.ToLocale(computer, LocaleContextHolder.getLocale().toString()); 
 	    model = new ModelAndView("editComputer");
 	    model.addObject("result", "error.notupdated");
 	    model.addObject("computer", computer);

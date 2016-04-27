@@ -1,48 +1,62 @@
 <%@ page pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="f" tagdir="/WEB-INF/tags/"%>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
 <title>Computer Database</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<c:set var="resourcesUrl" value="${pageContext.request.contextPath}/resources" />
+<c:set var="resourcesUrl"
+	value="${pageContext.request.contextPath}/resources" />
 <meta charset="utf-8">
 <!-- Bootstrap -->
 <link href="${resourcesUrl}/css/bootstrap.min.css" rel="stylesheet"
 	media="screen">
-<link href="${resourcesUrl}/css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="${resourcesUrl}/css/main.css" rel="stylesheet" media="screen">
+<link href="${resourcesUrl}/css/font-awesome.css" rel="stylesheet"
+	media="screen">
+<link href="${resourcesUrl}/css/main.css" rel="stylesheet"
+	media="screen">
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard">  <spring:message code="title"/></a>
-<span style="float: right;"><a   href="?lang=en"><img src="${resourcesUrl}/icone/en.png"></a> | <a href="?lang=fr"><img src="${resourcesUrl}/icone/fr.png"></a></span>
+			<a class="navbar-brand" href="dashboard"> <spring:message
+					code="title" /></a> <span style="float: right;"><a
+				href="?lang=en"><img src="${resourcesUrl}/icone/en.png"></a> |
+				<a href="?lang=fr"><img src="${resourcesUrl}/icone/fr.png"></a></span>
 		</div>
 	</header>
 	<section id="main">
-	<span class="lang-sm lang-lbl" lang="en"></span>
+		<span class="lang-sm lang-lbl" lang="en"></span>
 		<div class="container">
-			<h1 id="homeTitle">${pager.totalElements} <spring:message code="computer.found"/></h1>
+			<h1 id="homeTitle">${pager.totalElements}
+				<spring:message code="computer.found" />
+			</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
 
 						<input type="search" id="searchbox" name="search"
-							class="form-control" placeholder="<spring:message code="placeholder.search"/>" /> <input
-							type="submit" id="searchsubmit" value="<spring:message code="button.filter"/>"
+							class="form-control"
+							placeholder="<spring:message code="placeholder.search"/>" /> <input
+							type="submit" id="searchsubmit"
+							value="<spring:message code="button.filter"/>"
 							class="btn btn-primary" />
 					</form>
 				</div>
 				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href="add"><spring:message code="button.add"/></a> <a class="btn btn-default" id="editComputer" href="#"
-						onclick="$.fn.toggleEditMode();"><spring:message code="button.edit"/></a>
+					<a class="btn btn-success" id="addComputer" href="add"><spring:message
+							code="button.add" /></a> <a class="btn btn-default" id="editComputer"
+						href="#" onclick="$.fn.toggleEditMode();"><spring:message
+							code="button.edit" /></a>
 				</div>
 			</div>
 		</div>
-		<form id="deleteForm" <f:link pager="${pager}" action="action" type="delete"></f:link> method="POST">
+		<form id="deleteForm"
+			<f:link pager="${pager}" action="action" type="delete"></f:link>
+			method="POST">
 			<input type="hidden" name="selection" value="">
 		</form>
 
@@ -60,12 +74,20 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th><a  <f:link pager="${pager}" action="href" type="dashboard" sort="computer"></f:link> ><spring:message code="computer.name"/></a></th>
-						<th><a  <f:link pager="${pager}" action="href" type="dashboard" sort="intro"></f:link> ><spring:message code="computer.introduced"/></a></th>
+						<th><a
+							<f:link pager="${pager}" action="href" type="dashboard" sort="computer"></f:link>><spring:message
+									code="computer.name" /></a></th>
+						<th><a
+							<f:link pager="${pager}" action="href" type="dashboard" sort="intro"></f:link>><spring:message
+									code="computer.introduced" /></a></th>
 						<!-- Table header for Discontinued Date -->
-						<th><a  <f:link pager="${pager}" action="href" type="dashboard" sort="disco"></f:link> ><spring:message code="computer.discontinued"/></a></th>
+						<th><a
+							<f:link pager="${pager}" action="href" type="dashboard" sort="disco"></f:link>><spring:message
+									code="computer.discontinued" /></a></th>
 						<!-- Table header for Company -->
-						<th><a  <f:link pager="${pager}" action="href" type="dashboard" sort="company"></f:link> ><spring:message code="computer.company"/></a> </th>
+						<th><a
+							<f:link pager="${pager}" action="href" type="dashboard" sort="company"></f:link>><spring:message
+									code="computer.company" /></a></th>
 
 					</tr>
 				</thead>
@@ -78,8 +100,11 @@
 								class="cb" value="${computer.id}"></td>
 							<td><a href="edit?id=${computer.id}" onclick="">${computer.name}</a>
 							</td>
-							<td>${computer.introduced}</td>
-							<td>${computer.discontinued}</td>
+							     <c:set var="pattern" value="${pageContext.response.locale eq 'en' ? 'MM-dd-yyyy' : 'dd-MM-yyyy'}"/>
+                            <fmt:parseDate pattern="yyyy-MM-dd" value="${computer.introduced}" var="dateIntroduced" />
+                            <fmt:parseDate pattern="yyyy-MM-dd" value="${computer.discontinued}" var="dateDiscontinued"/>
+                            <td><fmt:formatDate value="${dateIntroduced}" pattern="${pattern}" /></td>
+                            <td><fmt:formatDate value="${dateDiscontinued}" pattern="${pattern}" /></td>
 							<td>${computer.companyName}</td>
 						</tr>
 					</c:forEach>
@@ -91,19 +116,25 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 			<ul class="pagination">
-				<li><a <f:link pager="${pager}" type="dashboard" action="href" page="1"/> aria-label="Previous"> <span
-						aria-hidden="true">&laquo;</span>
+				<li><a
+					<f:link pager="${pager}" type="dashboard" action="href" page="1"/>
+					aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 				</a></li>
 				<f:printmenupage pager="${ pager}" />
-				<li><a <f:link pager="${pager}" type="dashboard" action="href" page="${pager.totalPages+1}"/>     
+				<li><a
+					<f:link pager="${pager}" type="dashboard" action="href" page="${pager.totalPages}"/>
 					aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 				</a></li>
 			</ul>
 
 			<div class="btn-group btn-group-sm pull-right" role="group">
-				<a <f:link pager="${pager}" type="dashboard" action="href" nbByPage="10"/> class="btn btn-default">10</a>
-				<a <f:link pager="${pager}" type="dashboard" action="href" nbByPage="50"/> class="btn btn-default">50</a>
-				<a <f:link pager="${pager}" type="dashboard" action="href" nbByPage="100"/>  class="btn btn-default">100</a>
+				<a
+					<f:link pager="${pager}" type="dashboard" action="href" nbByPage="10"/>
+					class="btn btn-default">10</a> <a
+					<f:link pager="${pager}" type="dashboard" action="href" nbByPage="50"/>
+					class="btn btn-default">50</a> <a
+					<f:link pager="${pager}" type="dashboard" action="href" nbByPage="100"/>
+					class="btn btn-default">100</a>
 			</div>
 		</div>
 	</footer>

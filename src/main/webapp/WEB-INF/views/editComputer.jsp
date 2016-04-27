@@ -4,6 +4,7 @@
 	prefix="springForm"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="f" tagdir="/WEB-INF/tags/"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <c:set var="dateplaceholder">
 	<spring:message code="placeholder.computer.date" />
@@ -46,7 +47,7 @@
 					<h1>
 						<spring:message code="computer.edit" />
 					</h1>
-
+					<fmt:formatDate value="${dateDiscontinued}" pattern="${pattern}" />
 					<springForm:form id="form" action="edit"
 						modelAttribute="computerDTO" method="POST">
 						<springForm:input type="hidden" path="id" name="id"
@@ -59,13 +60,18 @@
 									class="form-control" id="computerName" value="${computer.name}" />
 								<springForm:errors path="name" cssClass="help-block form-error" />
 							</div>
+							<!-- Converting the date from yyyy-mm-dd to locale  -->
+							<c:set var="pattern" value="${pageContext.response.locale eq 'en' ? 'MM-dd-yyyy' : 'dd-MM-yyyy'}" />
+							<fmt:parseDate pattern="yyyy-MM-dd"	value="${computer.introduced}" var="dateIntroduced" />
+							<fmt:parseDate pattern="yyyy-MM-dd"	value="${computer.discontinued}" var="dateDiscontinued" />
+							<fmt:formatDate value='${dateIntroduced}' pattern='${pattern}' var="introDate" />
+							<fmt:formatDate value="${dateDiscontinued}" pattern="${pattern}" var="discoDate" />
 							<div class="form-group">
 								<label for="introduced"><spring:message
 										code="computer.introduced" /></label>
 								<springForm:input type="text" class="form-control"
-									placeholder="${ dateplaceholder}"
-									path="introduced" id="introduced" name="introduced"
-									value="${computer.introduced}" />
+									placeholder="${ dateplaceholder}" path="introduced"
+									id="introduced" name="introduced" value="${introDate}" />
 								<springForm:errors path="introduced"
 									cssClass="help-block form-error" />
 							</div>
@@ -73,10 +79,8 @@
 								<label for="discontinued"><spring:message
 										code="computer.add" /></label>
 								<springForm:input path="discontinued" type="text"
-									placeholder="${ dateplaceholder}
-									class="
-									form-control" id="discontinued" name="discontinued"
-									value="${computer.discontinued }" />
+									placeholder="${ dateplaceholder}" class="form-control"
+									id="discontinued" name="discontinued" value="${discoDate}" />
 								<span class="help-block form-error">${error['discontinued']}</span>
 								<springForm:errors path="discontinued"
 									cssClass="help-block form-error" />
