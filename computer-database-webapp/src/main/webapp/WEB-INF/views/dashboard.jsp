@@ -117,7 +117,7 @@
 		<div class="container text-center">
 			<ul class="pagination">
 				<li><a
-					<f:link pager="${pager}" type="dashboard" action="href" page="1"/>
+					<f:link pager="${pager}" type="dashboard" action="href" page="0"/>
 					aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 				</a></li>
 				<f:printmenupage pager="${ pager}" />

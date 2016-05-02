@@ -26,9 +26,9 @@
 
 <c:choose>
 	<c:when test="${action == 'action'}">
-	<c:out value="action='${type}?Page=${page-1}&Nb=${nbByPage}&search=${search}&order=${sort}'" escapeXml="false"/>
+	<c:out value="action='${type}?Page=${page}&Nb=${nbByPage}&search=${search}&order=${sort}'" escapeXml="false"/>
 	</c:when>
-	<c:when test="${action == 'href'}">href="${type}?Page=${page-1}&Nb=${nbByPage}&search=${search}&order=${sort}"</c:when>
+	<c:when test="${action == 'href'}">href="${type}?Page=${page}&Nb=${nbByPage}&search=${search}&order=${sort}"</c:when>
 	<c:otherwise>
 	<a href="${type}?Page=${page-1}&Nb=${nbByPage}&search=${search}&order=${sort}">${name}</a>
 	</c:otherwise>
