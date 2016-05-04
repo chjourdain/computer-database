@@ -49,8 +49,8 @@
 				</div>
 				<div class="pull-right">
 					<a class="btn btn-success" id="addComputer" href="add"><spring:message
-							code="button.add" /></a> <a class="btn btn-default" id="editComputer"
-						href="#" onclick="$.fn.toggleEditMode();"><spring:message
+							code="button.add" /></a> <a class="btn btn-default"
+						id="editComputer" href="#" onclick="$.fn.toggleEditMode();"><spring:message
 							code="button.edit" /></a>
 				</div>
 			</div>
@@ -58,7 +58,8 @@
 		<form id="deleteForm"
 			<f:link pager="${pager}" action="action" type="delete"></f:link>
 			method="POST">
-			<input type="hidden" name="selection" value="">
+			<input type="hidden" name="selection" value=""> <input
+				type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 		</form>
 
 		<div class="container" style="margin-top: 10px;">
@@ -104,10 +105,14 @@
 							<c:set var="locale">${pageContext.response.locale}</c:set>
 							<c:set var="pattern"
 								value="${ ('en' eq locale) ? 'MM-dd-yyyy' : 'dd-MM-yyyy'}" />
-							<fmt:parseDate pattern="yyyy-MM-dd" value="${computer.introduced}" var="dateIntroduced" />
-                            <fmt:parseDate pattern="yyyy-MM-dd" value="${computer.discontinued}" var="dateDiscontinued"/>
-                            <td><fmt:formatDate value="${dateIntroduced}" pattern="${pattern}" /></td>
-                            <td><fmt:formatDate value="${dateDiscontinued}" pattern="${pattern}" /></td>
+							<fmt:parseDate pattern="yyyy-MM-dd"
+								value="${computer.introduced}" var="dateIntroduced" />
+							<fmt:parseDate pattern="yyyy-MM-dd"
+								value="${computer.discontinued}" var="dateDiscontinued" />
+							<td><fmt:formatDate value="${dateIntroduced}"
+									pattern="${pattern}" /></td>
+							<td><fmt:formatDate value="${dateDiscontinued}"
+									pattern="${pattern}" /></td>
 							<td>${computer.companyName}</td>
 						</tr>
 					</c:forEach>

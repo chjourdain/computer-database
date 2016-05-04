@@ -12,9 +12,9 @@ public class LogoutController {
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView get() {
-	 SecurityContextHolder.getContext().setAuthentication(null);
-	 ModelAndView model =  new ModelAndView("login");
-	 model.addObject("logout", "out");
-	return model;
+        SecurityContextHolder.getContext().setAuthentication(null);
+        ModelAndView model = new ModelAndView("login");
+        model.addObject("logout", "out");
+        return model;
     }
 }

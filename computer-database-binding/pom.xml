@@ -5,17 +5,16 @@
   <parent>
     <groupId>com.excilys.computerdatabase</groupId>
     <artifactId>computer-database</artifactId>
-    <version>1.4-SNAPSHOT</version>
+    <version>${main.version}</version>
   </parent>
   <groupId>com.excilys.computerdatabase</groupId>
   <artifactId>computer-database-binding</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>${binding.version}</version>
   <name>computerdatabase-binding</name>
   <dependencies>
     <dependency>
       <groupId>com.excilys.computerdatabase</groupId>
       <artifactId>computer-database-core</artifactId>
-      <version>1.0-SNAPSHOT</version> 
   </dependency>
 
   </dependencies>

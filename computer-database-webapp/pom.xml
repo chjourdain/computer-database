@@ -6,40 +6,33 @@
 	<parent>
 		<groupId>com.excilys.computerdatabase</groupId>
 		<artifactId>computer-database</artifactId>
-		<version>1.4-SNAPSHOT</version>
+		<version>${main.version}</version>
 	</parent>
 
 	<artifactId>computer-database-webapp</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>${webapp.version}</version>
 	<packaging>war</packaging>
 	<name>computer-database</name>
 	<dependencies>
 		<dependency>
 			<groupId>com.excilys.computerdatabase</groupId>
 			<artifactId>computer-database-service</artifactId>
-			<version>1.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.excilys.computerdatabase</groupId>
 			<artifactId>computer-database-binding</artifactId>
-			<version>1.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>jstl</groupId>
 			<artifactId>jstl</artifactId>
-			<version>${jstlVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
-			<version>${servletVersion}</version>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet.jsp</groupId>
 			<artifactId>jsp-api</artifactId>
-			<version>${jspAPI.version}</version>
-			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 

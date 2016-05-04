@@ -24,7 +24,7 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="/computer/dashboard"> Application -
+			<a class="navbar-brand" href="computer/dashboard"> Application -
 				Computer Database </a> <span style="float: right;"><a
 				href="?lang=en"><img src="${resourcesUrl}/icone/en.png"></a> |
 				<a href="?lang=fr"><img src="${resourcesUrl}/icone/fr.png"></a></span>
@@ -34,36 +34,41 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
-				
 					<h1>
 						<spring:message code="login" />
 					</h1>
 
 					<fieldset>
 						<div class="form-group">
-
-
 							<form action="${loginUrl}" method="post">
 								<c:if test="${param.error != null}">
-									<p>		<spring:message code="login.error" /></p>
+									<p>
+										<spring:message code="login.error" />
+									</p>
 								</c:if>
 								<c:if test="${logout != null}">
-									<p><spring:message code="logout" /></p>
+									<p>
+										<spring:message code="logout" />
+									</p>
 								</c:if>
-							
-									<label for="username"><spring:message code="login.id" /></label> <input class="form-control"  type="text"
-										id="username" name="username" />
-							</div><div class="form-group">
-							
-									<label for="password"><spring:message code="login.password" /></label> <input class="form-control"  type="password"
-										id="password" name="password" />
-								
-								<input type="hidden" name="${_csrf.parameterName}"
-									value="${_csrf.token}" />
+
+								<label for="username"><spring:message code="login.id" /></label>
+								<input class="form-control" type="text" id="username"
+									name="username" />
+						</div>
+						<div class="form-group">
+
+							<label for="password"><spring:message
+									code="login.password" /></label> <input class="form-control"
+								type="password" id="password" name="password" /> <input
+								type="hidden" name="${_csrf.parameterName}"
+								value="${_csrf.token}" />
 						</div>
 					</fieldset>
 					<div class="actions pull-right">
-						<button type="submit" class="btn btn-primary"><spring:message code="login.button" /></button>
+						<button type="submit" class="btn btn-primary">
+							<spring:message code="login.button" />
+						</button>
 					</div>
 
 					</form>

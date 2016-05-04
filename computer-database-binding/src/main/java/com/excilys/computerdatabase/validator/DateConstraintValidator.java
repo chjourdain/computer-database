@@ -5,18 +5,23 @@ import javax.validation.ConstraintValidatorContext;
 import org.apache.commons.validator.GenericValidator;
 import com.excilys.computerdatabase.validator.annotations.DateValid;
 
+/**
+ * Class use by hibernate validator to validate date.
+ * 
+ * @author charles
+ *
+ */
 public class DateConstraintValidator implements ConstraintValidator<DateValid, String> {
 
     @Override
-    public void initialize(DateValid arg0) {
-    }
+    public void initialize(DateValid arg0) {}
 
     @Override
     public boolean isValid(String date, ConstraintValidatorContext arg1) {
-	if (date == null || date.isEmpty() || GenericValidator.isDate(date, "MM-dd-yyyy", true)
-		|| GenericValidator.isDate(date, "dd-MM-yyyy", true)) {
-	    return true;
-	}
-	return false;
+        if (date == null || date.isEmpty() || GenericValidator.isDate(date, "MM-dd-yyyy", true)
+                || GenericValidator.isDate(date, "dd-MM-yyyy", true)) {
+            return true;
+        }
+        return false;
     }
 }

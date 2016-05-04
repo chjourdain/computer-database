@@ -6,34 +6,29 @@
 	<parent>
 		<groupId>com.excilys.computerdatabase</groupId>
 		<artifactId>computer-database</artifactId>
-		<version>1.4-SNAPSHOT</version>
+		<version>${main.version}</version>
 	</parent>
 	<groupId>com.excilys.computerdatabase</groupId>
 	<artifactId>computer-database-persistence</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>${persist.version}</version>
 	<name>computerdatabase-persitence</name>
 	<dependencies>
 		<dependency>
 			<groupId>com.excilys.computerdatabase</groupId>
 			<artifactId>computer-database-core</artifactId>
-			<version>1.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>${mysqlVersion}</version>
-			<scope>runtime</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-ehcache</artifactId>
-			<version>${hibernate.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.zaxxer</groupId>
 			<artifactId>HikariCP</artifactId>
-			<version>2.4.5</version>
 		</dependency>
 	</dependencies>
 </project>
