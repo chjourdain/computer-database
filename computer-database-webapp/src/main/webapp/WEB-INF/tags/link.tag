@@ -20,7 +20,7 @@
 <c:if test="${empty search}">
 	<c:set var="search" value="${search}" />
 </c:if>
-<c:if test="${empty sort}">
+<c:if test="${empty sort && empty pager.sort}">
 	<c:set var="sort" value="${pager.sort.order}" />
 </c:if>
 

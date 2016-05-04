@@ -26,7 +26,7 @@ public class PagerRequestMapper {
             size = Integer.parseInt(param.get("Nb"));
         }
         if (param.get("order") != null && !param.get("order").isEmpty()) {
-            sort = new Sort(Direction.ASC, "order");
+            sort = new Sort(Direction.ASC, param.get("order"));
         }
         return new PageRequest(page, size, sort);
     }

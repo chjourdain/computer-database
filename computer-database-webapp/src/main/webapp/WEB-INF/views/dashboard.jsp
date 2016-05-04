@@ -77,18 +77,18 @@
 							</a>
 						</span></th>
 						<th><a
-							<f:link pager="${pager}" action="href" type="dashboard" sort="computer"></f:link>><spring:message
+							<f:link pager="${pager}" action="href" type="dashboard" sort="name"></f:link>><spring:message
 									code="computer.name" /></a></th>
 						<th><a
-							<f:link pager="${pager}" action="href" type="dashboard" sort="intro"></f:link>><spring:message
+							<f:link pager="${pager}" action="href" type="dashboard" sort="introduced"></f:link>><spring:message
 									code="computer.introduced" /></a></th>
 						<!-- Table header for Discontinued Date -->
 						<th><a
-							<f:link pager="${pager}" action="href" type="dashboard" sort="disco"></f:link>><spring:message
+							<f:link pager="${pager}" action="href" type="dashboard" sort="discontinued"></f:link>><spring:message
 									code="computer.discontinued" /></a></th>
 						<!-- Table header for Company -->
 						<th><a
-							<f:link pager="${pager}" action="href" type="dashboard" sort="company"></f:link>><spring:message
+							<f:link pager="${pager}" action="href" type="dashboard" sort="company.name"></f:link>><spring:message
 									code="computer.company" /></a></th>
 
 					</tr>
