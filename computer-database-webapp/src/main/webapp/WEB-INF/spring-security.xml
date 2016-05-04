@@ -20,9 +20,9 @@
 
         <!-- Override default login and logout pages -->
         <security:form-login login-page="/login" 
-                             default-target-url="/dashboard" 
+                             default-target-url="/computer/dashboard" 
                              authentication-failure-url="/login?error=1" />
-        <security:logout logout-url="/logout" logout-success-url="/logoutSuccess.html" />
+        <security:logout logout-url="/logout" />
     </security:http>
 
   <!--<security:authentication-manager>

@@ -25,7 +25,8 @@
 			<a class="navbar-brand" href="dashboard"> <spring:message
 					code="title" /></a> <span style="float: right;"><a
 				href="?lang=en"><img src="${resourcesUrl}/icone/en.png"></a> |
-				<a href="?lang=fr"><img src="${resourcesUrl}/icone/fr.png"></a></span>
+				<a href="?lang=fr"><img src="${resourcesUrl}/icone/fr.png"></a>
+				<a href="../logout"><img src="${resourcesUrl}/icone/logout.png"></a></span>
 		</div>
 	</header>
 	<section id="main">
@@ -100,8 +101,10 @@
 								class="cb" value="${computer.id}"></td>
 							<td><a href="edit?id=${computer.id}" onclick="">${computer.name}</a>
 							</td>
-							     <c:set var="pattern" value="${pageContext.response.locale eq 'en' ? 'MM-dd-yyyy' : 'dd-MM-yyyy'}"/>
-                            <fmt:parseDate pattern="yyyy-MM-dd" value="${computer.introduced}" var="dateIntroduced" />
+							<c:set var="locale">${pageContext.response.locale}</c:set>
+							<c:set var="pattern"
+								value="${ ('en' eq locale) ? 'MM-dd-yyyy' : 'dd-MM-yyyy'}" />
+							<fmt:parseDate pattern="yyyy-MM-dd" value="${computer.introduced}" var="dateIntroduced" />
                             <fmt:parseDate pattern="yyyy-MM-dd" value="${computer.discontinued}" var="dateDiscontinued"/>
                             <td><fmt:formatDate value="${dateIntroduced}" pattern="${pattern}" /></td>
                             <td><fmt:formatDate value="${dateDiscontinued}" pattern="${pattern}" /></td>

@@ -61,11 +61,17 @@
 								<springForm:errors path="name" cssClass="help-block form-error" />
 							</div>
 							<!-- Converting the date from yyyy-mm-dd to locale  -->
-							<c:set var="pattern" value="${pageContext.response.locale eq 'en' ? 'MM-dd-yyyy' : 'dd-MM-yyyy'}" />
-							<fmt:parseDate pattern="yyyy-MM-dd"	value="${computer.introduced}" var="dateIntroduced" />
-							<fmt:parseDate pattern="yyyy-MM-dd"	value="${computer.discontinued}" var="dateDiscontinued" />
-							<fmt:formatDate value='${dateIntroduced}' pattern='${pattern}' var="introDate" />
-							<fmt:formatDate value="${dateDiscontinued}" pattern="${pattern}" var="discoDate" />
+							<c:set var="locale">${pageContext.response.locale}</c:set>
+							<c:set var="pattern"
+								value="${ ('en' eq locale) ? 'MM-dd-yyyy' : 'dd-MM-yyyy'}" />
+							<fmt:parseDate pattern="yyyy-MM-dd"
+								value="${computer.introduced}" var="dateIntroduced" />
+							<fmt:parseDate pattern="yyyy-MM-dd"
+								value="${computer.discontinued}" var="dateDiscontinued" />
+							<fmt:formatDate value='${dateIntroduced}' pattern='${pattern}'
+								var="introDate" />
+							<fmt:formatDate value="${dateDiscontinued}" pattern="${pattern}"
+								var="discoDate" />
 							<div class="form-group">
 								<label for="introduced"><spring:message
 										code="computer.introduced" /></label>
