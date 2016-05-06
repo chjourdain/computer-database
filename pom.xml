@@ -317,6 +317,12 @@
 			<version>4.0.4.RELEASE</version>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-taglibs</artifactId>
+			<version>4.1.0.RELEASE</version>
+		</dependency>
+
+		<dependency>
 			<groupId>xml-apis</groupId>
 			<artifactId>xml-apis</artifactId>
 			<version>${xml.api.version}</version>

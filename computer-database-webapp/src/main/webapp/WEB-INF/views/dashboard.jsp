@@ -3,6 +3,9 @@
 <%@ taglib prefix="f" tagdir="/WEB-INF/tags/"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -47,12 +50,14 @@
 							class="btn btn-primary" />
 					</form>
 				</div>
-				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href="add"><spring:message
-							code="button.add" /></a> <a class="btn btn-default"
-						id="editComputer" href="#" onclick="$.fn.toggleEditMode();"><spring:message
-							code="button.edit" /></a>
-				</div>
+				<sec:authorize access="hasRole('ROLE_ADMIN')">
+					<div class="pull-right">
+						<a class="btn btn-success" id="addComputer" href="add"><spring:message
+								code="button.add" /></a> <a class="btn btn-default"
+							id="editComputer" href="#" onclick="$.fn.toggleEditMode();"><spring:message
+								code="button.edit" /></a>
+					</div>
+				</sec:authorize>
 			</div>
 		</div>
 		<form id="deleteForm"
@@ -100,8 +105,11 @@
 						<tr class="computer">
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="${computer.id}"></td>
-							<td><a href="edit?id=${computer.id}" onclick="">${computer.name}</a>
-							</td>
+							<td><sec:authorize access="hasRole('ROLE_ADMIN')">
+									<a href="edit?id=${computer.id}" onclick="">
+								</sec:authorize> ${computer.name} <sec:authorize access="hasRole('ROLE_ADMIN')">
+									</a>
+								</sec:authorize></td>
 							<c:set var="locale">${pageContext.response.locale}</c:set>
 							<c:set var="pattern"
 								value="${ ('en' eq locale) ? 'MM-dd-yyyy' : 'dd-MM-yyyy'}" />
@@ -122,7 +130,8 @@
 	</section>
 
 	<footer class="navbar-fixed-bottom">
-		<div class="container text-center">
+		<div class="container text-center"><%@ taglib prefix="sec"
+				uri="http://www.springframework.org/security/tags"%>
 			<ul class="pagination">
 				<li><a
 					<f:link pager="${pager}" type="dashboard" action="href" page="0"/>

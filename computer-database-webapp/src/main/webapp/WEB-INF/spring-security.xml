@@ -13,9 +13,10 @@
     <security:http auto-config="false">
         <!-- Restrict URLs based on role -->
         <security:intercept-url pattern="/login*" access="permitAll" />
-        <security:intercept-url pattern="/logoutSuccess*" access="permitAll" />	
+        <security:intercept-url pattern="/logout*" access="permitAll" />	
         <security:intercept-url pattern="/resources/**" access="permitAll" />
 
+        <security:intercept-url pattern="/computer/dashboard*" access="hasAnyRole('ROLE_ADMIN','ROLE_USER')" />
         <security:intercept-url pattern="/**" access="hasRole('ROLE_ADMIN')" />
 
         <!-- Override default login and logout pages -->
