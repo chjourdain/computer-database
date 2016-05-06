@@ -50,14 +50,14 @@
 					<fmt:formatDate value="${dateDiscontinued}" pattern="${pattern}" />
 					<springForm:form id="form" action="edit"
 						modelAttribute="computerDTO" method="POST">
-						<springForm:input type="hidden" path="id" name="id"
+						<springForm:input type="hidden" path="id" name="id" id="id"
 							value="${computer.id}" />
 						<fieldset>
 							<div class="form-group">
 								<label for="computerName"><spring:message
 										code="computer.name" /></label>
 								<springForm:input path="name" name="name" type="text"
-									class="form-control" id="computerName" value="${computer.name}" />
+									class="form-control" id="name" value="${computer.name}" />
 								<springForm:errors path="name" cssClass="help-block form-error" />
 							</div>
 							<!-- Converting the date from yyyy-mm-dd to locale  -->
@@ -111,6 +111,9 @@
 								class="btn btn-primary"> or <a href="dashboard"
 								class="btn btn-default"><spring:message code="button.cancel" /></a>
 						</div>
+						 <input
+								type="hidden" name="${_csrf.parameterName}"
+								value="${_csrf.token}" id="_csrf"/>
 					</springForm:form>
 					<script type="text/javascript">
 						var translated = new Array();

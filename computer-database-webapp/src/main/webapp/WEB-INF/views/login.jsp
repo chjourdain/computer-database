@@ -40,7 +40,7 @@
 
 					<fieldset>
 						<div class="form-group">
-							<form action="${loginUrl}" method="post">
+							<form action="j_spring_security_check" method="post">
 								<c:if test="${param.error != null}">
 									<p>
 										<spring:message code="login.error" />
@@ -62,11 +62,11 @@
 									code="login.password" /></label> <input class="form-control"
 								type="password" id="password" name="password" /> <input
 								type="hidden" name="${_csrf.parameterName}"
-								value="${_csrf.token}" />
+								value="${_csrf.token}" id="_csrf"/>
 						</div>
 					</fieldset>
 					<div class="actions pull-right">
-						<button type="submit" class="btn btn-primary">
+						<button id="submit" type="submit" class="btn btn-primary">
 							<spring:message code="login.button" />
 						</button>
 					</div>

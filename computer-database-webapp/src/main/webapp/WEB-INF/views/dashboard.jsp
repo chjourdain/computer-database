@@ -48,6 +48,9 @@
 							type="submit" id="searchsubmit"
 							value="<spring:message code="button.filter"/>"
 							class="btn btn-primary" />
+							 <input
+								type="hidden" name="${_csrf.parameterName}"
+								value="${_csrf.token}" id="_csrf"/>
 					</form>
 				</div>
 				<sec:authorize access="hasRole('ROLE_ADMIN')">
@@ -64,7 +67,7 @@
 			<f:link pager="${pager}" action="action" type="delete"></f:link>
 			method="POST">
 			<input type="hidden" name="selection" value=""> <input
-				type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+				type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" id="_csrf" />
 		</form>
 
 		<div class="container" style="margin-top: 10px;">
@@ -103,10 +106,10 @@
 
 					<c:forEach var="computer" items="${pager.content}">
 						<tr class="computer">
-							<td class="editMode"><input type="checkbox" name="cb"
+							<td class="editMode"><input type="checkbox" name="cb" id="${computer.name}_id"
 								class="cb" value="${computer.id}"></td>
 							<td><sec:authorize access="hasRole('ROLE_ADMIN')">
-									<a href="edit?id=${computer.id}" onclick="">
+									<a href="edit?id=${computer.id}" onclick="" id="${computer.name}_name">
 								</sec:authorize> ${computer.name} <sec:authorize access="hasRole('ROLE_ADMIN')">
 									</a>
 								</sec:authorize></td>

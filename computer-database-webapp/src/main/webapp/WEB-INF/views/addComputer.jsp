@@ -53,7 +53,7 @@
 								<label for="computerName"><spring:message
 										code="computer.name" /></label>
 								<springForm:input type="text" class="form-control"
-									id="computerName" name="name" path="name" />
+									id="name" name="name" path="name" />
 								<springForm:errors path="name" cssClass="help-block form-error" />
 
 
@@ -72,8 +72,8 @@
 								<label for="discontinued"><spring:message
 										code="computer.discontinued" /></label>
 								<springForm:input path="discontinued" type="text"
-									placeholder="${ dateplaceholder}"
-									class="form-control" id="discontinued" name="discontinued" />
+									placeholder="${ dateplaceholder}" class="form-control"
+									id="discontinued" name="discontinued" />
 								<springForm:errors path="discontinued"
 									cssClass="help-block form-error" />
 
@@ -99,6 +99,8 @@
 								class="btn btn-primary"> or <a href="dashboard"
 								class="btn btn-default"><spring:message code="button.cancel" /></a>
 						</div>
+						<input type="hidden" name="${_csrf.parameterName}"
+							value="${_csrf.token}" id="_csrf" />
 					</springForm:form>
 
 					<script type="text/javascript">

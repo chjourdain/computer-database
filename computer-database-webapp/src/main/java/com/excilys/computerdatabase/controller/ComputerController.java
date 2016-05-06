@@ -4,6 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
@@ -30,6 +32,8 @@ public class ComputerController {
     @Autowired
     CompanyServiceImpl companyService;
 
+    private Logger Logger = LoggerFactory.getLogger(this.getClass());
+
     @RequestMapping(value = "/dashboard", method = RequestMethod.GET)
     public ModelAndView get(@RequestParam Map<String, String> param) {
         ModelAndView model = new ModelAndView("dashboard");
@@ -50,6 +54,7 @@ public class ComputerController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ModelAndView addComputer(@Valid @ModelAttribute("computerDTO") ComputerDTO dto,
             BindingResult bindingResult) {
+        Logger.info("POST de ADD method");
         ModelAndView model = new ModelAndView("addComputer");
         String result = "error.notadded";
         if (!bindingResult.hasErrors()) {
@@ -82,8 +87,11 @@ public class ComputerController {
     public ModelAndView editView(@RequestParam Map<String, String> param) {
         // get the computer id, send back the user to dashboard.jsp if not
         // valid.
+        Logger.info("Get de edit \n\n\n\n\n");
         String id = param.get("id");
+        Logger.info(id);
         if (id == null || id.equals("0") || id.isEmpty()) {
+            Logger.info("Redirect pour dashboard");
             return new ModelAndView("redirect:dashboard");
         }
         // get the computer to send its data to the jsp.
