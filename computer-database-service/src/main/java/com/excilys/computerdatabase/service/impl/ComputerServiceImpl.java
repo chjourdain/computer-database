@@ -14,46 +14,45 @@ public class ComputerServiceImpl implements ComputerService {
     @Autowired
     ComputerDao computerDao;
 
-    private ComputerServiceImpl() {
-    }
+    private ComputerServiceImpl() {}
 
     public long count() {
-	return computerDao.count();
+        return computerDao.count();
     }
 
     public Computer create(Computer c) {
-	if (c == null) {
-	    return null;
-	}
-	return computerDao.save(c);
+        if (c == null) {
+            return null;
+        }
+        return computerDao.save(c);
     }
 
     public Computer update(Computer c) {
-	if (c == null) {
-	    return null;
-	}
-	return computerDao.save(c);
+        if (c == null) {
+            return null;
+        }
+        return computerDao.save(c);
     }
 
     public void delete(Computer c) {
-	if (c != null) {
-	    computerDao.delete(c);
-	}
+        if (c != null) {
+            computerDao.delete(c);
+        }
     }
 
     @Override
     public Computer find(long id) {
-	if (id != 0) {
-	    return computerDao.findOne(id);
-	}
-	return null;
+        if (id != 0) {
+            return computerDao.findOne(id);
+        }
+        return null;
     }
 
     @Override
     public Page<Computer> findAll(Pageable pager, String search) {
-	if (search !=null && !search.isEmpty()) {
-	   return computerDao.findByNameCompanySearch("%"+search+"%",pager);
-	}
-	return computerDao.findAll(pager);
+        if (search != null && !search.isEmpty()) {
+            return computerDao.findByNameCompanySearch("%" + search + "%", pager);
+        }
+        return computerDao.findAll(pager);
     }
 }

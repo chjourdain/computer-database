@@ -10,5 +10,7 @@
 	
 	<import resource="classpath:bindingApplicationContext.xml" />
 	<import resource="classpath:serviceApplicationContext.xml" />
+	<import resource="classpath:restApplicationContext.xml" />
+
 
 </beans>

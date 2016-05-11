@@ -14,6 +14,7 @@
 		<module>computer-database-console</module>
 		<module>computer-database-webapp</module>
 		<module>computer-database-binding</module>
+		<module>computer-database-rest</module>
 	</modules>
 	<properties>
 		<main.version>1.4</main.version>
@@ -21,6 +22,7 @@
 		<service.version>1.4</service.version>
 		<persist.version>1.4</persist.version>
 		<console.version>1.4</console.version>
+		<rest.version>1.4</rest.version>
 		<webapp.version>1.4</webapp.version>
 		<binding.version>1.4</binding.version>
 		<javasourceversion>1.8</javasourceversion>
@@ -90,38 +92,14 @@
 			</plugin>
 
 			<!-- Run the integration test with a embedded tomcat server -->
-			<plugin>
-				<groupId>org.codehaus.cargo</groupId>
-				<artifactId>cargo-maven2-plugin</artifactId>
-				<version>1.2.0</version>
-				<configuration>
-					<container>
-						<containerId>tomcat7x</containerId>
-						<zipUrlInstaller>
-							<url>http://archive.apache.org/dist/tomcat/tomcat-8/v8.0.32/bin/apache-tomcat-8.0.32.zip
-							</url>
-							<downloadDir>${project.build.directory}/downloads</downloadDir>
-							<extractDir>${project.build.directory}/extracts</extractDir>
-						</zipUrlInstaller>
-					</container>
-				</configuration>
-				<executions>
-					<execution>
-						<id>start-tomcat</id>
-						<phase>pre-integration-test</phase>
-						<goals>
-							<goal>start</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>stop-tomcat</id>
-						<phase>post-integration-test</phase>
-						<goals>
-							<goal>stop</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+			<!-- <plugin> <groupId>org.codehaus.cargo</groupId> <artifactId>cargo-maven2-plugin</artifactId> 
+				<version>1.2.0</version> <configuration> <container> <containerId>tomcat7x</containerId> 
+				<zipUrlInstaller> <url>http://archive.apache.org/dist/tomcat/tomcat-8/v8.0.32/bin/apache-tomcat-8.0.32.zip 
+				</url> <downloadDir>${project.build.directory}/downloads</downloadDir> <extractDir>${project.build.directory}/extracts</extractDir> 
+				</zipUrlInstaller> </container> </configuration> <executions> <execution> 
+				<id>start-tomcat</id> <phase>pre-integration-test</phase> <goals> <goal>start</goal> 
+				</goals> </execution> <execution> <id>stop-tomcat</id> <phase>post-integration-test</phase> 
+				<goals> <goal>stop</goal> </goals> </execution> </executions> </plugin> -->
 		</plugins>
 	</build>
 	<reporting>
@@ -147,6 +125,11 @@
 				<groupId>com.excilys.computerdatabase</groupId>
 				<artifactId>computer-database-core</artifactId>
 				<version>${core.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.excilys.computerdatabase</groupId>
+				<artifactId>computer-database-rest</artifactId>
+				<version>${rest.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.excilys.computerdatabase</groupId>
@@ -265,12 +248,6 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-tx</artifactId>
-
-			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
@@ -291,37 +268,9 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-
-		<!-- Spring security -->
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-config</artifactId>
-			<version>4.0.4.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-web</artifactId>
-			<version>4.0.4.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-core</artifactId>
-			<version>4.0.4.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-taglibs</artifactId>
-			<version>4.1.0.RELEASE</version>
-		</dependency>
-
 		<dependency>
 			<groupId>xml-apis</groupId>
 			<artifactId>xml-apis</artifactId>

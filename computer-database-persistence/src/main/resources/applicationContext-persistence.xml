@@ -8,26 +8,13 @@
 http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.0.xsd
 http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 
- <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource"  destroy-method="close">
-		<property name="dataSourceClassName" value="${dataSourceClassName}"/>
-		<!-- Tomcat is in BIO mode, so it accepts 200 threads/connections -->
-		<property name="maximumPoolSize" value="${maximumPoolSize}" />
-		<!-- Maximum lifetime of a connection in the pool. -->
-		<property name="maxLifetime" value="${maxLifetime}" />
-		<!-- Maximum amount of time that a connection is allowed to sit idle in the pool. -->
-		<property name="idleTimeout" value="${idleTimeout}" />
-		<property name="dataSourceProperties">
-			<props>
-				<prop key="url">${db.url}</prop>
-				<prop key="user">${db.user}</prop>
-				<prop key="password">${db.password}</prop>
-				<prop key="prepStmtCacheSize">${prepStmtCacheSize}</prop>
-				<prop key="prepStmtCacheSqlLimit">${prepStmtCacheSqlLimit}</prop>
-				<prop key="cachePrepStmts">${cachePrepStmts}</prop>
-				<prop key="useServerPrepStmts">${useServerPrepStmts}</prop>
-			</props>
-		</property>
-	</bean>
+   <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+        <property name="driverClassName" value="${db.driver}" />
+        <property name="jdbcUrl" value="${db.url}" />
+        <property name="username" value="${db.user}" />
+        <property name="password" value="${db.password}" />
+        <property name="maximumPoolSize" value="${jdbc_maxconnections}" />
+    </bean>
 
 <jpa:repositories base-package="com.excilys.computerdatabase.persist.dao" />
 
@@ -40,7 +27,7 @@ http://www.springframework.org/schema/tx http://www.springframework.org/schema/t
 	</bean>
 	
 	<bean id="jpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
-        <property name="showSql" value="true"/>
+        <property name="showSql" value="false"/>
         <property name="databasePlatform" value="org.hibernate.dialect.MySQLDialect" />
         <property name="generateDdl" value="true"/>
         <property name="database" value="MYSQL"/>
