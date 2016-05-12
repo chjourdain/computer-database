@@ -17,8 +17,8 @@ import com.excilys.computerdatabase.model.Company;
 public class CLIUtils {
     private Scanner sc;
 
-    final static String URL = "http://localhost:8080/computer-database/rest/computer/";
-    final static String URL_COMPANY = "http://localhost:8080/computer-database/rest/company/";
+    final static String URL = "http://localhost:8080/computer-database-rest/rest/computer/";
+    final static String URL_COMPANY = "http://localhost:8080/computer-database-rest/rest/company/";
     Client client = ClientBuilder.newBuilder().register(new JacksonFeature()).build();
 
     public CLIUtils(Scanner sc) {

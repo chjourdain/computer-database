@@ -23,10 +23,6 @@
 			<artifactId>computer-database-binding</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.excilys.computerdatabase</groupId>
-			<artifactId>computer-database-rest</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>jstl</groupId>
 			<artifactId>jstl</artifactId>
 		</dependency>

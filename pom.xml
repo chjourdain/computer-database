@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.excilys.computerdatabase</groupId>
 	<artifactId>computer-database</artifactId>
@@ -14,8 +13,8 @@
 		<module>computer-database-console</module>
 		<module>computer-database-webapp</module>
 		<module>computer-database-binding</module>
-		<module>computer-database-rest</module>
-	</modules>
+    <module>computer-database-rest</module>
+  </modules>
 	<properties>
 		<main.version>1.4</main.version>
 		<core.version>1.4</core.version>
@@ -126,11 +125,7 @@
 				<artifactId>computer-database-core</artifactId>
 				<version>${core.version}</version>
 			</dependency>
-			<dependency>
-				<groupId>com.excilys.computerdatabase</groupId>
-				<artifactId>computer-database-rest</artifactId>
-				<version>${rest.version}</version>
-			</dependency>
+	
 			<dependency>
 				<groupId>com.excilys.computerdatabase</groupId>
 				<artifactId>computer-database-service</artifactId>
