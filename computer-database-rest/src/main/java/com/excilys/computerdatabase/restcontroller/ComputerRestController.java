@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import com.excilys.computerdatabase.dto.ComputerDTO;
 import com.excilys.computerdatabase.mapper.ComputerMapper;
+import com.excilys.computerdatabase.model.Computer;
 import com.excilys.computerdatabase.service.impl.ComputerServiceImpl;
 
 @RestController
@@ -49,6 +50,13 @@ public class ComputerRestController {
     @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity<ComputerDTO> update(@RequestBody ComputerDTO dto) {
         service.update(ComputerMapper.toComputer(dto));
+        return new ResponseEntity<ComputerDTO>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<ComputerDTO> delete(@PathVariable Long id) {
+        Computer computer = service.find(id);
+        service.delete(computer);
         return new ResponseEntity<ComputerDTO>(HttpStatus.OK);
     }
 }

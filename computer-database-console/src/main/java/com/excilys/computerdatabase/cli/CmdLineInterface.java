@@ -3,91 +3,79 @@ package com.excilys.computerdatabase.cli;
 import java.io.IOException;
 import java.util.Scanner;
 
-import com.excilys.computerdatabase.service.impl.CompanyServiceImpl;
-import com.excilys.computerdatabase.service.impl.ComputerServiceImpl;
-
 public class CmdLineInterface {
 
-    private ComputerServiceImpl computerService;
-    private CompanyServiceImpl service;
-
-    private CLIUtils utils;
     private static final Scanner SC;
 
     static {
-	SC = new Scanner(System.in);
+        SC = new Scanner(System.in);
     }
 
-    public CmdLineInterface(ComputerServiceImpl cService, CompanyServiceImpl service) {
-	computerService = cService;
-	this.service = service;
-	utils = new CLIUtils(SC);
-    }
+    private CLIUtils utils = new CLIUtils(SC);
 
     public void startCmdLineInterface() {
 
-		boolean doContinue = true;
+        boolean doContinue = true;
 
-		try {
-			while (doContinue) {
-				utils.displayMenu();
+        try {
+            while (doContinue) {
+                utils.displayMenu();
 
-				String cmd = SC.next();
+                String cmd = SC.next();
 
-				switch (cmd) {
-				case "listcomputer":
-				case "1":
-					utils.listComputer(computerService);
-					;
-					break;
+                switch (cmd) {
+                case "listcomputer":
+                case "1":
+                    utils.listComputer();
+                    ;
+                    break;
 
-				case "deletecompanie":
-				case "2":
-					utils.deleteCompanie(service);
-					;
-					break;
+                case "deletecompanie":
+                case "2":
+                    utils.deleteCompany();
+                    break;
 
-				case "show":
-				case "3":
-					utils.showComputer(computerService);
-					break;
+                case "show":
+                case "3":
+                    utils.showComputer();
+                    break;
 
-				case "create":
-				case "4":
-					utils.createComputer(computerService);
-					break;
+                case "create":
+                case "4":
+                    utils.createComputer();
+                    break;
 
-				case "update":
-				case "5":
-					utils.updateComputer(computerService);
-					break;
-				
-				case "deleteComputer":
-				case "6":
-					utils.deleteComputer(computerService);
-					break;
-					
-				case "listCompany":
-				case "7":
-					utils.listCompanie();
-					break;
-	
-				case "exit":
-				case "8":
-					doContinue = false;
-					System.out.println("Operation terminated.");
-					break;
+                case "update":
+                case "5":
+                    utils.updateComputer();
+                    break;
 
-				default:
-					break;
-				}
+                case "deleteComputer":
+                case "6":
+                    utils.deleteComputer();
+                    break;
 
-				System.out.println("\nPress 'enter' to continue.");
-				System.in.read();
-			}
-		} catch (IOException ioe) {
-		} finally {
-			SC.close();
-		}
-	}
+                case "listCompany":
+                case "7":
+                    utils.listCompanies();
+                    break;
+
+                case "exit":
+                case "8":
+                    doContinue = false;
+                    System.out.println("Operation terminated.");
+                    break;
+
+                default:
+                    break;
+                }
+
+                System.out.println("\nPress 'enter' to continue.");
+                System.in.read();
+            }
+        } catch (IOException ioe) {
+        } finally {
+            SC.close();
+        }
+    }
 }

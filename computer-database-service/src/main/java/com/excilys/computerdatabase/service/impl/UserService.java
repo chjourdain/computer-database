@@ -15,7 +15,7 @@ import com.excilys.computerdatabase.model.roles.UserRole;
 import com.excilys.computerdatabase.persist.dao.UserDao;
 
 @Service("userDetailsService")
-public class myUserDetailsService implements UserDetailsService {
+public class UserService implements UserDetailsService {
 
     @Autowired
     private UserDao userDao;

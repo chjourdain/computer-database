@@ -1,9 +1,9 @@
 package com.excilys.computerdatabase.persist.dao;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import com.excilys.computerdatabase.model.Company;
 
-public interface CompanyDao extends CrudRepository<Company,Long> {
+public interface CompanyDao extends PagingAndSortingRepository<Company, Long> {
 
     Company findByName(String id);
 }

@@ -14,6 +14,7 @@
         <!-- Restrict URLs based on role -->
         <security:intercept-url pattern="/login*" access="permitAll" />
         <security:intercept-url pattern="/logout*" access="permitAll" />	
+        <security:intercept-url pattern="/rest/**" access="permitAll" />	
         <security:intercept-url pattern="/resources/**" access="permitAll" />
 
         <security:intercept-url pattern="/computer/dashboard*" access="hasAnyRole('ROLE_ADMIN','ROLE_USER')" />

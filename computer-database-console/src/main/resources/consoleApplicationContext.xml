@@ -7,4 +7,9 @@
 	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
 	http://www.springframework.org/schema/data/jpa
     http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+    
+    
+    
+    	<import resource="classpath:bindingApplicationContext.xml" />
+	<import resource="classpath:serviceApplicationContext.xml" />
 </beans>

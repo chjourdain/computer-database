@@ -4,10 +4,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import com.excilys.computerdatabase.model.Company;
 import com.excilys.computerdatabase.persist.dao.CompanyDao;
@@ -35,7 +34,6 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    @Cacheable("findCompanyCache")
     public Company find(long id) {
         if (id == 0) {
             return null;
@@ -48,7 +46,7 @@ public class CompanyServiceImpl implements CompanyService {
      * 
      * @return
      */
-    @Cacheable("companyCache")
+
     public Map<Long, String> getMap() {
         if (map == null) {
             map = new HashMap<>();
@@ -62,10 +60,13 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    @CacheEvict(value = { "companyCache", "findCompanyCache" }, allEntries = true)
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional()
     public void delete(Company c) {
-        computerDao.deleteByCompany_id(c.getId());
+        computerDao.deleteByCompany(c);
         companyDao.delete(c);
+    }
+
+    public Page<Company> findAll(Pageable pager) {
+        return companyDao.findAll(pager);
     }
 }
